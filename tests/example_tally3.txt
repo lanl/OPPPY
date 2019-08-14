@@ -1,0 +1,19 @@
+! A simple tally example
+cycle: 7
+time: 7.0
+bins: 1 2 3 4 5
+odd_counts: 61 63 65 67 69
+even_counts: 62 64 66 68 70
+
+cycle: 8
+time: 8.0
+bins: 1 2 3 4 5
+odd_counts: 71 73 75 77 79
+even_counts: 72 74 76 78 80
+
+cycle: 9
+time: 9.0
+bins: 1 2 3 4 5
+odd_counts: 81 83 85 87 89
+even_counts: 82 84 86 88 90
+

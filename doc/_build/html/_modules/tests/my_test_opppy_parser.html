@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tests.my_test_opppy_parser &mdash; OPPPY 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> OPPPY
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opppy.html">opppy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tests.html">tests package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OPPPY</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>tests.my_test_opppy_parser</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tests.my_test_opppy_parser</h1><div class="highlight"><pre>
+<span></span><span class="c1"># a simple example opppy parser</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<div class="viewcode-block" id="my_test_opppy_parser"><a class="viewcode-back" href="../../tests.html#tests.my_test_opppy_parser.my_test_opppy_parser">[docs]</a><span class="k">class</span> <span class="nc">my_test_opppy_parser</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An example OPPPY parser that can extract simple cycle string</span>
+<span class="sd">    data and return a cycle dictionary</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="c1"># initialize the cycle parsing data</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">sort_key_string</span> <span class="o">=</span> <span class="s1">&#39;time&#39;</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">cycle_opening_string</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">cycle_closing_string</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">file_end_string</span> <span class="o">=</span> <span class="kc">None</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initializing my_test_opppy_parser&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="my_test_opppy_parser.parse_cycle_string"><a class="viewcode-back" href="../../tests.html#tests.my_test_opppy_parser.my_test_opppy_parser.parse_cycle_string">[docs]</a>    <span class="k">def</span> <span class="nf">parse_cycle_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cycle_string</span><span class="p">):</span>
+      <span class="c1"># return dictionary of dictionaries </span>
+      <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="c1"># initial internal dictionaries</span>
+      <span class="n">problem_data_dict</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">cycle_info</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">test_data1</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">test_data2</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">back_fill_data</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">density_data</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">cycle_string</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;cycle&quot;</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
+          <span class="n">cycle</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;# cycle &#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))</span>
+          <span class="n">cycle_info</span><span class="p">[</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cycle</span>
+          <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;cycle_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cycle_info</span> 
+        <span class="k">if</span> <span class="s2">&quot;time&quot;</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
+          <span class="n">time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;time &#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))</span>
+          <span class="n">cycle_info</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span>
+          <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;cycle_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cycle_info</span>
+        <span class="k">if</span> <span class="s2">&quot;test_data1&quot;</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
+          <span class="n">split_string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+          <span class="n">test_data1</span><span class="p">[</span><span class="n">split_string</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">split_string</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+          <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;test_data1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_data1</span>
+        <span class="k">if</span> <span class="s2">&quot;test_data2&quot;</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
+          <span class="n">split_string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+          <span class="n">test_data2</span><span class="p">[</span><span class="n">split_string</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">split_string</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+          <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;test_data2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_data2</span>
+        <span class="k">if</span> <span class="s2">&quot;back_fill_data&quot;</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
+          <span class="n">split_string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+          <span class="n">back_fill_data</span><span class="p">[</span><span class="n">split_string</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">split_string</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+          <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;back_fill_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">back_fill_data</span>
+        <span class="k">if</span> <span class="s2">&quot;density&quot;</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
+            <span class="n">density</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> 
+            <span class="n">mat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[(|)]&#39;</span><span class="p">,</span><span class="n">string</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">density_data</span><span class="p">[</span><span class="n">mat</span><span class="p">]</span> <span class="o">=</span> <span class="n">density</span>
+
+      <span class="c1"># append dictionary with multiple entries</span>
+      <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;density&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">density_data</span>
+
+
+
+
+      <span class="k">return</span> <span class="n">data_dict</span></div></div>
+        
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Mathew Cleveland
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

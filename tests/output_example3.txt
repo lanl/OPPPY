@@ -1,0 +1,28 @@
+# cycle 9
+time 9
+test_data1 = 9
+test_data2 = 90
+density(mat1) = 9.3
+density(mat2) = 18.3
+density(mat3) = 27.3
+# cycle 10
+time 10
+test_data1 = 10
+test_data2 = 100
+# cycle 11
+time 11
+test_data1 = 11
+test_data2 = 110
+back_fill_data = 11.4
+density(mat1) = 11.4
+density(mat2) = 22.4
+density(mat4) = 44.4
+# cycle 12
+time 12
+test_data1 = 12
+test_data2 = 120
+back_fill_data = 12.5
+density(mat1) = 12.5
+density(mat2) = 24.5
+density(mat3) = 36.5
+#

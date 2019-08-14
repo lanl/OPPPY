@@ -1,0 +1,10 @@
+This example data file will be broken up based on multiple cycles
+
+#cycle 1
+some data here 
+
+#cycle 2
+some more data here
+
+#end of file 
+

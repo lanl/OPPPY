@@ -1,0 +1,29 @@
+2019-02-2019 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY major release:
+        + OPPPY-0_1_0
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+        + sphinx (to build documentation)
+
+    * Summary of changes:
+        + Initial project population
+        + Initial output and dump parsing, plotting, and pickling tools
+        + Initial testing dir and basic function tests are included
+        + Simple example parsers are include in the test source dir
+
+    * Corrected defects:
+        + N/A
+
+    * New Features:
+        + Output dictionary construction
+        + Output dictionary plotting
+        + Dump dictionary construction
+        + Dump dictionary plotting
+
+
+    * Known Defects:
+        + Not all plotting features have been tested.

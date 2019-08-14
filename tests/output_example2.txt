@@ -1,0 +1,23 @@
+# cycle 5
+time 5
+test_data1 = 5
+test_data2 = 50
+# cycle 6
+time 6
+test_data1 = 6
+test_data2 = 60
+# cycle 7
+time 7
+test_data1 = 7
+test_data2 = 70
+back_fill_data = 7.1
+density(mat1) = 7.1
+density(mat2) = 14.1
+# cycle 8
+time 8
+test_data1 = 8
+test_data2 = 80
+back_fill_data = 8.2
+density(mat1) = 8.2
+density(mat2) = 16.2
+#
