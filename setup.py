@@ -21,7 +21,13 @@
 ##---------------------------------------------------------------------------##
 
 from opppy.version import __version__
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    try:
+        from setuptools.core import setup
+    except ImportError:
+        from distutils.core import setup
 
 setup(name='opppy',
       version=__version__,
