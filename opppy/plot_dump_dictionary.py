@@ -657,7 +657,7 @@ class plot_line_series_dictionary():
         
                         print('# ', index_key, header_xlabel, header_ylabel, file=outputfile)
                         for x_value, y_value in zip(x, y):
-                            outstring = "%.9e"%(index_value)+"%.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+"\n"
+                            outstring = "%.9e"%(index_value)+" %.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+"\n"
                             outputfile.write(outstring)
                 if(args.data_file_name is not None):
                     print("data saved as -- "+args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat')
@@ -888,7 +888,7 @@ class plot_2d_series_dictionary():
         
                     print('# ', index_key, header_xlabel, header_ylabel, dname, file=outputfile)
                     for x_value, y_value, v_value in zip(x, y, v):
-                        outstring = "%.9e"%(index_value)+"%.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+"%.9e"%(v_value)+"\n"
+                        outstring = "%.9e"%(index_value)+" %.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+" %.9e"%(v_value)+"\n"
                         outputfile.write(outstring)
             if(args.data_file_name is not None):
                 print("data saved as -- "+args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',dname)+'.dat')
