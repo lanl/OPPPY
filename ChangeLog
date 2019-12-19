@@ -1,4 +1,58 @@
-2019-02-2019 Mathew Cleveland <cleveland@lanl.gov>
+2019-12-19 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_2
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+        + sphinx (to build documentation)
+
+    * Summary of changes:
+        + Fix minor plotting/parsing issues and add multiple dictionary scaling
+
+    * Corrected defects:
+        + Fix y_limits
+        + fix data append to ignore cycles with empty time dictionaries
+
+    * New Features:
+        + It is now possible to scale multiple dictionaries with different scale values
+
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+2019-09-19 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_1
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+        + sphinx (to build documentation)
+
+    * Summary of changes:
+        + Fix save data spacing
+
+    * Corrected defects:
+        + Fix save data spacing
+
+    * New Features:
+        + None
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+        + y_limit plotting is broken
+        + Need the ability to scale individual dictionary data
+
+2019-08-19 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY major release:
         + OPPPY-0_1_0
 
