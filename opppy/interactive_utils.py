@@ -327,8 +327,21 @@ class interactive_output_parser:
           last_xmax = None
           last_ymin = None
           last_ymax = None
-    
-          for dictionary, name in zip(dictionary_data, dictionary_names):
+
+          if len(plot_args.scale_x) != len(dictionary_data):
+              if len(plot_args.scale_x) == 0:
+                plot_args.scale_x = [1.0]*len(dictionary_data)
+              else:
+                plot_args.scale_x = [plot_args.scale_x[-1]]*len(dictionary_data)
+
+          if len(plot_args.scale_y) != len(dictionary_data):
+              if len(plot_args.scale_y) == 0:
+                plot_args.scale_y = [1.0]*len(dictionary_data)
+              else:
+                plot_args.scale_y = [plot_args.scale_y[-1]]*len(dictionary_data)
+
+
+          for dictionary, name, scale_x, scale_y in zip(dictionary_data, dictionary_names, plot_args.scale_x, plot_args.scale_y):
             data = dictionary[plot_args.dictionary_name]
     
             xmin = []
@@ -338,19 +351,19 @@ class interactive_output_parser:
             plabels = []
             x = []
             y = []
-            xmin.append(min(data[plot_args.x_value_name])*plot_args.scale_x)
-            xmax.append(max(data[plot_args.x_value_name])*plot_args.scale_x)
-            ymin.append(min(data[plot_args.y_value_names[0]])*plot_args.scale_y)
-            ymax.append(max(data[plot_args.y_value_names[0]])*plot_args.scale_y)
+            xmin.append(min(data[plot_args.x_value_name])*scale_x)
+            xmax.append(max(data[plot_args.x_value_name])*scale_x)
+            ymin.append(min(data[plot_args.y_value_names[0]])*scale_y)
+            ymax.append(max(data[plot_args.y_value_names[0]])*scale_y)
             # material specific plot
             for yname in plot_args.y_value_names:
-              x.append(array(data[plot_args.x_value_name])*plot_args.scale_x)
-              ymin[-1] = min(ymin[-1],min(data[yname])*plot_args.scale_y)
-              ymax[-1] = max(ymin[-1],max(data[yname])*plot_args.scale_y)
+              x.append(array(data[plot_args.x_value_name])*scale_x)
+              ymin[-1] = min(ymin[-1],min(data[yname])*scale_y)
+              ymax[-1] = max(ymin[-1],max(data[yname])*scale_y)
               plabels.append(label+" "+yname)
               if (option.no_y_names):
                   plabels[-1] = ''
-              y.append(array(data[yname])*plot_args.scale_y)
+              y.append(array(data[yname])*scale_y)
     
             xmin = array(xmin)
             xmax = array(xmax)
@@ -1111,8 +1124,20 @@ class interactive_tally_parser:
           last_xmax = None
           last_ymin = None
           last_ymax = None
-    
-          for dictionary, name in zip(dictionary_data, dictionary_names):
+          
+          if len(plot_args.scale_x) != len(dictionary_data):
+              if len(plot_args.scale_x) == 0:
+                plot_args.scale_x = [1.0]*len(dictionary_data)
+              else:
+                plot_args.scale_x = [plot_args.scale_x[-1]]*len(dictionary_data)
+
+          if len(plot_args.scale_y) != len(dictionary_data):
+              if len(plot_args.scale_y) == 0:
+                plot_args.scale_y = [1.0]*len(dictionary_data)
+              else:
+                plot_args.scale_y = [plot_args.scale_y[-1]]*len(dictionary_data)
+
+          for dictionary, name, scale_x, scale_y in zip(dictionary_data, dictionary_names, plot_args.scale_x, plot_args.scale_y):
             data = dictionary[plot_args.dictionary_name]
     
             xmin = []
@@ -1122,19 +1147,19 @@ class interactive_tally_parser:
             plabels = []
             x = []
             y = []
-            xmin.append(min(data[plot_args.x_value_name])*plot_args.scale_x)
-            xmax.append(max(data[plot_args.x_value_name])*plot_args.scale_x)
-            ymin.append(min(data[plot_args.y_value_names[0]])*plot_args.scale_y)
-            ymax.append(max(data[plot_args.y_value_names[0]])*plot_args.scale_y)
+            xmin.append(min(data[plot_args.x_value_name])*scale_x)
+            xmax.append(max(data[plot_args.x_value_name])*scale_x)
+            ymin.append(min(data[plot_args.y_value_names[0]])*scale_y)
+            ymax.append(max(data[plot_args.y_value_names[0]])*scale_y)
             # material specific plot
             for yname in plot_args.y_value_names:
-              x.append(array(data[plot_args.x_value_name])*plot_args.scale_x)
-              ymin[-1] = min(ymin[-1],min(data[yname])*plot_args.scale_y)
-              ymax[-1] = max(ymin[-1],max(data[yname])*plot_args.scale_y)
+              x.append(array(data[plot_args.x_value_name])*scale_x)
+              ymin[-1] = min(ymin[-1],min(data[yname])*scale_y)
+              ymax[-1] = max(ymin[-1],max(data[yname])*scale_y)
               plabels.append(label+" "+yname)
               if (option.no_y_names):
                   plabels[-1] = ''
-              y.append(array(data[yname])*plot_args.scale_y)
+              y.append(array(data[yname])*scale_y)
     
             xmin = array(xmin)
             xmax = array(xmax)

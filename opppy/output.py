@@ -208,7 +208,7 @@ def print_dictionary_data(data):
         if key == 'appended_files' or key == 'version':
             continue
         print(key,":", end='\n  ')
-        if 'time' in data[key]:
+        if 'time' in data[key] and len(data[key]['time'])>0:
             print("#_of_entries = ", len(data[key]['time']), "\n  min_time =", min(data[key]['time']), "\n  max_time = ",max(data[key]['time']),end='\n  ')
         keys = list(data[key].keys())
         print("keys:")

@@ -96,7 +96,21 @@ class plot_dictionary():
         dictionary_name = args.dictionary_name
         yname = ''
         xname = ''
-        for dictionary, filename in zip(dictionaries,data_names):
+
+        if len(args.scale_x) != len(dictionaries):
+            if len(args.scale_x) == 0:
+                args.scale_x = [1.0]*len(dictionaries)
+            else:
+                args.scale_x = [args.scale_x[-1]]*len(dictionaries)
+
+        if len(args.scale_y) != len(dictionaries):
+            if len(args.scale_y) == 0:
+                args.scale_y = [1.0]*len(dictionaries)
+            else:
+                args.scale_y = [args.scale_y[-1]]*len(dictionaries)
+
+
+        for dictionary, filename, scale_x, scale_y in zip(dictionaries,data_names,args.scale_x,args.scale_y):
             data = dictionary[dictionary_name]
             new_file = True
             last_x = []
@@ -107,16 +121,16 @@ class plot_dictionary():
                 if(args.data_file_name is not None):
                     outputfile = open(args.data_file_name+'_'+filename.split('/')[-1].strip('.p')+'.'+dictionary_name.replace(' ','_').replace('/','_').replace('#','num')+"."+re.sub(r'[^\w]','',yname)+'.dat', 'w')
                 xname = args.x_value_name
-                x = np.array(data[xname])*args.scale_x
-                y = np.array(data[yname])*args.scale_y
+                x = np.array(data[xname])*scale_x
+                y = np.array(data[yname])*scale_y
                 if args.last_time_value is not None:
                     for time, x_value, y_value in zip(data['time'],data[xname],data[yname]):
                         if value > last_time_value:
-                            last_y.append(y_value*args.scale_y)
-                            last_x.append(x_value*args.scale_x)
+                            last_y.append(y_value*scale_y)
+                            last_x.append(x_value*scale_x)
                 elif args.last_point_only:
-                    last_y.append(data[yname][-1]*args.scale_y)
-                    last_x.append(data[xname][-1]*args.scale_x)
+                    last_y.append(data[yname][-1]*scale_y)
+                    last_x.append(data[xname][-1]*scale_x)
     
                 if(args.data_file_name is not None):
                     if(args.x_label is not None):
@@ -131,7 +145,7 @@ class plot_dictionary():
     
                     print('# ', header_xlabel, header_ylabel, file=outputfile)
                     for x_value, y_value in zip(x, y):
-                        outstring = "%.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+"\n"
+                        outstring = "%.9e"%(x_value*scale_x)+" %.9e"%(y_value*scale_y)+"\n"
                         outputfile.write(outstring)
                 data_name = ''                    
                 if(args.data_file_name is not None):
@@ -236,7 +250,7 @@ class plot_dictionary():
             PyPloter.ylabel(dictionary_name)
         
         if(args.y_limits is not None):
-            PyPloter.ylim(y_limits)
+            PyPloter.ylim(args.y_limits)
         
         if(args.plot_grid):
             PyPloter.grid()

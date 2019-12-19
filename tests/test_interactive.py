@@ -96,7 +96,16 @@ class test_interactive_utils(unittest.TestCase):
         os.system("python my_interactive_parser.py dump pickle -pf interactive_dump.p -df example_dump*.txt")
 
         # Parse and plot a point series
-        os.system("python my_interactive_parser.py dump point -df example_dump*.txt -df example_dump*.txt -dk x -p 5 -s time -d temperature")
+        os.system("python my_interactive_parser.py dump point -df example_dump*.txt -df example_dump*.txt -dk x -p 5 -s time -d temperature -sy 10.0 -sy 1.0")
+
+        # test individual scale x
+        os.system("python my_interactive_parser.py dump point -df example_dump*.txt -df example_dump*.txt -dk x -p 5 -s time -d temperature -sx 10.0 -sx 1.0")
+
+        # test scale all x
+        os.system("python my_interactive_parser.py dump point -df example_dump*.txt -df example_dump*.txt -dk x -p 5 -s time -d temperature -sx 10.0")
+
+        # test scale all y
+        os.system("python my_interactive_parser.py dump point -df example_dump*.txt -df example_dump*.txt -dk x -p 5 -s time -d temperature -sy 10.0")
 
         # plot a point series from a pickled dump
         os.system("python my_interactive_parser.py dump point -pf interactive_dump.p interactive_dump.p -dk x -p 5 -s time -d temperature")
@@ -124,6 +133,8 @@ class test_interactive_utils(unittest.TestCase):
         # parse and plot the output data files
         os.system("python my_interactive_parser.py tally plot -tf example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts [#]'")
         os.system("python my_interactive_parser.py tally plot -pf interactive_tally.p -sk time -sv 5.0 -dn cool_counts -x bins -xlab 'bin [#]'  -y even_counts  -ylab 'Counts [#]'")
+        # test scaling and log axis
+        os.system("python my_interactive_parser.py tally plot -tf example_tally*.txt -tf example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts  [#]' -lx -ly -sx 10 -sx 1e-3 -sy 10 -sy 1e-3 -xl 0.00001 1000 -yl 0.00001 10000")
 
 
  
