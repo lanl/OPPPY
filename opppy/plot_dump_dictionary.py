@@ -102,9 +102,21 @@ class plot_1d_dump_dictionary():
             print("Error: len of dictionaries do not match length of associated data names")
             sys.exit(0)
     
+        if len(args.scale_x) != len(dictionaries):
+            if len(args.scale_x) == 0:
+                args.scale_x = [1.0]*len(dictionaries)
+            else:
+                args.scale_x = [args.scale_x[-1]]*len(dictionaries)
+
+        if len(args.scale_y) != len(dictionaries):
+            if len(args.scale_y) == 0:
+                args.scale_y = [1.0]*len(dictionaries)
+            else:
+                args.scale_y = [args.scale_y[-1]]*len(dictionaries)
+
         yname = ''
         xname = ''
-        for data, filename in zip(dictionaries,data_names):
+        for data, filename, scale_x, scale_y in zip(dictionaries,data_names,args.scale_x,args.scale_y):
             new_file = True
             last_x = []
             last_y = []
@@ -117,16 +129,16 @@ class plot_1d_dump_dictionary():
                     time_str = ' t='+str("%.5e"%data['time'])
                 except:
                     time_str = ''
-                x = np.array(data[xname])*args.scale_x
-                y = np.array(data[yname])*args.scale_y
+                x = np.array(data[xname])*scale_x
+                y = np.array(data[yname])*scale_y
                 if args.last_time_value is not None:
                     for time, x_value, y_value in zip(data['time'],data[xname],data[yname]):
                         if value > last_time_value:
-                            last_y.append(y_value*args.scale_y)
-                            last_x.append(x_value*args.scale_x)
+                            last_y.append(y_value*scale_y)
+                            last_x.append(x_value*scale_x)
                 elif args.last_point_only:
-                    last_y.append(data[yname][-1]*args.scale_y)
-                    last_x.append(data[xname][-1]*args.scale_x)
+                    last_y.append(data[yname][-1]*scale_y)
+                    last_x.append(data[xname][-1]*scale_x)
     
                 if(args.data_file_name is not None):
                     if(args.x_label is not None):
@@ -141,7 +153,7 @@ class plot_1d_dump_dictionary():
     
                     print('# ', header_xlabel, header_ylabel, time_str, file=outputfile)
                     for x_value, y_value in zip(x, y):
-                        outstring = "%.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+"\n"
+                        outstring = "%.9e"%(x_value*scale_x)+" %.9e"%(y_value*scale_y)+"\n"
                         outputfile.write(outstring)
                 data_name = ''                    
                 if(args.data_file_name is not None):
@@ -247,7 +259,7 @@ class plot_1d_dump_dictionary():
             PyPloter.ylabel(yname)
         
         if(args.y_limits is not None):
-            PyPloter.ylim(y_limits)
+            PyPloter.ylim(args.y_limits)
         
         if(args.plot_grid):
             PyPloter.grid()
@@ -625,7 +637,20 @@ class plot_line_series_dictionary():
             xname = args.x_value_name
             yname = args.y_value_name
 
-            for series_pair, filename in zip(series_pairs, data_names):
+            if len(args.scale_x) != len(series_pairs):
+                if len(args.scale_x) == 0:
+                    args.scale_x = [1.0]*len(series_pairs)
+                else:
+                    args.scale_x = [args.scale_x[-1]]*len(series_pairs)
+
+            if len(args.scale_y) != len(series_pairs):
+                if len(args.scale_y) == 0:
+                    args.scale_y = [1.0]*len(series_pairs)
+                else:
+                    args.scale_y = [args.scale_y[-1]]*len(series_pairs)
+
+
+            for series_pair, filename, scale_x, scale_y in zip(series_pairs, data_names,args.scale_x,args.scale_y):
                 series_data = series_pair.grid
                 index_key =  next(iter(series_pair.index))
                 # find min and max of the data and write it to a file if necessary
@@ -633,13 +658,13 @@ class plot_line_series_dictionary():
                 if(args.data_file_name is not None):
                     outputfile = open(args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat', 'w')
 
-                xmin=(np.array(series_data[0][xname])*args.scale_x).min()
-                xmax=(np.array(series_data[0][xname])*args.scale_x).max()
-                ymin=(np.array(series_data[0][yname])*args.scale_y).min()
-                ymax=(np.array(series_data[0][yname])*args.scale_y).max()
+                xmin=(np.array(series_data[0][xname])*scale_x).min()
+                xmax=(np.array(series_data[0][xname])*scale_x).max()
+                ymin=(np.array(series_data[0][yname])*scale_y).min()
+                ymax=(np.array(series_data[0][yname])*scale_y).max()
                 for data, index_value in zip(series_data, series_pair.index[index_key]):
-                    x = np.array(data[xname])*args.scale_x
-                    y = np.array(data[yname])*args.scale_y
+                    x = np.array(data[xname])*scale_x
+                    y = np.array(data[yname])*scale_y
                     xmin = min(x.min(),xmin)
                     xmax = max(x.max(),xmax)
                     ymin = min(y.min(),ymin)
@@ -657,7 +682,7 @@ class plot_line_series_dictionary():
         
                         print('# ', index_key, header_xlabel, header_ylabel, file=outputfile)
                         for x_value, y_value in zip(x, y):
-                            outstring = "%.9e"%(index_value)+" %.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+"\n"
+                            outstring = "%.9e"%(index_value)+" %.9e"%(x_value*scale_x)+" %.9e"%(y_value*scale_y)+"\n"
                             outputfile.write(outstring)
                 if(args.data_file_name is not None):
                     print("data saved as -- "+args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat')
@@ -737,7 +762,7 @@ class plot_line_series_dictionary():
                 PyPloter.ylabel(yname)
             
             if(args.y_limits is not None):
-                PyPloter.ylim(y_limits)
+                PyPloter.ylim(args.y_limits)
             
             if(args.plot_grid):
                 PyPloter.grid()
@@ -756,7 +781,7 @@ class plot_line_series_dictionary():
             yname = args.y_value_name
             for j in range(0,len(series_pairs)):
                 data = series_pairs[j].grid[i]
-                lines[j].set_data(np.array(data[xname])*args.scale_x,np.array(data[yname])*args.scale_y)
+                lines[j].set_data(np.array(data[xname])*args.scale_x[j],np.array(data[yname])*args.scale_y[j])
             return lines
 
         ani = FuncAnimation(fig, animate, frames=len(series_pairs[0].grid), blit=True)
@@ -859,14 +884,14 @@ class plot_2d_series_dictionary():
             if(args.data_file_name is not None):
                 outputfile = open(args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat', 'w')
 
-            vmin=(np.array(series_data[0][dname])).min()
-            vmax=(np.array(series_data[0][dname])).max()
+            vmin=(np.array(series_data[0][dname])*args.scale_value).min()
+            vmax=(np.array(series_data[0][dname])*args.scale_value).max()
             xmin=(np.array(series_data[0][xname])*args.scale_x).min()
             xmax=(np.array(series_data[0][xname])*args.scale_x).max()
             ymin=(np.array(series_data[0][yname])*args.scale_y).min()
             ymax=(np.array(series_data[0][yname])*args.scale_y).max()
             for data, index_value in zip(series_data, series_pair.index[index_key]):
-                v = np.array(data[dname])*args.scale_x
+                v = np.array(data[dname])*args.scale_value
                 x = np.array(data[xname])*args.scale_x
                 y = np.array(data[yname])*args.scale_y
                 vmin = min(v.min(),vmin)
@@ -888,7 +913,7 @@ class plot_2d_series_dictionary():
         
                     print('# ', index_key, header_xlabel, header_ylabel, dname, file=outputfile)
                     for x_value, y_value, v_value in zip(x, y, v):
-                        outstring = "%.9e"%(index_value)+" %.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+" %.9e"%(v_value)+"\n"
+                        outstring = "%.9e"%(index_value)+" %.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+" %.9e"%(v_value*args.scale_value)+"\n"
                         outputfile.write(outstring)
             if(args.data_file_name is not None):
                 print("data saved as -- "+args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',dname)+'.dat')
@@ -916,7 +941,7 @@ class plot_2d_series_dictionary():
                 PyPloter.ylabel(yname)
             
             if(args.y_limits is not None):
-                PyPloter.ylim(y_limits)
+                PyPloter.ylim(args.y_limits)
             
             if(args.plot_grid):
                 PyPloter.grid()
