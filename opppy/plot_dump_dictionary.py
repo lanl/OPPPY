@@ -379,7 +379,13 @@ class plot_2d_dump_dictionary():
         else:
             griddata = data2grid(dictionary,xname,yname,data_name,args.num_grid,args.interp_method)
 
-        PyPloter.imshow(griddata[data_name] , extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower')
+        if(args.data_bounds):
+            vmin = args.data_bounds[0]
+            vmax = args.data_bounds[1]
+        else:
+            vmin = None
+            vmax = None
+        PyPloter.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
         PyPloter.colorbar()
         
         if(args.find_max_value):
@@ -521,7 +527,14 @@ class plot_3d_dump_dictionary():
         
         griddata = data2grid3Dslice(dictionary,xname,yname,zname,data_name,args.z_slice,args.num_grid,args.interp_method)
 
-        PyPloter.imshow(griddata[data_name] , extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower')
+        if(args.data_bounds):
+            vmin = args.data_bounds[0]
+            vmax = args.data_bounds[1]
+        else:
+            vmin = None
+            vmax = None
+
+        PyPloter.imshow(griddata[data_name], vmin=vmin,vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
         PyPloter.colorbar()
         
         if(args.find_max_value):
@@ -948,7 +961,11 @@ class plot_2d_series_dictionary():
             
             PyPloter.legend(loc='best')
             
-            imshow = PyPloter.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True)
+            if(args.data_bounds):
+                vmin = args.data_bounds[0]
+                vmax = args.data_bounds[1]
+
+            imshow = PyPloter.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')
             PyPloter.colorbar()
             
             return imshow, xmin, xmax, ymin, ymax, vmin, vmax
@@ -956,7 +973,7 @@ class plot_2d_series_dictionary():
         imshow, xmin, xmax, ymin, ymax, vmin, vmax = init_contour()
         ims = []
         for data in series_pair.grid:
-            ims.append([PyPloter.imshow(data[args.data_name], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True)])
+            ims.append([PyPloter.imshow(data[args.data_name], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')])
 
         ani = ArtistAnimation(fig, ims, interval=200, blit=True)
 
