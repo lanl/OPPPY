@@ -586,7 +586,7 @@ class interactive_dump_parser:
         plot_parser.set_defaults(func=self.plot_3d)
 
     def plot_3d(self, args):
-        dictionaries = generate_dump_dictionary_list(args.dump_names, self.dump_parser, args.key_words, args.pickle_files)
+        dictionaries = generate_dump_dictionary_list(args.dump_names, self.dump_parser, args.key_words, args.pickle_files, args.case_files)
         self.ploter_3d.plot_3d_slice(args, dictionaries[0])
 
 
@@ -597,7 +597,7 @@ class interactive_dump_parser:
 
 
     def plot_1d(self, args):
-        dictionaries = generate_dump_dictionary_list(args.dump_names, self.dump_parser, args.key_words, args.pickle_files)
+        dictionaries = generate_dump_dictionary_list(args.dump_names, self.dump_parser, args.key_words, args.pickle_files, args.case_files)
         self.ploter_1d.plot_1d(args, dictionaries, args.dump_names)
 
 
