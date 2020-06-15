@@ -17,6 +17,8 @@ Dictionary Plotting class
 
 import matplotlib.pyplot as PyPloter
 import matplotlib.axes as axes
+from matplotlib.collections import PatchCollection
+from matplotlib.patches import Polygon
 from matplotlib.animation import FuncAnimation
 from matplotlib.animation import ArtistAnimation
 import string, sys, os
@@ -327,6 +329,7 @@ class plot_2d_dump_dictionary():
         parser.add_argument('-d','--data_name',dest='data_name',help="data to be plotted on the (x,y) contour", type=str, required=True)
         parser.add_argument('-x','--x_data', dest='x_value_name', help='dictionary data to be plotted on the x axes.', required=True)
         parser.add_argument('-y','--y_data', dest='y_value_name', help='dictionary data to be plotted on the y axes.', required=True)
+        parser.add_argument('-v','--verts', dest='xy_verts_name', help='dictionary vertices for each cell.', type=str)
         add_2d_plot_options(parser);
 
     def plot_2d(self, args, dictionary):
@@ -370,23 +373,49 @@ class plot_2d_dump_dictionary():
             print("data saved as -- "+args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat')
             outputfile.close()
 
-        if args.x_limits is not None or args.y_limits is not None:
-            if args.x_limits is None:
-                args.x_limits = [min(x),max(x)]
-            if args.y_limits is None:
-                args.y_limits = [min(y),max(y)]
-            griddata = data2gridbox(dictionary,xname,yname,data_name,args.x_limits[0],args.y_limits[0],args.x_limits[1],args.y_limits[1],args.num_grid,args.interp_method)
-        else:
-            griddata = data2grid(dictionary,xname,yname,data_name,args.num_grid,args.interp_method)
-
         if(args.data_bounds):
             vmin = args.data_bounds[0]
             vmax = args.data_bounds[1]
         else:
             vmin = None
             vmax = None
-        PyPloter.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
-        PyPloter.colorbar()
+
+        if args.xy_verts_name is not None:
+            fig, ax = PyPloter.subplots()
+            if args.x_limits is None:
+                args.x_limits = [min(x),max(x)]
+            if args.y_limits is None:
+                args.y_limits = [min(y),max(y)]
+            ax.set_xlim(args.x_limits[0], args.x_limits[1])
+            ax.set_ylim(args.y_limits[0], args.y_limits[1])
+
+            xy_verts = dictionary[args.xy_verts_name]
+            if vmin is None:
+                vmin = min(data)
+            if vmax is None:
+                vmax = max(data)
+            patches = []
+            for verts in xy_verts:
+                patches.append(Polygon(xy=verts))
+            collection = PatchCollection(patches, cmap='jet')
+            collection.set_array(np.array(data))
+            collection.set_clim(vmin,vmax)
+            ax.add_collection(collection)
+            ax.set_aspect('equal', adjustable='box')
+            fig.colorbar(collection, ax=ax)
+        else:
+            if args.x_limits is not None or args.y_limits is not None:
+                if args.x_limits is None:
+                    args.x_limits = [min(x),max(x)]
+                if args.y_limits is None:
+                    args.y_limits = [min(y),max(y)]
+                griddata = data2gridbox(dictionary,xname,yname,data_name,args.x_limits[0],args.y_limits[0],args.x_limits[1],args.y_limits[1],args.num_grid,args.interp_method)
+            else:
+                griddata = data2grid(dictionary,xname,yname,data_name,args.num_grid,args.interp_method)
+
+          
+            PyPloter.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
+            PyPloter.colorbar()
         
         if(args.find_max_value):
             print(data_name, "max value ", x[y.index(max(data))], x[y.index(max(data))], max(data))
@@ -862,6 +891,7 @@ class plot_2d_series_dictionary():
         parser.add_argument('-d','--data_name',dest='data_name',help="data to be plotted on the (x,y) contour", type=str)
         parser.add_argument('-x','--x_data', dest='x_value_name', help='dictionary data to be plotted on the x axes.', required=True)
         parser.add_argument('-y','--y_data', dest='y_value_name', help='dictionary data to be plotted on the y axes.', required=True)
+        parser.add_argument('-v','--verts', dest='xy_verts_name', help='dictionary vertices for each cell.', type=str)
         add_2d_plot_options(parser);
     
     def plot_2d_series(self,args, series_pair):
