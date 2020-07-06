@@ -329,7 +329,12 @@ class plot_2d_dump_dictionary():
         parser.add_argument('-d','--data_name',dest='data_name',help="data to be plotted on the (x,y) contour", type=str, required=True)
         parser.add_argument('-x','--x_data', dest='x_value_name', help='dictionary data to be plotted on the x axes.', required=True)
         parser.add_argument('-y','--y_data', dest='y_value_name', help='dictionary data to be plotted on the y axes.', required=True)
-        parser.add_argument('-v','--verts', dest='xy_verts_name', help='dictionary vertices for each cell.', type=str)
+        parser.add_argument('-cm','--contour', dest='contour', help='Plot contour map.', nargs='?', type=bool, const=True, default=False)
+        parser.add_argument('-cl','--contour_lines', dest='contour_lines', help='Plot contour lines.', nargs='?', type=bool, const=True, default=False)
+        parser.add_argument('-clev','--contour_levels', dest='contour_levels', help='Contour levels.', nargs='+', type=float)
+        group = parser.add_argument_group()
+        group.add_argument('-v','--verts', dest='xy_verts_name', help='dictionary vertices for each cell.', type=str)
+        group.add_argument('-sm','--show_mesh', dest='show_mesh', help='show mesh (only valid if verts are included).', nargs='?', type=bool, const=True, default=False)
         add_2d_plot_options(parser);
 
     def plot_2d(self, args, dictionary):
@@ -397,12 +402,45 @@ class plot_2d_dump_dictionary():
             patches = []
             for verts in xy_verts:
                 patches.append(Polygon(xy=verts))
-            collection = PatchCollection(patches, cmap='jet')
+            collection = PatchCollection(patches, cmap='jet', snap=True)
             collection.set_array(np.array(data))
             collection.set_clim(vmin,vmax)
+            if args.show_mesh:
+                collection.set_edgecolors("black")
             ax.add_collection(collection)
             ax.set_aspect('equal', adjustable='box')
+            if(args.contour_lines):
+                collection.set_alpha(0.3)
+                if args.x_limits is None:
+                    args.x_limits = [min(x),max(x)]
+                if args.y_limits is None:
+                    args.y_limits = [min(y),max(y)]
+                ax.set_xlim(args.x_limits[0], args.x_limits[1])
+                ax.set_ylim(args.y_limits[0], args.y_limits[1])
+                ax.set_aspect('equal', adjustable='box')
+                ax.tricontour(x,y,data,cmap='jet',levels=args.contour_levels)
+
             fig.colorbar(collection, ax=ax)
+        elif(args.contour):
+            fig, ax = PyPloter.subplots()
+            if args.x_limits is None:
+                args.x_limits = [min(x),max(x)]
+            if args.y_limits is None:
+                args.y_limits = [min(y),max(y)]
+            ax.set_xlim(args.x_limits[0], args.x_limits[1])
+            ax.set_ylim(args.y_limits[0], args.y_limits[1])
+            ax.set_aspect('equal', adjustable='box')
+            PyPloter.tricontourf(x,y,data,cmap='jet',levels=args.contour_levels)
+        elif(args.contour_lines):
+            fig, ax = PyPloter.subplots()
+            if args.x_limits is None:
+                args.x_limits = [min(x),max(x)]
+            if args.y_limits is None:
+                args.y_limits = [min(y),max(y)]
+            ax.set_xlim(args.x_limits[0], args.x_limits[1])
+            ax.set_ylim(args.y_limits[0], args.y_limits[1])
+            ax.set_aspect('equal', adjustable='box')
+            PyPloter.tricontour(x,y,data,cmap='jet',levels=args.contour_levels)
         else:
             if args.x_limits is not None or args.y_limits is not None:
                 if args.x_limits is None:
@@ -416,7 +454,8 @@ class plot_2d_dump_dictionary():
           
             PyPloter.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
             PyPloter.colorbar()
-        
+
+
         if(args.find_max_value):
             print(data_name, "max value ", x[y.index(max(data))], x[y.index(max(data))], max(data))
         if(args.find_min_value):
@@ -442,7 +481,7 @@ class plot_2d_dump_dictionary():
         
         PyPloter.legend(loc='best')
         if(args.figure_name is not None):
-            fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
+            fig = PyPloter.savefig(args.figure_name, bbox_inches='tight', dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
             PyPloter.show()
@@ -891,7 +930,9 @@ class plot_2d_series_dictionary():
         parser.add_argument('-d','--data_name',dest='data_name',help="data to be plotted on the (x,y) contour", type=str)
         parser.add_argument('-x','--x_data', dest='x_value_name', help='dictionary data to be plotted on the x axes.', required=True)
         parser.add_argument('-y','--y_data', dest='y_value_name', help='dictionary data to be plotted on the y axes.', required=True)
-        parser.add_argument('-v','--verts', dest='xy_verts_name', help='dictionary vertices for each cell.', type=str)
+        group = parser.add_argument_group()
+        group.add_argument('-v','--verts', dest='xy_verts_name', help='dictionary vertices for each cell.', type=str)
+        group.add_argument('-sm','--show_mesh', dest='show_mesh', help='show mesh (only valid if verts are included).', nargs='?', type=bool, const=True, default=False)
         add_2d_plot_options(parser);
     
     def plot_2d_series(self,args, series_pair):
