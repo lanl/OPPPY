@@ -70,6 +70,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         
         dump_2d_ploter = plot_2d_dump_dictionary();
 
+        # using interpolate
         plot_string = '-x x -y y -d temperature'
         args = dump_2d_ploter.parse_input_string(plot_string)
 
@@ -77,6 +78,58 @@ class test_opppy_dump_utils(unittest.TestCase):
 
         # generate a plot given my plotting arguments, dictionary, and data name
         dump_2d_ploter.plot_2d(args, data)
+
+        # using polygon patches
+        plot_string = '-x x -y y -d temperature -v xy_verts -sm'
+        args = dump_2d_ploter.parse_input_string(plot_string)
+
+        # generate a plot given my plotting arguments, dictionary, and data name
+        dump_2d_ploter.plot_2d(args, data)
+
+        # using polygon patches with contour lines
+        plot_string = '-x x -y y -d temperature -v xy_verts -sm -cl'
+        args = dump_2d_ploter.parse_input_string(plot_string)
+
+        # generate a plot given my plotting arguments, dictionary, and data name
+        dump_2d_ploter.plot_2d(args, data)
+
+        # using polygon patches with contour lines and set contour levels
+        plot_string = '-x x -y y -d temperature -v xy_verts -sm -cl -clev 10.0 12.0 12.5 13.0'
+        args = dump_2d_ploter.parse_input_string(plot_string)
+
+        # generate a plot given my plotting arguments, dictionary, and data name
+        dump_2d_ploter.plot_2d(args, data)
+
+        # using contour lines
+        plot_string = '-x x -y y -d temperature -cl'
+        args = dump_2d_ploter.parse_input_string(plot_string)
+
+        # generate a plot given my plotting arguments, dictionary, and data name
+        dump_2d_ploter.plot_2d(args, data)
+
+        # using contour lines with contour levels
+        plot_string = '-x x -y y -d temperature -cl -clev 10.0 12.0 12.5 13.0'
+        args = dump_2d_ploter.parse_input_string(plot_string)
+
+        # generate a plot given my plotting arguments, dictionary, and data name
+        dump_2d_ploter.plot_2d(args, data)
+
+        # using contour map
+        plot_string = '-x x -y y -d temperature -cm'
+        args = dump_2d_ploter.parse_input_string(plot_string)
+
+        # generate a plot given my plotting arguments, dictionary, and data name
+        dump_2d_ploter.plot_2d(args, data)
+
+        # using contour map with contour levels
+        plot_string = '-x x -y y -d temperature -cm -clev 10.0 12.0 12.5 13.0'
+        args = dump_2d_ploter.parse_input_string(plot_string)
+
+        # generate a plot given my plotting arguments, dictionary, and data name
+        dump_2d_ploter.plot_2d(args, data)
+
+
+
 
     def test_3d_dump_ploter(self):
         '''

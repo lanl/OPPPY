@@ -386,15 +386,34 @@ class plot_2d_dump_dictionary():
             vmax = None
 
         if args.xy_verts_name is not None:
+            xy_verts = dictionary[args.xy_verts_name]
             fig, ax = PyPloter.subplots()
+            xmin = None
+            xmax = None
+            ymin = None
+            ymax = None
+            if args.x_limits is None or args.y_limits is None:
+                xmin = 1.e100
+                xmax = -1.e100
+                ymin = 1.e100
+                ymax = -1.e100
+                for verts in xy_verts:
+                    for xy in verts:
+                        if xy[0]<xmin:
+                            xmin = xy[0]
+                        if xy[0]>xmax:
+                            xmax = xy[0]
+                        if xy[1]<ymin:
+                            ymin = xy[1]
+                        if xy[1]>ymax:
+                            ymax = xy[1]
             if args.x_limits is None:
-                args.x_limits = [min(x),max(x)]
+                args.x_limits = [xmin,xmax]
             if args.y_limits is None:
-                args.y_limits = [min(y),max(y)]
+                args.y_limits = [ymin,ymax]
             ax.set_xlim(args.x_limits[0], args.x_limits[1])
             ax.set_ylim(args.y_limits[0], args.y_limits[1])
 
-            xy_verts = dictionary[args.xy_verts_name]
             if vmin is None:
                 vmin = min(data)
             if vmax is None:
