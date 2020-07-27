@@ -1,3 +1,32 @@
+2020-07-27 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_4
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+        + sphinx (to build documentation)
+
+    * Summary of changes:
+		+ Add improved 2d mesh plotting using mesh verticies
+		+ Add 2d contour line and contour map plotting
+
+    * Corrected defects:
+		+ Fix figure resolution option
+
+    * New Features:
+        + Add support for 2d mesh plotting (using python polygon patches)
+		+ Add show mesh option for polygon patches
+		+ Add 2d contour line and contour map plotting
+
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
 2020-06-03 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
         + OPPPY-0_1_3
