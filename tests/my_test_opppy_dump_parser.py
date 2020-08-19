@@ -34,6 +34,12 @@ class my_test_opppy_dump_parser():
                 if key in line and len(key) is len(line.split(':')[0]):
                     data[key] = array(str_vector_to_float_vector(line.strip('\n').split(' ')[1:]))
 
+        # build xy_verts for 2d mesh plotting example
+        xy_verts = []
+        for x, y in zip(data['x'], data['y']):
+           xy_verts.append([[x-0.5,y-0.5],[x+0.5,y-0.5],[x+0.5,y+0.5],[x-0.5,y+0.5]])
+        data['xy_verts'] = xy_verts
+
         return data
         
 
