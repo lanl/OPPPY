@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tests.test_dump_utils &mdash; OPPPY 0.1.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="OPPPY 0.1.2 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> OPPPY
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opppy.html">opppy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tests.html">tests package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OPPPY</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>tests.test_dump_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tests.test_dump_utils</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env pyton</span>
+<span class="c1"># ---------------------------*-python-*----------------------------------------#</span>
+<span class="c1"># file   test_output.py</span>
+<span class="c1"># author mathew cleveland</span>
+<span class="c1"># date   February 2019</span>
+<span class="c1"># note   Copyright (C) 2019, Los Alamos National Security, LLC.</span>
+<span class="c1">#        All rights reserved.</span>
+<span class="c1"># -----------------------------------------------------------------------------#</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">PyPlot</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">opppy.dump_utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">test</span> <span class="k">import</span> <span class="n">support</span>
+
+<div class="viewcode-block" id="test_opppy_dump_utils"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils">[docs]</a><span class="k">class</span> <span class="nc">test_opppy_dump_utils</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="test_opppy_dump_utils.test_dump_parser"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils.test_dump_parser">[docs]</a>    <span class="k">def</span> <span class="nf">test_dump_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Test a simple example opppy_dump parser</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">my_test_opppy_dump_parser</span> <span class="k">import</span> <span class="n">my_test_opppy_dump_parser</span>
+
+        <span class="c1"># initialize my test dump parser</span>
+        <span class="n">dump_parser</span> <span class="o">=</span> <span class="n">my_test_opppy_dump_parser</span><span class="p">()</span>
+        
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump.txt&quot;</span>
+        <span class="c1"># extract all data from the example dump file</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># extract a subset of data from the example dump file</span>
+        <span class="n">sub_data</span> <span class="o">=</span> <span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s1">&#39;density&#39;</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">sub_data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_opppy_dump_utils.test_point_value"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils.test_point_value">[docs]</a>    <span class="k">def</span> <span class="nf">test_point_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Thest the three different point value extraction functions</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">my_test_opppy_dump_parser</span> <span class="k">import</span> <span class="n">my_test_opppy_dump_parser</span>
+
+        <span class="c1"># initialize my test dump parser</span>
+        <span class="n">dump_parser</span> <span class="o">=</span> <span class="n">my_test_opppy_dump_parser</span><span class="p">()</span>
+        
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump.txt&quot;</span>
+        <span class="c1"># extract all data from the example dump file</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        
+        <span class="c1"># extract a 1D data value</span>
+        <span class="n">point1d</span> <span class="o">=</span> <span class="n">point_value_1d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;cell_id&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">);</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">point1d</span><span class="p">)</span>
+
+        <span class="n">point2d</span> <span class="o">=</span> <span class="n">point_value_2d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">);</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">point2d</span><span class="p">)</span>
+    
+        <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">point3d</span> <span class="o">=</span> <span class="n">point_value_3d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">point3d</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_opppy_dump_utils.test_point_series"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils.test_point_series">[docs]</a>    <span class="k">def</span> <span class="nf">test_point_series</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Thest the three different point value extraction functions</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">my_test_opppy_dump_parser</span> <span class="k">import</span> <span class="n">my_test_opppy_dump_parser</span>
+
+        <span class="c1"># initialize my test dump parser</span>
+        <span class="n">dump_parser</span> <span class="o">=</span> <span class="n">my_test_opppy_dump_parser</span><span class="p">()</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump.txt&quot;</span>
+        <span class="c1"># extract all data from the example dump file</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump2.txt&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump3.txt&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        
+        <span class="c1"># extract a 1D data value</span>
+        <span class="n">tracer_x</span><span class="p">,</span> <span class="n">tracer_y</span> <span class="o">=</span> <span class="n">extract_series_point</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;density&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_x</span><span class="p">,</span> <span class="n">tracer_y</span><span class="p">)</span>
+        <span class="n">tracer_x</span><span class="p">,</span> <span class="n">tracer_y</span> <span class="o">=</span> <span class="n">extract_series_point</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;density&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_x</span><span class="p">,</span> <span class="n">tracer_y</span><span class="p">)</span>
+        <span class="n">tracer_x</span><span class="p">,</span> <span class="n">tracer_y</span> <span class="o">=</span> <span class="n">extract_series_point</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;density&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">5.0</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_x</span><span class="p">,</span> <span class="n">tracer_y</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="test_opppy_dump_utils.test_grid_data"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils.test_grid_data">[docs]</a>    <span class="k">def</span> <span class="nf">test_grid_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Test the ability to extract contour</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">my_test_opppy_dump_parser</span> <span class="k">import</span> <span class="n">my_test_opppy_dump_parser</span>
+
+        <span class="c1"># initialize my test dump parser</span>
+        <span class="n">dump_parser</span> <span class="o">=</span> <span class="n">my_test_opppy_dump_parser</span><span class="p">()</span>
+        
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump.txt&quot;</span>
+        <span class="c1"># extract all data from the example dump file</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        
+        <span class="c1"># extract data to a grid</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">data2grid</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;density&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># plot the data as a check </span>
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="s1">&#39;density&#39;</span><span class="p">]</span> <span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">grid</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">grid</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">grid</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        
+        <span class="c1"># plot the data in a bounding box</span>
+        <span class="n">gridbox</span> <span class="o">=</span> <span class="n">data2gridbox</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gridbox</span><span class="p">[</span><span class="s1">&#39;density&#39;</span><span class="p">]</span> <span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">gridbox</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">gridbox</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">gridbox</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">gridbox</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="c1"># extract an x slice of data</span>
+        <span class="n">gridxslice</span> <span class="o">=</span> <span class="n">data2grid3Dslice</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span>
+
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gridxslice</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">gridxslice</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">gridxslice</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">gridxslice</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">gridxslice</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">gridxslice</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_opppy_dump_utils.test_2D_series"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils.test_2D_series">[docs]</a>    <span class="k">def</span> <span class="nf">test_2D_series</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Thest the 2D series function</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">my_test_opppy_dump_parser</span> <span class="k">import</span> <span class="n">my_test_opppy_dump_parser</span>
+
+        <span class="c1"># initialize my test dump parser</span>
+        <span class="n">dump_parser</span> <span class="o">=</span> <span class="n">my_test_opppy_dump_parser</span><span class="p">()</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump.txt&quot;</span>
+        <span class="c1"># extract all data from the example dump file</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump2.txt&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump3.txt&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        
+        <span class="c1"># extract a 1D data value</span>
+        <span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span> <span class="o">=</span> <span class="n">extract_series_2d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;temperature&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">npts</span><span class="o">=</span><span class="mi">5</span> <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span><span class="p">)</span>
+        <span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span> <span class="o">=</span> <span class="n">extract_series_2d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;temperature&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">npts</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">]</span> <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_opppy_dump_utils.test_2D_slice_series"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils.test_2D_slice_series">[docs]</a>    <span class="k">def</span> <span class="nf">test_2D_slice_series</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Thest the three different point value extraction functions</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">my_test_opppy_dump_parser</span> <span class="k">import</span> <span class="n">my_test_opppy_dump_parser</span>
+
+        <span class="c1"># initialize my test dump parser</span>
+        <span class="n">dump_parser</span> <span class="o">=</span> <span class="n">my_test_opppy_dump_parser</span><span class="p">()</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump.txt&quot;</span>
+        <span class="c1"># extract all data from the example dump file</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump2.txt&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump3.txt&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        
+        <span class="c1"># extract 2d plane data value</span>
+        <span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span> <span class="o">=</span> <span class="n">extract_series_2d_slice</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;temperature&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">5</span> <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="test_opppy_dump_utils.test_data_2_line"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils.test_data_2_line">[docs]</a>    <span class="k">def</span> <span class="nf">test_data_2_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Test the ability to extract line data from 2 and 3D dump files</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">my_test_opppy_dump_parser</span> <span class="k">import</span> <span class="n">my_test_opppy_dump_parser</span>
+
+        <span class="c1"># initialize my test dump parser</span>
+        <span class="n">dump_parser</span> <span class="o">=</span> <span class="n">my_test_opppy_dump_parser</span><span class="p">()</span>
+        
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump.txt&quot;</span>
+        <span class="c1"># extract all data from the example dump file</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># plot the data in a bounding box</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data2line2d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="c1"># plot the data in a bounding box</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data2line3d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span>  <span class="mf">5.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">PyPlot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="test_opppy_dump_utils.test_line_series"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_opppy_dump_utils.test_line_series">[docs]</a>    <span class="k">def</span> <span class="nf">test_line_series</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Thest the three different point value extraction functions</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">my_test_opppy_dump_parser</span> <span class="k">import</span> <span class="n">my_test_opppy_dump_parser</span>
+
+        <span class="c1"># initialize my test dump parser</span>
+        <span class="n">dump_parser</span> <span class="o">=</span> <span class="n">my_test_opppy_dump_parser</span><span class="p">()</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump.txt&quot;</span>
+        <span class="c1"># extract all data from the example dump file</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump2.txt&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_dump3.txt&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dump_parser</span><span class="o">.</span><span class="n">build_data_dictionary</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        
+        <span class="c1"># extract a 1D data value</span>
+        <span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span> <span class="o">=</span> <span class="n">extract_series_line</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;temperature&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span>  <span class="p">[</span><span class="mf">5.0</span><span class="p">],</span> <span class="n">npts</span><span class="o">=</span><span class="mi">5</span> <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span><span class="p">)</span>
+        <span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span> <span class="o">=</span> <span class="n">extract_series_line</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;temperature&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>  <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="n">npts</span><span class="o">=</span><span class="mi">5</span> <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span><span class="p">)</span>
+        <span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span> <span class="o">=</span> <span class="n">extract_series_line</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s2">&quot;temperature&quot;</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">],</span>  <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">],</span> <span class="n">npts</span><span class="o">=</span><span class="mi">5</span>  <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tracer_t</span><span class="p">,</span> <span class="n">tracer_grid</span><span class="p">)</span></div></div>
+        
+
+
+ 
+<div class="viewcode-block" id="test_main"><a class="viewcode-back" href="../../tests.html#tests.test_dump_utils.test_main">[docs]</a><span class="k">def</span> <span class="nf">test_main</span><span class="p">():</span>
+  <span class="n">support</span><span class="o">.</span><span class="n">run_unittest</span><span class="p">(</span><span class="n">test_opppy_dump_utils</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+  <span class="n">test_main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Mathew Cleveland.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
