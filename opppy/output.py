@@ -116,45 +116,36 @@ def append_data(data, cycle_data, cycle_info, sort_key_string):
       data - python dictionary of appended data
     '''
     time = cycle_info[sort_key_string]
-    number_of_time_steps = len(data[sort_key_string])
-    reversed_time = reversed(data[sort_key_string])
-    dict_keys = list(data.keys())
-    cycle_keys = list(cycle_data.keys())
-    for index, data_time in zip(list(range(number_of_time_steps,0,-1)),reversed_time):
+    last_time = data[sort_key_string][-1]
+    # pop off any old data 
+    if(time<=last_time):
+        reversed_time = reversed(data[sort_key_string])
+        dict_keys = list(data.keys())
+        for data_time in reversed_time:
+            if(data_time >= time):
+                # pop the old data off the data arrays
+                for key in dict_keys:
+                    data[key].pop(-1)
+            else:
+                break
 
-        if(data_time == time):
-            # replace the cycle_info data
-            for subkey in list(cycle_info):
-                data[subkey][-1] = cycle_info[subkey]
-            # replace or back fill the cycle data
-            for key in cycle_keys:
-                if key in data:
-                    data[key][-1] = cycle_data[key]
-                else:
-                    # Backfill missing data with zeros
-                    data[key] = [0]*len(data[sort_key_string])
-                    data[key][-1] = cycle_data[key]
-            break
-        elif(data_time > time):
-            # pop the old data off the data arrays
-            for key in dict_keys:
-                data[key].pop(-1)
+    # Now the data array is clean of duplicate data we can do a simple append
+    # extend existing arrays
+    for key in data.keys():
+        data[key].append(0)
+    # fill the cycle_info data
+    for subkey in list(cycle_info):
+        data[subkey][-1] = cycle_info[subkey]
+    # filly the cycle data 
+
+    cycle_keys = list(cycle_data.keys())
+    for key in cycle_keys:
+        if key in data:
+            data[key][-1] = cycle_data[key]
         else:
-            # extend existing arrays
-            for key in data.keys():
-                data[key].append(0)
-            # fill the cycle_info data
-            for subkey in list(cycle_info):
-                data[subkey][-1] = cycle_info[subkey]
-            # filly the cycle data 
-            for key in cycle_keys:
-                if key in data:
-                    data[key][-1] = cycle_data[key]
-                else:
-                    # Backfill missing data with zeros
-                    data[key] = [0]*len(data[sort_key_string])
-                    data[key][-1] = cycle_data[key]
-            break
+            # Backfill missing data with zeros
+            data[key] = [0]*len(data[sort_key_string])
+            data[key][-1] = cycle_data[key]
     return data
 
 
