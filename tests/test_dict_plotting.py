@@ -11,7 +11,7 @@ import sys
 sys.path.append('..')
 
 import os 
-dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
 
 import unittest
 from test import support
