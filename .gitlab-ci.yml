@@ -1,0 +1,56 @@
+stages:
+    - test
+
+variables:
+      GIT_STRATEGY: clone
+
+test-python3.7:
+    only:
+        - merge_requests
+        - master
+    tags:
+        - skylake-v.2
+    stage: test
+    script:
+        - module load anaconda/Anaconda3.2019.10
+        # ensure we are actually using Python 3.7
+        - python -c "import sys; assert sys.version_info.major == 3"
+        - python -c "import sys; assert sys.version_info.minor == 7"
+        - python -m pip install --user coverage
+        - coverage -m test/test_tally.py
+## 
+## test-python3.8:
+##     only:
+##         - merge_requests
+##         - master
+##     tags:
+##         - skylake-v.2
+##     stage: test
+##     script:
+##         - module load anaconda/Anaconda3.2019.10
+##         - conda clean -a
+##         - conda create -y -n py38_tws python=3.8
+##         - source activate py38_tws
+##         # ensure we are actually using Python 3.8
+##         - python -c "import sys; assert sys.version_info.major == 3"
+##         - python -c "import sys; assert sys.version_info.minor == 8"
+##         - python -m pip install --user pytest-cov
+##         - python -m pytest --cov-report term-missing --cov=tws_xrage --durations=10
+## 
+## test-python3.9:
+##     only:
+##         - merge_requests
+##         - master
+##     tags:
+##         - skylake-v.2
+##     stage: test
+##     script:
+##         - module load anaconda/Anaconda3.2019.10
+##         - conda clean -a
+##         - conda create -y -n py39_tws python=3.9
+##         - source activate py39_tws
+##         # ensure we are actually using Python 3.9
+##         - python -c "import sys; assert sys.version_info.major == 3"
+##         - python -c "import sys; assert sys.version_info.minor == 9"
+##         - python -m pip install --user pytest-cov
+##         - python -m pytest --cov-report term-missing --cov=tws_xrage --durations=10
