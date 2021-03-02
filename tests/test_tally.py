@@ -10,6 +10,9 @@ import sys
 
 sys.path.append('..')
 
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
+
 import unittest
 from test import support
 
@@ -53,21 +56,21 @@ class test_opppy_tally(unittest.TestCase):
     data['version'] = __version__
   
     # Append the first output file
-    tally_files = ["example_tally1.txt"]
+    tally_files = [dir_path+"example_tally1.txt"]
     # Build initial pickle
     append_tally_dictionary(data, tally_files, opppy_parser)
 
     print(data)
   
     # Append the second tally file
-    tally_files = ["example_tally2.txt"]
+    tally_files = [dir_path+"example_tally2.txt"]
     # Build initial pickle
     append_tally_dictionary(data, tally_files, opppy_parser)
   
     print(data)
     
     # Append the thrid tally file
-    tally_files = ["example_tally3.txt"]
+    tally_files = [dir_path+"example_tally3.txt"]
     # Build initial pickle
     append_tally_dictionary(data, tally_files, opppy_parser)
 
@@ -79,7 +82,7 @@ class test_opppy_tally(unittest.TestCase):
   
   
     # Append the thrid tally file
-    tally_files = ["example_tally1.txt","example_tally2.txt","example_tally3.txt"]
+    tally_files = [dir_path+"example_tally1.txt",dir_path+"example_tally2.txt",dir_path+"example_tally3.txt"]
     # Build initial pickle
     append_tally_dictionary(data2, tally_files, opppy_parser)
 
