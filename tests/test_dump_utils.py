@@ -11,6 +11,9 @@ import matplotlib.pyplot as PyPlot
 
 sys.path.append('..')
 
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
+
 from opppy.dump_utils import *
 import unittest
 from test import support
@@ -25,7 +28,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         # initialize my test dump parser
         dump_parser = my_test_opppy_dump_parser()
         
-        filename = "example_dump.txt"
+        filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
         data = dump_parser.build_data_dictionary(filename)
 
@@ -45,7 +48,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         # initialize my test dump parser
         dump_parser = my_test_opppy_dump_parser()
         
-        filename = "example_dump.txt"
+        filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
         data = dump_parser.build_data_dictionary(filename)
         
@@ -73,12 +76,12 @@ class test_opppy_dump_utils(unittest.TestCase):
         dump_parser = my_test_opppy_dump_parser()
         
         data = []
-        filename = "example_dump.txt"
+        filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
         data.append(dump_parser.build_data_dictionary(filename))
-        filename = "example_dump2.txt"
+        filename = dir_path + "example_dump2.txt"
         data.append(dump_parser.build_data_dictionary(filename))
-        filename = "example_dump3.txt"
+        filename = dir_path + "example_dump3.txt"
         data.append(dump_parser.build_data_dictionary(filename))
         
         # extract a 1D data value
@@ -100,7 +103,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         # initialize my test dump parser
         dump_parser = my_test_opppy_dump_parser()
         
-        filename = "example_dump.txt"
+        filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
         data = dump_parser.build_data_dictionary(filename)
         
@@ -134,12 +137,12 @@ class test_opppy_dump_utils(unittest.TestCase):
         dump_parser = my_test_opppy_dump_parser()
         
         data = []
-        filename = "example_dump.txt"
+        filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
         data.append(dump_parser.build_data_dictionary(filename))
-        filename = "example_dump2.txt"
+        filename = dir_path + "example_dump2.txt"
         data.append(dump_parser.build_data_dictionary(filename))
-        filename = "example_dump3.txt"
+        filename = dir_path + "example_dump3.txt"
         data.append(dump_parser.build_data_dictionary(filename))
         
         # extract a 1D data value
@@ -158,12 +161,12 @@ class test_opppy_dump_utils(unittest.TestCase):
         dump_parser = my_test_opppy_dump_parser()
         
         data = []
-        filename = "example_dump.txt"
+        filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
         data.append(dump_parser.build_data_dictionary(filename))
-        filename = "example_dump2.txt"
+        filename = dir_path + "example_dump2.txt"
         data.append(dump_parser.build_data_dictionary(filename))
-        filename = "example_dump3.txt"
+        filename = dir_path + "example_dump3.txt"
         data.append(dump_parser.build_data_dictionary(filename))
         
         # extract 2d plane data value
@@ -181,7 +184,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         # initialize my test dump parser
         dump_parser = my_test_opppy_dump_parser()
         
-        filename = "example_dump.txt"
+        filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
         data = dump_parser.build_data_dictionary(filename)
 
@@ -208,12 +211,12 @@ class test_opppy_dump_utils(unittest.TestCase):
         dump_parser = my_test_opppy_dump_parser()
         
         data = []
-        filename = "example_dump.txt"
+        filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
         data.append(dump_parser.build_data_dictionary(filename))
-        filename = "example_dump2.txt"
+        filename = dir_path + "example_dump2.txt"
         data.append(dump_parser.build_data_dictionary(filename))
-        filename = "example_dump3.txt"
+        filename = dir_path + "example_dump3.txt"
         data.append(dump_parser.build_data_dictionary(filename))
         
         # extract a 1D data value
