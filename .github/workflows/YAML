@@ -1,56 +1,32 @@
-stages:
-    - test
+name: Python package
 
-variables:
-      GIT_STRATEGY: clone
+on: [push]
 
-test-python3.7:
-    only:
-        - merge_requests
-        - master
-    tags:
-        - skylake-v.2
-    stage: test
-    script:
-        - module load anaconda/Anaconda3.2019.10
-        # ensure we are actually using Python 3.7
-        - python -c "import sys; assert sys.version_info.major == 3"
-        - python -c "import sys; assert sys.version_info.minor == 7"
-        - python -m pip install --user coverage
-        - coverage -m test/test_tally.py
-## 
-## test-python3.8:
-##     only:
-##         - merge_requests
-##         - master
-##     tags:
-##         - skylake-v.2
-##     stage: test
-##     script:
-##         - module load anaconda/Anaconda3.2019.10
-##         - conda clean -a
-##         - conda create -y -n py38_tws python=3.8
-##         - source activate py38_tws
-##         # ensure we are actually using Python 3.8
-##         - python -c "import sys; assert sys.version_info.major == 3"
-##         - python -c "import sys; assert sys.version_info.minor == 8"
-##         - python -m pip install --user pytest-cov
-##         - python -m pytest --cov-report term-missing --cov=tws_xrage --durations=10
-## 
-## test-python3.9:
-##     only:
-##         - merge_requests
-##         - master
-##     tags:
-##         - skylake-v.2
-##     stage: test
-##     script:
-##         - module load anaconda/Anaconda3.2019.10
-##         - conda clean -a
-##         - conda create -y -n py39_tws python=3.9
-##         - source activate py39_tws
-##         # ensure we are actually using Python 3.9
-##         - python -c "import sys; assert sys.version_info.major == 3"
-##         - python -c "import sys; assert sys.version_info.minor == 9"
-##         - python -m pip install --user pytest-cov
-##         - python -m pytest --cov-report term-missing --cov=tws_xrage --durations=10
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        pytest
