@@ -10,6 +10,9 @@ import sys
 
 sys.path.append('..')
 
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
 import unittest
 from test import support
 import shlex
@@ -34,7 +37,7 @@ class test_dict_plotting(unittest.TestCase):
     data['version'] = __version__
   
     # Append the thrid output file
-    output_files = ["output_example1.txt","output_example2.txt","output_example3.txt"]
+    output_files = [dir_path+"output_example1.txt",dir_path+"output_example2.txt",dir_path+"output_example3.txt"]
     # Build initial pickle
     append_output_dictionary(data, output_files, opppy_parser)
 
