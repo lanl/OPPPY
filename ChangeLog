@@ -1,3 +1,34 @@
+2021-03-03 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_5
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+        + sphinx (to build documentation)
+
+    * Summary of changes:
+		+ Improve output parsing performance
+		+ Add github integration testing
+        + Add github documentation hosting
+
+    * Corrected defects:
+        + Improve output parsing performance by only checking for duplicates
+        when the current cycle time is less then or equal to the last parsed
+        cycle time
+
+    * New Features:
+        + Github integration testing
+		+ Github documentation
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+
 2020-07-27 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
         + OPPPY-0_1_4
