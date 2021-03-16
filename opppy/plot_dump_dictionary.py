@@ -387,6 +387,7 @@ class plot_2d_dump_dictionary():
 
         if args.xy_verts_name is not None:
             xy_verts = dictionary[args.xy_verts_name]
+            xy_verts = [ [[xy[0]*args.scale_x,xy[1]*args.scale_y] for xy in verts] for verts in xy_verts]
             fig, ax = PyPloter.subplots()
             xmin = None
             xmax = None
