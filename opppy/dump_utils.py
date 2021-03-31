@@ -498,7 +498,7 @@ def append_dumps(data, dump_files, opppy_parser, key_words=None):
     count = 0
     for dump in dump_files:
       # append new dictionary data to the pickle file
-      data[dump.split('/')[0]] = opppy_parser.build_data_dictionary(dump,key_words)
+      data[dump.split('/')[-1]] = opppy_parser.build_data_dictionary(dump,key_words)
       count += 1
       progress(count,total, 'of dump files read')
 
