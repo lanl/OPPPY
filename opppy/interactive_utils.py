@@ -804,12 +804,12 @@ class interactive_dump_parser:
             tracer_t = {}
             tracer_grid = {}
             if args.z_slice_location is not None:
-                if len(args.dimension_keys) is not 3:
+                if len(args.dimension_keys) != 3:
                     print('Error: z_slice_location specified so length of dimension_keys must be 3')
                     sys.exit(0)
                 tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.z_slice_location, args.number_of_points, args.interpolation_method) 
             else:
-                if len(args.dimension_keys) is not 2:
+                if len(args.dimension_keys) != 2:
                     print('Error: z_slice_location specified is not specified so length of dimension_keys must be 2')
                 tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.number_of_points, args.interpolation_method) 
             series_data = series_pair(tracer_t, tracer_grid)
@@ -822,12 +822,12 @@ class interactive_dump_parser:
             tracer_t = {}
             tracer_grid = {}
             if args.z_slice_location is not None:
-                if len(args.dimension_keys) is not 3:
+                if len(args.dimension_keys) != 3:
                     print('Error: z_slice_location specified so length of dimension_keys must be 3')
                     sys.exit(0)
                 tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.z_slice_location, args.number_of_points, args.interpolation_method) 
             else:
-                if len(args.dimension_keys) is not 2:
+                if len(args.dimension_keys) != 2:
                     print('Error: z_slice_location specified is not specified so length of dimension_keys must be 2')
                 tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.number_of_points, args.interpolation_method) 
             series_data = series_pair(tracer_t, tracer_grid)
@@ -836,12 +836,12 @@ class interactive_dump_parser:
             tracer_t = {}
             tracer_grid = {}
             if args.z_slice_location is not None:
-                if len(args.dimension_keys) is not 3:
+                if len(args.dimension_keys) != 3:
                     print('Error: z_slice_location specified so length of dimension_keys must be 3')
                     sys.exit(0)
                 tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.z_slice_location, args.number_of_points, args.interpolation_method) 
             else:
-                if len(args.dimension_keys) is not 2:
+                if len(args.dimension_keys) != 2:
                     print('Error: z_slice_location specified is not specified so length of dimension_keys must be 2')
                 tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.number_of_points, args.interpolation_method) 
             series_data = series_pair(tracer_t, tracer_grid)

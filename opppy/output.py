@@ -259,7 +259,7 @@ def get_output_lines(filename,opening_string,closing_string, file_end_string=Non
           reading_cycle = True
       elif reading_cycle and closing_string in str(line):
           # catch the special exception when the line is a return character
-          if closing_string == '\n' and len(line) is not 1:
+          if closing_string == '\n' and len(line) != 1:
               temp_lines += line
               continue
           reading_cycle = False
