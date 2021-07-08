@@ -13,6 +13,7 @@
 		+ Fix log scale to allow negative values in 2d plots
 		+ Remove old "is not" syntax errors
         + Allow formated prints in plot titles
+		+ Allow more efficient parsing of case files 
 
     * Corrected defects:
 		+ Fix log scale to allow negative values in 2d plots
@@ -20,6 +21,8 @@
 
     * New Features:
         + Allow formated prints in plot titles
+		+ Case file parsing will only parse specified dump names when
+		requested
 
     * Known Defects:
         + Not all plotting features have been tested.
