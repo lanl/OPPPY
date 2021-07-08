@@ -355,8 +355,9 @@ class plot_2d_dump_dictionary():
         if(args.data_file_name is not None):
             outputfile = open(args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat', 'w')
         data = np.array(dictionary[data_name])*args.scale_value
-        if(args.log_scale is not None):
-            data = [ math.log10(val) if val>0.0 else 0.0 for val in data]
+        if(args.log_scale):
+            bias = abs(min(data));
+            data = [ math.log10(val+bias) if val+bias>0.0 else 0.0 for val in data]
         x = np.array(dictionary[xname])*args.scale_x
         y = np.array(dictionary[yname])*args.scale_y
 
@@ -484,17 +485,17 @@ class plot_2d_dump_dictionary():
             print(data_name, "min value ", x[y.index(min(data))], x[y.index(min(data))], min(data))
         
         if args.plot_title is not None:
-            PyPloter.title(args.plot_title)
+            PyPloter.title(bytes(args.plot_title, "utf-8").decode("unicode_escape"))
         else:
             PyPloter.title(data_name)
 
         if(args.x_label is not None):
-            PyPloter.xlabel(args.x_label)
+            PyPloter.xlabel(bytes(args.x_label, "utf-8").decode("unicode_escape"))
         else:
             PyPloter.xlabel(xname)
         
         if(args.y_label is not None):
-            PyPloter.ylabel(args.y_label)
+            PyPloter.ylabel(bytes(args.y_label, "utf-8").decode("unicode_escape"))
         else:
             PyPloter.ylabel(yname)
         
