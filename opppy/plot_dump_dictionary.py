@@ -355,6 +355,8 @@ class plot_2d_dump_dictionary():
         if(args.data_file_name is not None):
             outputfile = open(args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat', 'w')
         data = np.array(dictionary[data_name])*args.scale_value
+        if(args.log_scale is not None):
+            data = [ math.log10(val) if val>0.0 else 0.0 for val in data]
         x = np.array(dictionary[xname])*args.scale_x
         y = np.array(dictionary[yname])*args.scale_y
 

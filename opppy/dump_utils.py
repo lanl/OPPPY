@@ -583,7 +583,7 @@ def build_data_list(dump_names, opppy_dump_parser, key_words=None):
     return dictionary_data
 
 
-def append_case(data, case_file, opppy_parser, key_words=None):
+def append_case(data, case_file, opppy_parser, key_words=None, dump_names=None):
     '''
     Append case file data to an existing opppy dictionary
 
@@ -595,7 +595,7 @@ def append_case(data, case_file, opppy_parser, key_words=None):
             name for tracking purposes 
     '''
     # append new dictionary data to the pickle file
-    data = opppy_parser.append_case_dictionary(data,case_file,key_words)
+    data = opppy_parser.append_case_dictionary(data,case_file,key_words,dump_names)
 
     print('')
     print('')
@@ -613,7 +613,7 @@ def build_case_data_list(case_file, dump_names, opppy_dump_parser, key_words=Non
     dictionary_data = []
     data = {}
     data['version'] = __version__
-    append_case(data, case_file, opppy_dump_parser, key_words)
+    append_case(data, case_file, opppy_dump_parser, key_words, dump_names)
     data.pop('version')
     if dump_names is None:
         for key in list(data.keys()):

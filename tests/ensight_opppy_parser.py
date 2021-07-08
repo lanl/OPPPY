@@ -27,7 +27,7 @@ class ensight_opppy_dump_parser():
     '''
     OPPPY dump parser for ensight files
     '''
-    def append_case_dictionary(self, dump_dictionary, case_filename, dump_keys=None):
+    def append_case_dictionary(self, dump_dictionary, case_filename, dump_keys=None, dump_names=None):
       # initialize the cycle parsing data
       self.case_filename = case_filename
 
@@ -176,6 +176,9 @@ class ensight_opppy_dump_parser():
       for filenumber, time in zip(range(filename_start_number, number_of_steps, filename_increment), times):
         data = {}
         dumpname = dumpname_prefix + '.{:0{prec}d}'.format(filenumber, prec=filename_int_count)
+        # skip non specified dumps if availabe
+        if args.dump_names is not None and dumpname not in args.dump_names:
+            continue
         # skip previously append dumps
         if dumpname in dump_dictionary.keys():
             continue
