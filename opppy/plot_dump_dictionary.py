@@ -472,7 +472,10 @@ class plot_2d_dump_dictionary():
                     args.y_limits = [min(y),max(y)]
                 griddata = data2gridbox(dictionary,xname,yname,data_name,args.x_limits[0],args.y_limits[0],args.x_limits[1],args.y_limits[1],args.num_grid,args.interp_method)
             else:
-                griddata = data2grid(dictionary,xname,yname,data_name,args.num_grid,args.interp_method)
+                try:
+                    griddata = data2grid(dictionary,xname,yname,data_name,args.num_grid,args.interp_method)
+                except:
+                    griddata = dictionary
 
           
             PyPloter.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
