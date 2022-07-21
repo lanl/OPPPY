@@ -332,28 +332,19 @@ def extract_series_point(data_list,series_key,value_key,dim_keys,point_values,me
     Y = []
     for data in data_list:
         if dim == 1:
-            if len(data[series_key]) == 1:
-                T.append(data[series_key][0])
-            else:
-                T.append(point_value_1d(data, dim_keys[0], series_key, point_values[0], method)[0])
+            T.append(data[series_key])
             if len(data[value_key]) == 1:
                 Y.append(data[value_key][0])
             else:
                 Y.append(point_value_1d(data, dim_keys[0], value_key, point_values[0], method)[0])
         elif dim == 2:
-            if len(data[series_key]) == 1:
-                T.append(data[series_key][0])
-            else:
-                T.append(point_value_2d(data, dim_keys[0], dim_keys[1], series_key, point_values[0], point_values[1], method)[0])
+            T.append(data[series_key])
             if len(data[value_key]) == 1:
                 Y.append(data[value_key][0])
             else:
                 Y.append(point_value_2d(data, dim_keys[0], dim_keys[1], value_key, point_values[0], point_values[1], method)[0])
         else:
-            if len(data[series_key]) == 1:
-                T.append(data[series_key][0])
-            else:
-                T.append(point_value_3d(data, dim_keys[0], dim_keys[1], dim_keys[2], series_key, point_values[0], point_values[1], point_values[2], method)[0])
+            T.append(data[series_key])
             if len(data[value_key]) == 1:
                 Y.append(data[value_key][0])
             else:
@@ -391,11 +382,7 @@ def extract_series_line(data_list,series_key,value_key,dim_keys,point0_values,po
     T = []
     grid = []
     for data in data_list:
-        if len(data[series_key]) == 1:
-            T.append(data[series_key][0])
-        else:
-            print("Error: series_key dictionary item must return a single value (i.e. cycle or time)")
-            sys.exit(0)
+        T.append(data[series_key])
         my_grid = {}
         if dim == 1:
             my_grid['distance'], my_grid[value_key] = data2line1d(data, dim_keys[0], value_key, point0_values[0], point1_values[0], npts, method)
@@ -434,11 +421,7 @@ def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, meth
     T = []
     grid = []
     for data in data_list:
-        if len(data[series_key]) == 1:
-            T.append(data[series_key][0])
-        else:
-            print("Error: series_key dictionary item must return a single value (i.e. cycle or time)")
-            sys.exit(0)
+        T.append(data[series_key])
         if len(box) == 0:
             grid.append(data2grid(data, dim_keys[0], dim_keys[1], value_key, npts, method))
         else:
