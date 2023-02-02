@@ -30,7 +30,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as PyPloter
 import re
-import parser
+import ast
 
 
 ####################################################
@@ -230,7 +230,7 @@ def get_value(y_value_name, names, data):
             sys.exit()
     # Convert the function string to a function
     # print y_value_name, function_string
-    function = parser.expr(function_string).compile()
+    function = ast.parse(function_string).compile()
     # return the function evaluation
     return eval(function)
 
