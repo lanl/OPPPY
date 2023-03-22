@@ -31,7 +31,7 @@ except ImportError:
 
 setup(name='opppy',
       version=__version__,
-      python_requires='>=3.0',
+      python_requires='>=3.6',
       description='Output Parse-Pickle-Plot Python (OPPPY) library',
       author='Mathew Cleveland',
       author_email='cleveland@lanl.gov',
