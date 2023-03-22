@@ -1,3 +1,32 @@
+2023-03-021 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_10
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+        + sphinx (to build documentation)
+
+    * Summary of changes:
+		+ Remove parser dependency and replace with ast required for python 3.10 support
+		+ Fix series data plotting with interactive plotter
+
+    * Corrected defects:
+		+ Remove parser dependency and replace with ast required for python 3.10 support
+		+ Fix series data plotting with interactive plotter
+
+    * New Features:
+        + Python 3.10+ support
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+
+
 2021-07-08 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
         + OPPPY-0_1_6
