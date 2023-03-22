@@ -31,10 +31,12 @@ except ImportError:
 
 setup(name='opppy',
       version=__version__,
+      python_requires='>=3.0',
       description='Output Parse-Pickle-Plot Python (OPPPY) library',
       author='Mathew Cleveland',
       author_email='cleveland@lanl.gov',
-      url='https://gitlab.lanl.gov/chaos/opppy',
+      url='https://github.com/lanl/OPPPY',
+      install_requires=['numpy', 'scipy', 'matplotlib'],
       packages=['opppy'])
 
 ##---------------------------------------------------------------------------##
