@@ -14,7 +14,6 @@ import os
 dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
 
 import unittest
-from test import support
 
 from opppy.output import *
 from opppy.tally import *
@@ -87,10 +86,3 @@ class test_opppy_tally(unittest.TestCase):
     append_tally_dictionary(data2, tally_files, opppy_parser)
 
     print(data2)
-  
-  
-def test_main():
-  support.run_unittest(test_opppy_tally)
-
-if __name__ == '__main__':
-  test_main()

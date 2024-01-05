@@ -14,7 +14,6 @@ import os
 dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
 
 import unittest
-from test import support
 
 from opppy.output import *
 
@@ -112,10 +111,3 @@ class test_opppy_outputs(unittest.TestCase):
     append_output_dictionary(data2, output_files, opppy_parser)
 
     print(data2)
-  
-  
-def test_main():
-  support.run_unittest(test_opppy_outputs)
-
-if __name__ == '__main__':
-  test_main()
