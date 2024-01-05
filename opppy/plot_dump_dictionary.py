@@ -470,10 +470,13 @@ class plot_2d_dump_dictionary():
                     args.x_limits = [min(x),max(x)]
                 if args.y_limits is None:
                     args.y_limits = [min(y),max(y)]
-                griddata = data2gridbox(dictionary,xname,yname,data_name,args.x_limits[0],args.y_limits[0],args.x_limits[1],args.y_limits[1],args.num_grid,args.interp_method)
+                griddata = data2gridbox(dictionary, xname, yname, data_name, args.x_limits[0], 
+                        args.y_limits[0], args.x_limits[1], args.y_limits[1], args.num_grid, 
+                        args.interp_method,args.log_scale)
             else:
                 try:
-                    griddata = data2grid(dictionary,xname,yname,data_name,args.num_grid,args.interp_method)
+                    griddata = data2grid(dictionary, xname, yname, data_name, args.num_grid,
+                            args.interp_method, args.log_scale)
                 except:
                     griddata = dictionary
 
@@ -619,7 +622,8 @@ class plot_3d_dump_dictionary():
             print("data saved as -- "+args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat')
             outputfile.close()
         
-        griddata = data2grid3Dslice(dictionary,xname,yname,zname,data_name,args.z_slice,args.num_grid,args.interp_method)
+        griddata = data2grid3Dslice(dictionary, xname, yname, zname, data_name, args.z_slice,
+                args.num_grid, args.interp_method, args.log_scale)
 
         if(args.data_bounds):
             vmin = args.data_bounds[0]

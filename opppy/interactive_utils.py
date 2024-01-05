@@ -807,11 +807,15 @@ class interactive_dump_parser:
                 if len(args.dimension_keys) != 3:
                     print('Error: z_slice_location specified so length of dimension_keys must be 3')
                     sys.exit(0)
-                tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.z_slice_location, args.number_of_points, args.interpolation_method) 
+                tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key,
+                        args.data_name, args.dimension_keys, args.z_slice_location,
+                        args.number_of_points, args.interpolation_method, args.log_scale) 
             else:
                 if len(args.dimension_keys) != 2:
                     print('Error: z_slice_location specified is not specified so length of dimension_keys must be 2')
-                tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.number_of_points, args.interpolation_method) 
+                tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key,
+                        args.data_name, args.dimension_keys, args.number_of_points,
+                        args.interpolation_method, args.log_scale) 
             series_data = series_pair(tracer_t, tracer_grid)
         elif args.pickle_file is not None:
             dictionary = pickle.load(open(args.pickle_file,'rb'))
@@ -825,11 +829,15 @@ class interactive_dump_parser:
                 if len(args.dimension_keys) != 3:
                     print('Error: z_slice_location specified so length of dimension_keys must be 3')
                     sys.exit(0)
-                tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.z_slice_location, args.number_of_points, args.interpolation_method) 
+                tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key,
+                        args.data_name, args.dimension_keys, args.z_slice_location,
+                        args.number_of_points, args.interpolation_method, args.log_scale) 
             else:
                 if len(args.dimension_keys) != 2:
                     print('Error: z_slice_location specified is not specified so length of dimension_keys must be 2')
-                tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.number_of_points, args.interpolation_method) 
+                tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key,
+                        args.data_name, args.dimension_keys, args.number_of_points,
+                        args.interpolation_method, args.log_scale) 
             series_data = series_pair(tracer_t, tracer_grid)
         if args.case_file is not None:
             dictionary_list = build_case_data_list(args.case_file, None, self.dump_parser, args.key_words)
@@ -839,11 +847,15 @@ class interactive_dump_parser:
                 if len(args.dimension_keys) != 3:
                     print('Error: z_slice_location specified so length of dimension_keys must be 3')
                     sys.exit(0)
-                tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.z_slice_location, args.number_of_points, args.interpolation_method) 
+                tracer_t, tracer_grid = extract_series_2d_slice(dictionary_list, args.series_key,
+                        args.data_name, args.dimension_keys, args.z_slice_location,
+                        args.number_of_points, args.interpolation_method, args.log_scale) 
             else:
                 if len(args.dimension_keys) != 2:
                     print('Error: z_slice_location specified is not specified so length of dimension_keys must be 2')
-                tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key, args.data_name, args.dimension_keys, args.number_of_points, args.interpolation_method) 
+                tracer_t, tracer_grid = extract_series_2d(dictionary_list, args.series_key,
+                        args.data_name, args.dimension_keys, args.number_of_points,
+                        args.interpolation_method, args.log_scale) 
             series_data = series_pair(tracer_t, tracer_grid)
 
         args.x_value_name= args.dimension_keys[0]

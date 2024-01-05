@@ -123,7 +123,7 @@ def point_value_3d(data, x_key, y_key, z_key, value_key, x_value, y_value, z_val
 
 
 
-def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest'):
+def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest', log_scale=False):
     '''
     This function takes a 2D data structure from dictionary and creates a 2D
     grid for each array by interpolating. This is useful for plotting.
@@ -147,6 +147,9 @@ def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest'):
     grid_data = {}
     value = data[value_key]
     grid_data[value_key] = griddata((X, Y), value, (xi, yi), method).T
+    if(log_scale):
+        grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
+                gird_data[value_key]]
     grid_data[x_key] = xi
     grid_data[y_key] = yi
 
@@ -154,7 +157,8 @@ def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest'):
 
 
 
-def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500, method='nearest'):
+def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500, method='nearest',
+        log_scale=False):
     '''
     This function takes a 2D data structure from a data dictionary and creates
     a 2D grid for each array by interpolating in a user defined region.
@@ -183,6 +187,9 @@ def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500,
     grid_data = {}
     value = data[value_key]
     grid_data[value_key] = griddata((X, Y), value, (xi, yi), method).T
+    if(log_scale):
+        grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
+                gird_data[value_key]]
     grid_data[x_key] = xi
     grid_data[y_key] = yi
 
@@ -190,7 +197,8 @@ def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500,
 
 
 
-def data2grid3Dslice(data, x_key, y_key, z_key, value_key, z_slice_value, npts=500,method='nearest'):
+def data2grid3Dslice(data, x_key, y_key, z_key, value_key, z_slice_value, npts=500,method='nearest',
+        log_scale=False):
     ''' 
     This function takes a 3D data structure from a data dictionary and creates
     a 2D grid for each array by interpolating. This is useful for plotting.
@@ -215,6 +223,9 @@ def data2grid3Dslice(data, x_key, y_key, z_key, value_key, z_slice_value, npts=5
     grid_data = {}
     V = data[value_key]
     grid_data[value_key] = griddata((X, Y, Z), V, (xi, yi, zi), method).T[0]
+    if(log_scale):
+        grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
+                gird_data[value_key]]
     grid_data[x_key] = xi.T[0]
     grid_data[y_key] = yi.T[0]
 
@@ -408,7 +419,8 @@ def extract_series_line(data_list,series_key,value_key,dim_keys,point0_values,po
 
     return t, grid
 
-def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, method='nearest', box=[]):
+def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, method='nearest',
+        box=[], log_scale=False):
     '''
     This function extracts the data values along a specified line from a
     series of data dictionaries.
@@ -432,16 +444,18 @@ def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, meth
     for data in data_list:
         T.append(data[series_key])
         if len(box) == 0:
-            grid.append(data2grid(data, dim_keys[0], dim_keys[1], value_key, npts, method))
+            grid.append(data2grid(data, dim_keys[0], dim_keys[1], value_key, npts, method, log_scale))
         else:
-            grid.append(data2gridbox(data, dim_keys[0], dim_keys[1], value_key, box[0], box[1], box[2], box[3],npts,method))
+            grid.append(data2gridbox(data, dim_keys[0], dim_keys[1], value_key, box[0], box[1],
+                box[2], box[3],npts,method, log_scale))
 
     t = {}
     t[series_key] = array(T)
 
     return t, grid
 
-def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value, npts=500, method='nearest'):
+def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value, npts=500,
+        method='nearest', log_scale=False):
     '''
     This function extracts the data values along a specified line from a
     series of data dictionaries.
@@ -468,7 +482,8 @@ def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value
             print("Error: series_key dictionary item must return a single value (i.e. cycle or time)")
             sys.exit(0)
 
-        grid.append(data2grid3Dslice(data, dim_keys[0], dim_keys[1], dim_keys[2],value_key, slice_value, npts, method))
+        grid.append(data2grid3Dslice(data, dim_keys[0], dim_keys[1], dim_keys[2],value_key,
+            slice_value, npts, method, log_scale))
 
     t = {}
     t[series_key] = array(T)
