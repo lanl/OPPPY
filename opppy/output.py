@@ -27,6 +27,8 @@ import sys
 import pickle
 import io
 import numpy as np
+## JUST WANT TO SEE IF THE TESTING IS STILL WORKING
+import so
 
 from opppy.version import __version__
 from opppy.progress import *
