@@ -279,11 +279,3 @@ class test_opppy_dump_utils(unittest.TestCase):
         print("Is data available", contour_series_ploter.is_data_available(args, series_data))
         # generate a plot given my plotting arguments, dictionary, and data name
         contour_series_ploter.plot_2d_series(args, series_data)
-
-
- 
-def test_main():
-  support.run_unittest(test_opppy_dump_utils)
-
-if __name__ == '__main__':
-  test_main()

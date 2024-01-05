@@ -16,7 +16,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
 
 from opppy.dump_utils import *
 import unittest
-from test import support
 
 class test_opppy_dump_utils(unittest.TestCase):
     def test_dump_parser(self):
@@ -226,12 +225,3 @@ class test_opppy_dump_utils(unittest.TestCase):
         print(tracer_t, tracer_grid)
         tracer_t, tracer_grid = extract_series_line(data,'time',"temperature",['x','y','z'], [5.0, 1.0, 1.2],  [5.0, 2.0, 1.75], npts=5  )
         print(tracer_t, tracer_grid)
-        
-
-
- 
-def test_main():
-  support.run_unittest(test_opppy_dump_utils)
-
-if __name__ == '__main__':
-  test_main()
