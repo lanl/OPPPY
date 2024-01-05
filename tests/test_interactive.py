@@ -16,7 +16,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
 
 import os
 import unittest
-from test import support
 import shlex
 
 class test_interactive_utils(unittest.TestCase):
@@ -139,12 +138,3 @@ class test_interactive_utils(unittest.TestCase):
         os.system("python my_interactive_parser.py tally plot -pf interactive_tally.p -sk time -sv 5.0 -dn cool_counts -x bins -xlab 'bin [#]'  -y even_counts  -ylab 'Counts [#]'")
         # test scaling and log axis
         os.system("python my_interactive_parser.py tally plot -tf "+dir_path+"example_tally*.txt -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts  [#]' -lx -ly -sx 10 -sx 1e-3 -sy 10 -sy 1e-3 -xl 0.00001 1000 -yl 0.00001 10000")
-
-
- 
-
-def test_main():
-  support.run_unittest(test_interactive_utils)
-
-if __name__ == '__main__':
-  unittest.main()

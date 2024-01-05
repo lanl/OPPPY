@@ -14,7 +14,6 @@ import os
 dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
 
 import unittest
-from test import support
 import shlex
 
 from opppy.tally import *
@@ -60,13 +59,3 @@ class test_dict_plotting(unittest.TestCase):
 
     # generate a plot given my plotting arguments, dictionary, and data name
     ploter.plot_dict(args, [data['tally_cycle_data'][index],data['tally_cycle_data'][index+1]], ["my_test_dict t ="+str(data['time'][index]), "my_test_dict t ="+str(data['time'][index+1])])
-
-
-    
-
-
-def test_main():
-  support.run_unittest(test_dict_plotting)
-
-if __name__ == '__main__':
-  test_main()

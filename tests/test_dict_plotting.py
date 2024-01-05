@@ -14,7 +14,6 @@ import os
 dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
 
 import unittest
-from test import support
 import shlex
 
 from opppy.output import *
@@ -55,13 +54,3 @@ class test_dict_plotting(unittest.TestCase):
 
     # generate a plot given my plotting arguments, dictionary, and data name
     ploter.plot_dict(args, [data], ["my_test_dict"])
-
-
-    
-
-
-def test_main():
-  support.run_unittest(test_dict_plotting)
-
-if __name__ == '__main__':
-  test_main()
