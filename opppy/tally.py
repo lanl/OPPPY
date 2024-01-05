@@ -33,10 +33,11 @@ from opppy.progress import *
 from opppy.output import *
 
 USE_THREADS = not os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('false', '0', 'f')
-if(USE_THREADS):
+try:
     from multiprocessing import Process, Manager
-
-
+except:
+    print("WARNING: multiprocessing module unavailable, turning off threads")
+    USE_THREADS = False
 
 def append_tally_data(cycle_data, data, sort_key_string):
     '''
