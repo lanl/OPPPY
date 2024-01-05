@@ -1000,8 +1000,14 @@ class plot_2d_series_dictionary():
             xmax=(np.array(series_data[0][xname])*args.scale_x).max()
             ymin=(np.array(series_data[0][yname])*args.scale_y).min()
             ymax=(np.array(series_data[0][yname])*args.scale_y).max()
+            bias = 0.0
             for data, index_value in zip(series_data, series_pair.index[index_key]):
                 v = np.array(data[dname])*args.scale_value
+                if(args.log_scale):
+                    bias = v.min()
+                    bias = 0.0 if bias>0.0 else abs(bias)
+                    v = np.array([ [math.log10(val+bias) if (val+bias)>0.0 else 0.0 
+                        for val in vals] for vals in v])
                 x = np.array(data[xname])*args.scale_x
                 y = np.array(data[yname])*args.scale_y
                 vmin = min(v.min(),vmin)
@@ -1059,8 +1065,8 @@ class plot_2d_series_dictionary():
             PyPloter.legend(loc='best')
             
             if(args.data_bounds):
-                vmin = args.data_bounds[0]
-                vmax = args.data_bounds[1]
+                vmin = args.data_bounds[0] if not args.log_scale else math.log10(args.data_bounds[0]+bias)
+                vmax = args.data_bounds[1] if not args.log_scale else math.log10(args.data_bounds[1]+bias)
 
             imshow = PyPloter.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')
             PyPloter.colorbar()

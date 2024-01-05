@@ -26,10 +26,16 @@
 '''
 
 from numpy import *
+import os
 import sys
 import pickle
 
 from opppy.progress import progress
+
+USE_THREADS = not os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('false', '0', 'f')
+if(USE_THREADS):
+    from multiprocessing import Process, Manager
+
 
 def point_value_1d(data, x_key, value_key, x_value, method='nearest'):
     '''
@@ -477,13 +483,32 @@ def append_dumps(data, dump_files, opppy_parser, key_words=None):
         append_date bool to specify if the data should be appended to the file
             name for tracking purposes 
     '''
+
     total = len(dump_files)
     count = 0
-    for dump in dump_files:
-      # append new dictionary data to the pickle file
-      data[dump.split('/')[-1]] = opppy_parser.build_data_dictionary(dump,key_words)
-      count += 1
-      progress(count,total, 'of dump files read')
+    print('')
+    print("Number of files to be read: ", total)
+    if(USE_THREADS):
+        def thread_all(file_name, key_words, result_d):
+            result_d[file_name.split('/')[-1]] = opppy_parser.build_data_dictionary(file_name,key_words)
+        with Manager() as manager:
+            result_d = manager.dict()
+            threads = []
+            for file_name in dump_files:
+                thread = Process(target=thread_all, args=(file_name, key_words, result_d,))
+                thread.start()
+                threads.append(thread)
+            for thread in threads:
+                thread.join()
+                count += 1
+                progress(count,total, 'of input files read')
+            data.update(result_d)
+    else:
+        for dump in dump_files:
+          # append new dictionary data to the pickle file
+          data[dump.split('/')[-1]] = opppy_parser.build_data_dictionary(dump,key_words)
+          count += 1
+          progress(count,total, 'of dump files read')
 
     print('')
     print('')

@@ -26,10 +26,16 @@ Utilities to extract cycle data from outputs
 import sys
 import pickle
 import io
+import os
 import numpy as np
 
 from opppy.version import __version__
 from opppy.progress import *
+
+USE_THREADS = not os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('false', '0', 'f')
+if(USE_THREADS):
+    from multiprocessing import Process, Manager
+
 
 
 def append_cycle_data(cycle_data, data, sort_key_string):
@@ -330,7 +336,6 @@ def append_output_dictionary(data, output_files, opppy_parser, append_date=False
         print("This data dictionary has no version")
       print("This version of OPPPY is ", __version__)
       sys.exit(0)
-
     time = ''
     if append_date:
       time = time+'.'+datetime.datetime.now().strftime ("%Y%m%d%H%M%S")
@@ -338,25 +343,52 @@ def append_output_dictionary(data, output_files, opppy_parser, append_date=False
     total = len(output_files) 
     print('')
     print("Number of files to be read: ", total)
-    cycle_string_list=[]
+    data_list = []
+    if(USE_THREADS):
+      def thread_all(file_name, result_d):
+          thread_cycle_string_list = get_output_lines(file_name, opppy_parser.cycle_opening_string,
+                 opppy_parser.cycle_closing_string, opppy_parser.file_end_string);
+          thread_data = []
+          for cycle_string in thread_cycle_string_list:
+                thread_data.append(extract_cycle_data(cycle_string, opppy_parser))
+          result_d[file_name]=thread_data
+      with Manager() as manager:
+            result_d = manager.dict()
+            threads = []
+            for file_name in output_files:
+                thread = Process(target=thread_all, args=(file_name, result_d,))
+                thread.start()
+                threads.append(thread)
+            for thread in threads:
+                thread.join()
+                count += 1
+                progress(count,total, 'of input files read')
+            for file_name in output_files:
+                data_list += result_d[file_name]
+    else:
+      cycle_string_list=[]
+      for file_name in output_files:
+        cycle_string_list+=get_output_lines(file_name, opppy_parser.cycle_opening_string, opppy_parser.cycle_closing_string, opppy_parser.file_end_string)
+        count += 1
+        progress(count,total, 'of input files read')
+
+      count = 0
+      total = len(cycle_string_list) 
+      print('')
+      print("Number of cycles to be parsed: ", total)
+      for cycle_string in cycle_string_list:
+        data_list.append(extract_cycle_data(cycle_string, opppy_parser))
+        count += 1
+        progress(count,total, 'of cycles parsed')
+      print('')
+
     for file_name in output_files:
-      cycle_string_list+=get_output_lines(file_name, opppy_parser.cycle_opening_string, opppy_parser.cycle_closing_string, opppy_parser.file_end_string)
       if 'appended_files' in data:
           data['appended_files'].append(file_name.split('/')[-1]+time)
       else:
           data['appended_files'] = [file_name.split('/')[-1]+time]
-      count += 1
-      progress(count,total, 'of input files read')
-
-    total = len(cycle_string_list) 
-    count = 0
-    print('')
-    print("Number of cycles to be parsed: ", total)
-    for cycle_string in cycle_string_list:
-      cycle_data = extract_cycle_data(cycle_string, opppy_parser)
+    for cycle_data in data_list:
       data = append_cycle_data(cycle_data,data,opppy_parser.sort_key_string)
-      count += 1
-      progress(count,total, 'of cycles parsed')
 
     print('')
     print('')
