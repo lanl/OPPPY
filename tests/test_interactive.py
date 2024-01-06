@@ -46,6 +46,8 @@ class test_interactive_utils(unittest.TestCase):
     def test_pickle_output(self):
         # This uses glob to pickle all the output data
         assert(os.system("python my_interactive_parser.py output pickle -pf interactive.p -of "+dir_path+"output_example*.txt")==0)
+        # Test no threads
+        assert(os.system("OPPPY_USE_THREADS=False python my_interactive_parser.py output pickle -pf interactive.p -of "+dir_path+"output_example*.txt")==0)
 
     def test_plot_pickle(self):
         # This uses glob to pickle all the output data
@@ -66,6 +68,8 @@ class test_interactive_utils(unittest.TestCase):
     def test_pickle_dumps(self):
         # This uses glob to pickle all the dump data
         assert(os.system("python my_interactive_parser.py dump pickle -pf interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
+        # Test serial parsing
+        assert(os.system("OPPPY_USE_THREADS=False python my_interactive_parser.py dump pickle -pf interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
 
     def test_plot_dump(self):
         # This uses glob to pickle all the dump data
@@ -126,6 +130,8 @@ class test_interactive_utils(unittest.TestCase):
     def test_pickle_tally(self):
         # This uses glob to pickle all the output data
         assert(os.system("python my_interactive_parser.py tally pickle -pf interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
+        # Test Serial parsing
+        assert(os.system("OPPPY_USE_THREADS=False python my_interactive_parser.py tally pickle -pf interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
 
     def test_plot_tally(self):
         # This uses glob to pickle all the output data
