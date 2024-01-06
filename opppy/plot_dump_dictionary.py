@@ -359,7 +359,7 @@ class plot_2d_dump_dictionary():
         data = np.array(dictionary[data_name])*args.scale_value
         if(args.log_scale):
             bias = abs(min(data));
-            data = [ math.log10(val+bias) if val+bias>0.0 else 0.0 for val in data]
+            data = [ log10(val+bias) if val+bias>0.0 else 0.0 for val in data]
         x = np.array(dictionary[xname])*args.scale_x
         y = np.array(dictionary[yname])*args.scale_y
 
@@ -1015,7 +1015,7 @@ class plot_2d_series_dictionary():
                 if(args.log_scale):
                     bias = v.min()
                     bias = 0.0 if bias>0.0 else abs(bias)
-                    v = np.array([ [math.log10(val+bias) if (val+bias)>0.0 else 0.0 
+                    v = np.array([ [log10(val+bias) if (val+bias)>0.0 else 0.0 
                         for val in vals] for vals in v])
                 x = np.array(data[xname])*args.scale_x
                 y = np.array(data[yname])*args.scale_y
@@ -1074,8 +1074,8 @@ class plot_2d_series_dictionary():
             PyPloter.legend(loc='best')
             
             if(args.data_bounds):
-                vmin = args.data_bounds[0] if not args.log_scale else math.log10(args.data_bounds[0]+bias)
-                vmax = args.data_bounds[1] if not args.log_scale else math.log10(args.data_bounds[1]+bias)
+                vmin = args.data_bounds[0] if not args.log_scale else log10(args.data_bounds[0]+bias)
+                vmax = args.data_bounds[1] if not args.log_scale else log10(args.data_bounds[1]+bias)
 
             imshow = PyPloter.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')
             PyPloter.colorbar()
