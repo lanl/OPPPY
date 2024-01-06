@@ -29,15 +29,11 @@ from numpy import *
 import os
 import sys
 import pickle
+from multiprocessing import Process, Manager
 
 from opppy.progress import progress
 
 USE_THREADS = not os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('false', '0', 'f')
-try:
-    from multiprocessing import Process, Manager
-except:
-    print("WARNING: multiprocessing module unavailable, turning off threads")
-    USE_THREADS = False
 
 
 def point_value_1d(data, x_key, value_key, x_value, method='nearest'):
@@ -149,7 +145,7 @@ def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest', log_sca
     grid_data[value_key] = griddata((X, Y), value, (xi, yi), method).T
     if(log_scale):
         grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
-                gird_data[value_key]]
+                grid_data[value_key]]
     grid_data[x_key] = xi
     grid_data[y_key] = yi
 
@@ -189,7 +185,7 @@ def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500,
     grid_data[value_key] = griddata((X, Y), value, (xi, yi), method).T
     if(log_scale):
         grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
-                gird_data[value_key]]
+                grid_data[value_key]]
     grid_data[x_key] = xi
     grid_data[y_key] = yi
 
@@ -225,7 +221,7 @@ def data2grid3Dslice(data, x_key, y_key, z_key, value_key, z_slice_value, npts=5
     grid_data[value_key] = griddata((X, Y, Z), V, (xi, yi, zi), method).T[0]
     if(log_scale):
         grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
-                gird_data[value_key]]
+                grid_data[value_key]]
     grid_data[x_key] = xi.T[0]
     grid_data[y_key] = yi.T[0]
 
@@ -420,7 +416,7 @@ def extract_series_line(data_list,series_key,value_key,dim_keys,point0_values,po
     return t, grid
 
 def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, method='nearest',
-        box=[], log_scale=False):
+        log_scale=False, box=[]):
     '''
     This function extracts the data values along a specified line from a
     series of data dictionaries.

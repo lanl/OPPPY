@@ -27,17 +27,13 @@ import pickle
 import io
 import os
 import numpy as np
+from multiprocessing import Process, Manager
 
 from opppy.version import __version__
 from opppy.progress import *
 from opppy.output import *
 
 USE_THREADS = not os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('false', '0', 'f')
-try:
-    from multiprocessing import Process, Manager
-except:
-    print("WARNING: multiprocessing module unavailable, turning off threads")
-    USE_THREADS = False
 
 def append_tally_data(cycle_data, data, sort_key_string):
     '''
