@@ -21,6 +21,7 @@ import re
 from math import *
 import argparse
 import shlex
+import warnings
 
 from opppy.plotting_help import *
 
@@ -264,6 +265,7 @@ class plot_dictionary():
             fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
     
     

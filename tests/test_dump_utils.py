@@ -98,6 +98,8 @@ class test_opppy_dump_utils(unittest.TestCase):
         Test the ability to extract contour
         '''
         from my_test_opppy_dump_parser import my_test_opppy_dump_parser
+        import warnings
+        warnings.filterwarnings("ignore")
 
         # initialize my test dump parser
         dump_parser = my_test_opppy_dump_parser()
@@ -179,6 +181,9 @@ class test_opppy_dump_utils(unittest.TestCase):
         Test the ability to extract line data from 2 and 3D dump files
         '''
         from my_test_opppy_dump_parser import my_test_opppy_dump_parser
+        import warnings
+        warnings.filterwarnings("ignore")
+
 
         # initialize my test dump parser
         dump_parser = my_test_opppy_dump_parser()

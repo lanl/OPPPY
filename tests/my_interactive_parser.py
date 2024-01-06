@@ -13,6 +13,14 @@ sys.path.append('..')
 import unittest
 from test import support
 import shlex
+import os
+
+# suppress plotting for pytest
+SHOW_PLOTS = os.getenv("SHOW_PLOTS", 'False').lower() in ('true', '1', 't')
+import matplotlib
+if(not SHOW_PLOTS):
+    matplotlib.use('Agg')
+
 
 from opppy.interactive_utils import *
 

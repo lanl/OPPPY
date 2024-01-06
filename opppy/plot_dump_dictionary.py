@@ -24,6 +24,7 @@ from matplotlib.animation import ArtistAnimation
 import string, sys, os
 import numpy as np
 import re
+import warnings
 from math import *
 import argparse
 import shlex
@@ -275,6 +276,7 @@ class plot_1d_dump_dictionary():
             fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
     
 class plot_2d_dump_dictionary():
@@ -513,6 +515,7 @@ class plot_2d_dump_dictionary():
             fig = PyPloter.savefig(args.figure_name, bbox_inches='tight', dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
     
     
@@ -663,6 +666,7 @@ class plot_3d_dump_dictionary():
             fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
 
 
@@ -901,6 +905,7 @@ class plot_line_series_dictionary():
             ani.save(args.figure_name, fps=30, extra_args=['-vcodec', 'libx264'])
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
 
 class plot_2d_series_dictionary():
@@ -1088,4 +1093,5 @@ class plot_2d_series_dictionary():
             ani.save(args.figure_name, fps=30, extra_args=['-vcodec', 'libx264'])
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()           

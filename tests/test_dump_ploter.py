@@ -257,7 +257,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         names.append(filename)
         data.append(dump_parser.build_data_dictionary(filename))
 
-        tracer_t, tracer_grid = extract_series_2d(data,'time',"temperature",['x','y'], npts=5
+        tracer_t, tracer_grid = extract_series_2d(data,'time',"temperature",['x','y'], npts=5,
                 log_scale=True)
         series_data = series_pair(tracer_t, tracer_grid)
 
