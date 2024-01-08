@@ -33,9 +33,7 @@ from multiprocessing import Process, Manager
 from opppy.version import __version__
 from opppy.progress import *
 
-USE_THREADS = not os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('false', '0', 'f')
-
-
+USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
 
 def append_cycle_data(cycle_data, data, sort_key_string):
     '''
@@ -317,7 +315,11 @@ def extract_cycle_data(cycle_string, my_opppy_parser):
 
 def append_output_dictionary(data, output_files, opppy_parser, append_date=False):
     '''
-    Append output data from a list of output_files to a user provided dictionary using a user proved opppy_parser
+    Append output data from a list of output_files to a user provided dictionary using a user proved
+    opppy_parser. By default this function will use the multiprocessing option to parallelize the
+    parsing of multiple dumps. The parallel parsing can be disabled by setting
+    the environment variable 'OPPPY_USE_THREADS=False'
+
 
     arguments:
         data opppy input dictionary to be append to (must have a 'verion' opppy key)

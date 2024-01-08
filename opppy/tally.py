@@ -33,7 +33,7 @@ from opppy.version import __version__
 from opppy.progress import *
 from opppy.output import *
 
-USE_THREADS = not os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('false', '0', 'f')
+USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
 
 def append_tally_data(cycle_data, data, sort_key_string):
     '''
@@ -216,7 +216,11 @@ def print_tally_data(data):
 
 def append_tally_dictionary(data, output_files, opppy_parser, append_date=False):
     '''
-    Append tally data from a list of output_files to a user provided dictionary using a user proved opppy_parser
+    Append tally data from a list of output_files to a user provided dictionary using a user proved
+    opppy_parser. By default this function will use the multiprocessing option to parallelize the
+    parsing of multiple dumps. The parallel parsing can be disabled by setting the environment
+    variable 'OPPPY_USE_THREADS=False'
+
 
     arguments:
         data opppy input dictionary to be append to (must have a 'verion' opppy key)

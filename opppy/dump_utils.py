@@ -34,8 +34,7 @@ from multiprocessing import Process, Manager
 
 from opppy.progress import progress
 
-USE_THREADS = not os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('false', '0', 'f')
-
+USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
 
 def point_value_1d(data, x_key, value_key, x_value, method='nearest'):
     '''
@@ -489,7 +488,10 @@ def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value
 
 def append_dumps(data, dump_files, opppy_parser, key_words=None):
     '''
-    Append output data from a list of output_files to a user provided dictionary using a user proved opppy_parser
+    Append output data from a list of output_files to a user provided dictionary using a user proved
+    opppy_parser. By default this function will use the multiprocessing option to parallelize the
+    parsing of multiple dumps. The parallel parsing can be disabled by setting
+    the environment variable 'OPPPY_USE_THREADS=False'
 
     Input options:
         data opppy input dictionary to be append to (must have a 'verion' opppy key)
