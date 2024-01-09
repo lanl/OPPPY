@@ -12,6 +12,7 @@ sys.path.append('..')
 
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
+OPPPY_UPGOLDS = os.getenv("OPPPY_UPGOLDS", 'False').lower() in ('true', '1', 't')
 
 import unittest
 
@@ -34,7 +35,18 @@ class test_opppy_tally(unittest.TestCase):
     opppy_parser = my_test_opppy_tally_parser()
   
     my_dictionary = extract_cycle_data(my_cycle_string, opppy_parser)
-  
+    if(OPPPY_UPGOLDS):
+        goldfile = open(dir_path+'gold_tally_extract_cycle.p', 'wb')
+        pickle.dump(my_dictionary,goldfile)
+        goldfile.close()
+
+    goldfile = open(dir_path+'gold_tally_extract_cycle.p', 'rb')
+    gold_data = pickle.load(goldfile)
+    goldfile.close()
+    for dic, gold_dic in zip(my_dictionary,gold_data):
+        assert(dic==gold_dic)
+
+
     print(my_dictionary)
   
   
@@ -74,6 +86,19 @@ class test_opppy_tally(unittest.TestCase):
     append_tally_dictionary(data, tally_files, opppy_parser)
 
     print(data)
+    if(OPPPY_UPGOLDS):
+        goldfile = open(dir_path+'gold_tally.p', 'wb')
+        pickle.dump(data,goldfile)
+        goldfile.close()
+
+    goldfile = open(dir_path+'gold_tally.p', 'rb')
+    gold_data = pickle.load(goldfile)
+    goldfile.close()
+    # Don't check the version for a match
+    gold_data.pop('version')
+    data.pop('version')
+    for dic, gold_dic in zip(data,gold_data):
+        assert(dic==gold_dic)
   
     # initialize a new data dictionary
     data2 = {}
@@ -86,3 +111,7 @@ class test_opppy_tally(unittest.TestCase):
     append_tally_dictionary(data2, tally_files, opppy_parser)
 
     print(data2)
+    # Don't check the version for a match
+    data2.pop('version')
+    for dic, gold_dic in zip(data2,gold_data):
+        assert(dic==gold_dic)

@@ -24,6 +24,7 @@ from matplotlib.animation import ArtistAnimation
 import string, sys, os
 import numpy as np
 import re
+import warnings
 from math import *
 import argparse
 import shlex
@@ -275,6 +276,7 @@ class plot_1d_dump_dictionary():
             fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
     
 class plot_2d_dump_dictionary():
@@ -357,7 +359,7 @@ class plot_2d_dump_dictionary():
         data = np.array(dictionary[data_name])*args.scale_value
         if(args.log_scale):
             bias = abs(min(data));
-            data = [ math.log10(val+bias) if val+bias>0.0 else 0.0 for val in data]
+            data = [ log10(val+bias) if val+bias>0.0 else 0.0 for val in data]
         x = np.array(dictionary[xname])*args.scale_x
         y = np.array(dictionary[yname])*args.scale_y
 
@@ -470,10 +472,13 @@ class plot_2d_dump_dictionary():
                     args.x_limits = [min(x),max(x)]
                 if args.y_limits is None:
                     args.y_limits = [min(y),max(y)]
-                griddata = data2gridbox(dictionary,xname,yname,data_name,args.x_limits[0],args.y_limits[0],args.x_limits[1],args.y_limits[1],args.num_grid,args.interp_method)
+                griddata = data2gridbox(dictionary, xname, yname, data_name, args.x_limits[0], 
+                        args.y_limits[0], args.x_limits[1], args.y_limits[1], args.num_grid, 
+                        args.interp_method,args.log_scale)
             else:
                 try:
-                    griddata = data2grid(dictionary,xname,yname,data_name,args.num_grid,args.interp_method)
+                    griddata = data2grid(dictionary, xname, yname, data_name, args.num_grid,
+                            args.interp_method, args.log_scale)
                 except:
                     griddata = dictionary
 
@@ -510,6 +515,7 @@ class plot_2d_dump_dictionary():
             fig = PyPloter.savefig(args.figure_name, bbox_inches='tight', dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
     
     
@@ -619,7 +625,8 @@ class plot_3d_dump_dictionary():
             print("data saved as -- "+args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat')
             outputfile.close()
         
-        griddata = data2grid3Dslice(dictionary,xname,yname,zname,data_name,args.z_slice,args.num_grid,args.interp_method)
+        griddata = data2grid3Dslice(dictionary, xname, yname, zname, data_name, args.z_slice,
+                args.num_grid, args.interp_method, args.log_scale)
 
         if(args.data_bounds):
             vmin = args.data_bounds[0]
@@ -659,6 +666,7 @@ class plot_3d_dump_dictionary():
             fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
 
 
@@ -897,6 +905,7 @@ class plot_line_series_dictionary():
             ani.save(args.figure_name, fps=30, extra_args=['-vcodec', 'libx264'])
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()
 
 class plot_2d_series_dictionary():
@@ -1000,8 +1009,14 @@ class plot_2d_series_dictionary():
             xmax=(np.array(series_data[0][xname])*args.scale_x).max()
             ymin=(np.array(series_data[0][yname])*args.scale_y).min()
             ymax=(np.array(series_data[0][yname])*args.scale_y).max()
+            bias = 0.0
             for data, index_value in zip(series_data, series_pair.index[index_key]):
                 v = np.array(data[dname])*args.scale_value
+                if(args.log_scale):
+                    bias = v.min()
+                    bias = 0.0 if bias>0.0 else abs(bias)
+                    v = np.array([ [log10(val+bias) if (val+bias)>0.0 else 0.0 
+                        for val in vals] for vals in v])
                 x = np.array(data[xname])*args.scale_x
                 y = np.array(data[yname])*args.scale_y
                 vmin = min(v.min(),vmin)
@@ -1059,8 +1074,8 @@ class plot_2d_series_dictionary():
             PyPloter.legend(loc='best')
             
             if(args.data_bounds):
-                vmin = args.data_bounds[0]
-                vmax = args.data_bounds[1]
+                vmin = args.data_bounds[0] if not args.log_scale else log10(args.data_bounds[0]+bias)
+                vmax = args.data_bounds[1] if not args.log_scale else log10(args.data_bounds[1]+bias)
 
             imshow = PyPloter.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')
             PyPloter.colorbar()
@@ -1078,4 +1093,5 @@ class plot_2d_series_dictionary():
             ani.save(args.figure_name, fps=30, extra_args=['-vcodec', 'libx264'])
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
+            warnings.filterwarnings("ignore")
             PyPloter.show()           

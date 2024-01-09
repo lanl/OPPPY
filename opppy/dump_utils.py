@@ -26,10 +26,15 @@
 '''
 
 from numpy import *
+import os
 import sys
 import pickle
+import math
+from multiprocessing import Process, Manager
 
 from opppy.progress import progress
+
+USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
 
 def point_value_1d(data, x_key, value_key, x_value, method='nearest'):
     '''
@@ -114,7 +119,7 @@ def point_value_3d(data, x_key, y_key, z_key, value_key, x_value, y_value, z_val
 
 
 
-def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest'):
+def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest', log_scale=False):
     '''
     This function takes a 2D data structure from dictionary and creates a 2D
     grid for each array by interpolating. This is useful for plotting.
@@ -138,6 +143,9 @@ def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest'):
     grid_data = {}
     value = data[value_key]
     grid_data[value_key] = griddata((X, Y), value, (xi, yi), method).T
+    if(log_scale):
+        grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
+                grid_data[value_key]]
     grid_data[x_key] = xi
     grid_data[y_key] = yi
 
@@ -145,7 +153,8 @@ def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest'):
 
 
 
-def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500, method='nearest'):
+def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500, method='nearest',
+        log_scale=False):
     '''
     This function takes a 2D data structure from a data dictionary and creates
     a 2D grid for each array by interpolating in a user defined region.
@@ -174,6 +183,9 @@ def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500,
     grid_data = {}
     value = data[value_key]
     grid_data[value_key] = griddata((X, Y), value, (xi, yi), method).T
+    if(log_scale):
+        grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
+                grid_data[value_key]]
     grid_data[x_key] = xi
     grid_data[y_key] = yi
 
@@ -181,7 +193,8 @@ def data2gridbox(data, x_key, y_key, value_key, xmin, ymin, xmax, ymax,npts=500,
 
 
 
-def data2grid3Dslice(data, x_key, y_key, z_key, value_key, z_slice_value, npts=500,method='nearest'):
+def data2grid3Dslice(data, x_key, y_key, z_key, value_key, z_slice_value, npts=500,method='nearest',
+        log_scale=False):
     ''' 
     This function takes a 3D data structure from a data dictionary and creates
     a 2D grid for each array by interpolating. This is useful for plotting.
@@ -206,6 +219,9 @@ def data2grid3Dslice(data, x_key, y_key, z_key, value_key, z_slice_value, npts=5
     grid_data = {}
     V = data[value_key]
     grid_data[value_key] = griddata((X, Y, Z), V, (xi, yi, zi), method).T[0]
+    if(log_scale):
+        grid_data[value_key] = [[0.0 if val<=0.0 else math.log10(val) for val in vals] for vals in
+                grid_data[value_key]]
     grid_data[x_key] = xi.T[0]
     grid_data[y_key] = yi.T[0]
 
@@ -399,7 +415,8 @@ def extract_series_line(data_list,series_key,value_key,dim_keys,point0_values,po
 
     return t, grid
 
-def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, method='nearest', box=[]):
+def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, method='nearest',
+        log_scale=False, box=[]):
     '''
     This function extracts the data values along a specified line from a
     series of data dictionaries.
@@ -423,16 +440,18 @@ def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, meth
     for data in data_list:
         T.append(data[series_key])
         if len(box) == 0:
-            grid.append(data2grid(data, dim_keys[0], dim_keys[1], value_key, npts, method))
+            grid.append(data2grid(data, dim_keys[0], dim_keys[1], value_key, npts, method, log_scale))
         else:
-            grid.append(data2gridbox(data, dim_keys[0], dim_keys[1], value_key, box[0], box[1], box[2], box[3],npts,method))
+            grid.append(data2gridbox(data, dim_keys[0], dim_keys[1], value_key, box[0], box[1],
+                box[2], box[3],npts,method, log_scale))
 
     t = {}
     t[series_key] = array(T)
 
     return t, grid
 
-def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value, npts=500, method='nearest'):
+def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value, npts=500,
+        method='nearest', log_scale=False):
     '''
     This function extracts the data values along a specified line from a
     series of data dictionaries.
@@ -459,7 +478,8 @@ def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value
             print("Error: series_key dictionary item must return a single value (i.e. cycle or time)")
             sys.exit(0)
 
-        grid.append(data2grid3Dslice(data, dim_keys[0], dim_keys[1], dim_keys[2],value_key, slice_value, npts, method))
+        grid.append(data2grid3Dslice(data, dim_keys[0], dim_keys[1], dim_keys[2],value_key,
+            slice_value, npts, method, log_scale))
 
     t = {}
     t[series_key] = array(T)
@@ -468,7 +488,10 @@ def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value
 
 def append_dumps(data, dump_files, opppy_parser, key_words=None):
     '''
-    Append output data from a list of output_files to a user provided dictionary using a user proved opppy_parser
+    Append output data from a list of output_files to a user provided dictionary using a user proved
+    opppy_parser. By default this function will use the multiprocessing option to parallelize the
+    parsing of multiple dumps. The parallel parsing can be disabled by setting
+    the environment variable 'OPPPY_USE_THREADS=False'
 
     Input options:
         data opppy input dictionary to be append to (must have a 'verion' opppy key)
@@ -477,13 +500,32 @@ def append_dumps(data, dump_files, opppy_parser, key_words=None):
         append_date bool to specify if the data should be appended to the file
             name for tracking purposes 
     '''
+
     total = len(dump_files)
     count = 0
-    for dump in dump_files:
-      # append new dictionary data to the pickle file
-      data[dump.split('/')[-1]] = opppy_parser.build_data_dictionary(dump,key_words)
-      count += 1
-      progress(count,total, 'of dump files read')
+    print('')
+    print("Number of files to be read: ", total)
+    if(USE_THREADS):
+        def thread_all(file_name, key_words, result_d):
+            result_d[file_name.split('/')[-1]] = opppy_parser.build_data_dictionary(file_name,key_words)
+        with Manager() as manager:
+            result_d = manager.dict()
+            threads = []
+            for file_name in dump_files:
+                thread = Process(target=thread_all, args=(file_name, key_words, result_d,))
+                thread.start()
+                threads.append(thread)
+            for thread in threads:
+                thread.join()
+                count += 1
+                progress(count,total, 'of input files read')
+            data.update(result_d)
+    else:
+        for dump in dump_files:
+          # append new dictionary data to the pickle file
+          data[dump.split('/')[-1]] = opppy_parser.build_data_dictionary(dump,key_words)
+          count += 1
+          progress(count,total, 'of dump files read')
 
     print('')
     print('')

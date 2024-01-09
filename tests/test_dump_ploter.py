@@ -149,7 +149,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         
         dump_3d_ploter = plot_3d_dump_dictionary();
 
-        plot_string = '-x z -y y -z x -zs 5 -d temperature'
+        plot_string = '-x z -y y -z x -zs 5 -d temperature -ls'
         args = dump_3d_ploter.parse_input_string(plot_string)
 
         print("Is data available", dump_3d_ploter.is_data_available(args, data))
@@ -257,7 +257,8 @@ class test_opppy_dump_utils(unittest.TestCase):
         names.append(filename)
         data.append(dump_parser.build_data_dictionary(filename))
 
-        tracer_t, tracer_grid = extract_series_2d(data,'time',"temperature",['x','y'], npts=5 )
+        tracer_t, tracer_grid = extract_series_2d(data,'time',"temperature",['x','y'], npts=5,
+                log_scale=True)
         series_data = series_pair(tracer_t, tracer_grid)
 
         contour_series_ploter = plot_2d_series_dictionary();
@@ -270,7 +271,8 @@ class test_opppy_dump_utils(unittest.TestCase):
         # generate a plot given my plotting arguments, dictionary, and data name
         contour_series_ploter.plot_2d_series(args, series_data)
 
-        tracer_t, tracer_grid = extract_series_2d_slice(data,'time',"temperature",['z','y','x'], 5.0, npts=10 )
+        tracer_t, tracer_grid = extract_series_2d_slice(data,'time',"temperature",['z','y','x'],
+                5.0, npts=10, log_scale=True )
         series_data = series_pair(tracer_t, tracer_grid)
 
         plot_string = '-x z -y y -d temperature -xlab test_x'

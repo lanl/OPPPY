@@ -12,8 +12,10 @@ sys.path.append('..')
 
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
+OPPPY_UPGOLDS = os.getenv("OPPPY_UPGOLDS", 'False').lower() in ('true', '1', 't')
 
 import unittest
+import pickle
 
 from opppy.output import *
 
@@ -29,21 +31,27 @@ class test_opppy_outputs(unittest.TestCase):
     # read all of the data
     cycle_strings = get_output_lines(dir_path+"example_output.txt","#cycle","#cycle","#end of file")
     print("All Data: ", cycle_strings)
+    assert(len(cycle_strings)==2)
     # only read cycle 1 data 
     cycle_strings2 = get_output_lines(dir_path+"example_output.txt","#cycle","#cycle")
     print("Cycle 1 Data:",cycle_strings2)
+    assert(len(cycle_strings2)==1)
     # only read cycle 2 data
     cycle_strings3 = get_output_lines(dir_path+"example_output.txt","#cycle 2","#")
     print("Cycle 2 Data:", cycle_strings3)
+    assert(len(cycle_strings3)==1 and cycle_strings2!=cycle_strings3)
     # only read cycle 2 data
     cycle_strings4 = get_output_lines(dir_path+"example_output.txt","#","#")
     print("No end file data:", cycle_strings4)
+    assert(len(cycle_strings4)==2)
     # read nothing
     cycle_strings5 = get_output_lines(dir_path+"example_output.txt","#","junk")
     print("Bad end cycle string so no data:", cycle_strings5)
+    assert(len(cycle_strings5)==0)
     # read nothing
     cycle_strings6 = get_output_lines(dir_path+"example_output.txt","junk","#")
     print("Bad start cycle string so no data:", cycle_strings6)
+    assert(len(cycle_strings6)==0)
   
   def test_extract_cycle_data(self):
     '''
@@ -59,7 +67,16 @@ class test_opppy_outputs(unittest.TestCase):
     opppy_parser = my_test_opppy_parser()
   
     my_dictionary = extract_cycle_data(my_cycle_string, opppy_parser)
-  
+    if(OPPPY_UPGOLDS):
+        goldfile = open(dir_path+'gold_extract_cycle.p', 'wb')
+        pickle.dump(my_dictionary,goldfile)
+        goldfile.close()
+
+    goldfile = open(dir_path+'gold_extract_cycle.p', 'rb')
+    gold_data = pickle.load(goldfile)
+    goldfile.close()
+    assert(my_dictionary==gold_data)
+
     print(my_dictionary)
   
   
@@ -67,7 +84,6 @@ class test_opppy_outputs(unittest.TestCase):
     '''
     This test the append_pickle function
     '''
-   
     # import the test parser
     from my_test_opppy_parser import my_test_opppy_parser
     from opppy.version import __version__
@@ -98,7 +114,18 @@ class test_opppy_outputs(unittest.TestCase):
     # Build initial pickle
     append_output_dictionary(data, output_files, opppy_parser)
 
-    print(data)
+    if(OPPPY_UPGOLDS):
+        goldfile = open(dir_path+'gold_output.p', 'wb')
+        pickle.dump(data,goldfile)
+        goldfile.close()
+
+    goldfile = open(dir_path+'gold_output.p', 'rb')
+    gold_data = pickle.load(goldfile)
+    goldfile.close()
+    # Don't check the version for a match
+    gold_data.pop('version')
+    data.pop('version')
+    assert(data==gold_data)
   
     # initialize a new data dictionary
     data2 = {}
@@ -111,3 +138,7 @@ class test_opppy_outputs(unittest.TestCase):
     append_output_dictionary(data2, output_files, opppy_parser)
 
     print(data2)
+    # Don't check the version for a match
+    data2.pop('version')
+    assert(data2==gold_data)
+
