@@ -1,3 +1,3 @@
 # Current OPPPY Version
-__version__ = '0.1.7'
-__data__ = '20230321'
+__version__ = '0.1.8'
+__data__ = '20240109'

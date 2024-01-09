@@ -1,6 +1,42 @@
+2024-01-09 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_8
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+		+ h5py
+        + sphinx (to build documentation)
+
+    * Summary of changes:
+		+ Added h5py to the test dependencies
+		+ Update testing
+			+ Remove unsupported test.support usage
+			+ Add sanity checks for interactive testing
+			+ Add Golds for test_output, test_dump_utils, and test_tally
+			+ Add SHOW_PLOTS test environment variables to hide plots during testing
+		+ Add Parallel Parsing for outputs, tallies, and dumps (can be disabled using
+		OPPPY_USE_THREADS=False environment variable)
+		+ Add log scale support for 2d contour plots
+
+    * Corrected defects:
+		+ Improve testing robustness
+		+ Support log scale 2D plotting
+
+    * New Features:
+        + Parallel parsing (can be disabled with OPPPY_USE_THREADS=False environment variable)
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+
 2023-03-021 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
-        + OPPPY-0_1_10
+        + OPPPY-0_1_7
 
     * Current dependencies:
         + Python 3.X
