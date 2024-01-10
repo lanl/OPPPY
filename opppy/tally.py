@@ -252,9 +252,7 @@ def append_tally_dictionary(data, output_files, opppy_parser, append_date=False)
           thread_cycle_string_list = get_output_lines(file_name, opppy_parser.cycle_opening_string, opppy_parser.cycle_closing_string, opppy_parser.file_end_string)
           thread_data=[]
           for cycle_string in thread_cycle_string_list:
-              print(cycle_string)
               thread_data.append(extract_cycle_data(cycle_string, opppy_parser))
-          print(thread_data)
           result_d[file_name] = thread_data
 
       with Manager() as manager:
