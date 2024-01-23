@@ -30,11 +30,12 @@ import os
 import sys
 import pickle
 import math
-from multiprocessing import Process, Manager
+from multiprocessing import Process, Manager, cpu_count
 
 from opppy.progress import progress
 
 USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
+NTHREADS = int(os.getenv("OPPPY_N_THREADS", str(min(cpu_count(),4))))
 
 def point_value_1d(data, x_key, value_key, x_value, method='nearest'):
     '''
@@ -508,18 +509,23 @@ def append_dumps(data, dump_files, opppy_parser, key_words=None):
     if(USE_THREADS):
         def thread_all(file_name, key_words, result_d):
             result_d[file_name.split('/')[-1]] = opppy_parser.build_data_dictionary(file_name,key_words)
-        with Manager() as manager:
-            result_d = manager.dict()
-            threads = []
-            for file_name in dump_files:
-                thread = Process(target=thread_all, args=(file_name, key_words, result_d,))
-                thread.start()
-                threads.append(thread)
-            for thread in threads:
-                thread.join()
-                count += 1
-                progress(count,total, 'of input files read')
-            data.update(result_d)
+        print("Number of threads used for processing: ",NTHREADS)
+        for stride in range(math.ceil(float(total)/float(NTHREADS))):
+            files = dump_files[NTHREADS*stride:min(NTHREADS*(stride+1),len(dump_files))]
+            with Manager() as manager:
+                result_d = manager.dict()
+                threads = []
+                for file_name in files:
+                    thread = Process(target=thread_all, args=(file_name, key_words, result_d,))
+                    thread.start()
+                    threads.append(thread)
+                for thread in threads:
+                    thread.join()
+                    count += 1
+                    progress(count,total, 'of input files read')
+                data.update(result_d)
+                del result_d
+                del threads
     else:
         for dump in dump_files:
           # append new dictionary data to the pickle file
