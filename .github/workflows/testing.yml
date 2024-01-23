@@ -33,4 +33,4 @@ jobs:
       run: |
         python -m pytest --cov-report term-missing --cov=opppy  tests/
       env: 
-        OPPPY_USE_THREADS=false
+          OPPPY_USE_THREADS: false
