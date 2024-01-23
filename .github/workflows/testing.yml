@@ -31,4 +31,6 @@ jobs:
         python -m pytest --cov-report term-missing --cov=opppy  tests/
     - name: Serial Test
       run: |
-        OPPPY_USE_THREADS=false python -m pytest --cov-report term-missing --cov=opppy  tests/
+        python -m pytest --cov-report term-missing --cov=opppy  tests/
+      env: 
+        OPPPY_USE_THREADS=false
