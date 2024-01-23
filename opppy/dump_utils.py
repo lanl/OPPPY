@@ -30,12 +30,18 @@ import os
 import sys
 import pickle
 import math
+import platform
 from multiprocessing import Process, Manager, cpu_count
 
 from opppy.progress import progress
 
 USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
 NTHREADS = int(os.getenv("OPPPY_N_THREADS", str(min(cpu_count(),4))))
+# Protect against multiprocessing fork issue on Windows
+if "windows" in platform.system().lower(): 
+    print("WARNING: DISABLING OPPPY MULTIPROCESSING THREADING ON WINDOWS SYSTEMS")
+    USE_THREADS = False
+    NTHREADS = 1
 
 def point_value_1d(data, x_key, value_key, x_value, method='nearest'):
     '''
