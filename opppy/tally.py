@@ -37,9 +37,9 @@ from opppy.output import *
 
 USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
 NTHREADS = int(os.getenv("OPPPY_N_THREADS", str(min(cpu_count(),4))))
-# Protect against multiprocessing fork issue on Windows
-if "windows" in platform.system().lower(): 
-    print("WARNING: DISABLING OPPPY MULTIPROCESSING THREADING ON WINDOWS SYSTEMS")
+# Protect against multiprocessing fork issue on Windows and Mac
+if "linux" not in platform.system().lower(): 
+    print("WARNING: DISABLING OPPPY MULTIPROCESSING THREADING ON WINDOWS/MAC SYSTEMS")
     USE_THREADS = False
     NTHREADS = 1
 
