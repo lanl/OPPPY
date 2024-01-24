@@ -24,24 +24,23 @@ Utilities to extract cycle data from outputs
 #----------------------------------------------------------#
 
 import sys
-import pickle
 import io
 import os
 import math
 import platform
 import numpy as np
-from multiprocessing import Process, Manager, cpu_count
+import pickle
+if "linux" in platform.system().lower(): 
+    from multiprocessing import Process, Manager, cpu_count
+else:
+    # Protect against multiprocessing fork issue on Windows and Mac
+    from multiprocess import Process, Manager, cpu_count
 
 from opppy.version import __version__
 from opppy.progress import *
 
 USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
 NTHREADS = int(os.getenv("OPPPY_N_THREADS", str(min(cpu_count(),4))))
-# Protect against multiprocessing fork issue on Windows and Mac
-if "linux" not in platform.system().lower(): 
-    print("WARNING: DISABLING OPPPY MULTIPROCESSING THREADING ON WINDOWS/MAC SYSTEMS")
-    USE_THREADS = False
-    NTHREADS = 1
 
 def append_cycle_data(cycle_data, data, sort_key_string):
     '''
