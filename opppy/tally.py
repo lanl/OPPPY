@@ -273,7 +273,7 @@ def append_tally_dictionary(data, output_files, opppy_parser, append_date=False)
           with Manager() as manager:
                 result_l = manager.list(range(len(files)))
                 threads = []
-                for file_index, file_name in enumerate(output_files):
+                for file_index, file_name in enumerate(files):
                     thread = Process(target=thread_all, args=(file_name, file_index, result_l,))
                     thread.start()
                     threads.append(thread)
