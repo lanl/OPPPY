@@ -158,7 +158,7 @@ class interactive_output_parser:
           sys.exit(0)
     
         # append new dictionary data to the pickle file
-        append_output_dictionary(data, args.output_files, self.opppy_parser, args.append_date)
+        append_output_dictionary(data, args.output_files, self.opppy_parser, args.append_date, args.nthreads)
     
         pickle.dump(data,open(args.pickle_name,"wb"))
         print("Output Data Saved To: ", args.pickle_name)
@@ -169,6 +169,7 @@ class interactive_output_parser:
         pickle_parser.add_argument('-of','--output_files', dest='output_files', help='output files to generate/append the pickle file', nargs='+', required=True )
         pickle_parser.add_argument('-pf','--pickle_file', dest='pickle_name', help='Pickle file name to be created or appended to', required=True )
         pickle_parser.add_argument('-ad','--append_date', dest='append_date', help='Append the date and time to the output file name', nargs='?', type=bool, const=True, default=False)
+        pickle_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
         pickle_parser.set_defaults(func=self.append_pickle)
  
 
@@ -180,6 +181,7 @@ class interactive_output_parser:
         input_type_parser = plot_parser.add_mutually_exclusive_group(required=True)
         input_type_parser.add_argument('-pf','--pickle_files', dest='pickle_files', help='pickle files to be plotted (run1.p run2.p etc...)', nargs='+' )
         input_type_parser.add_argument('-of','--output_files', dest='output_files', help='output files to be parsed and plotted (output_file1.txt output_file2.txt etc...)', nargs='+', action='append')
+        plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
         self.dict_ploter = plot_dictionary()
         self.dict_ploter.setup_parser(plot_parser)
         plot_parser.set_defaults(func=self.plot_dictionary)
@@ -210,6 +212,7 @@ class interactive_output_parser:
         input_type_parser = plot_output_parser.add_mutually_exclusive_group(required=True)
         input_type_parser.add_argument('-pf','--pickle_files', dest='pickle_files', help='pickle files to be plotted (run1.p run2.p etc...)', nargs='+' )
         input_type_parser.add_argument('-of','--output_files', dest='output_files', help='output files to be parsed and plotted (output_file1.txt output_file2.txt etc...)', nargs='+', action='append')
+        plot_output_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
         plot_output_parser.set_defaults(func=self.plot_output)
     
     def get_plot_option(self):
@@ -608,6 +611,7 @@ class interactive_dump_parser:
         input_type_parser.add_argument('-cf','--case_file', dest='case_file', help='Case file to be pickled', nargs='?')
         pickle_parser.add_argument('-pf','--pickle_file', dest='pickle_name', help='Pickle file name to be created or appended to', required=True )
         pickle_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
+        pickle_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Specify number of threads for dump parsing', nargs='?', default=0 )
         pickle_parser.set_defaults(func=self.pickle_dumps)
  
     def pickle_dumps(self, args):
@@ -639,7 +643,7 @@ class interactive_dump_parser:
           sys.exit(0)
 
         if args.dump_files is not None:
-            append_dumps(dumps,args.dump_files,self.dump_parser,args.key_words)
+            append_dumps(dumps,args.dump_files,self.dump_parser,args.key_words,args.nthreads)
         else:
             append_case(dumps,args.case_file,self.dump_parser,args.key_words)
 
@@ -927,7 +931,7 @@ class interactive_tally_parser:
           sys.exit(0)
     
         # append new dictionary data to the pickle file
-        append_tally_dictionary(data, args.tally_files, self.opppy_parser, args.append_date)
+        append_tally_dictionary(data, args.tally_files, self.opppy_parser, args.append_date, args.nthreads)
     
         pickle.dump(data,open(args.pickle_name,"wb"))
         print("Output Data Saved To: ", args.pickle_name)
@@ -938,6 +942,7 @@ class interactive_tally_parser:
         pickle_parser.add_argument('-tf','--tally_files', dest='tally_files', help='output files to generate/append the pickle file', nargs='+', required=True )
         pickle_parser.add_argument('-pf','--pickle_file', dest='pickle_name', help='Pickle file name to be created or appended to', required=True )
         pickle_parser.add_argument('-ad','--append_date', dest='append_date', help='Append the date and time to the output file name', nargs='?', type=bool, const=True, default=False)
+        pickle_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
         pickle_parser.set_defaults(func=self.append_pickle)
  
 
@@ -951,6 +956,7 @@ class interactive_tally_parser:
         input_type_parser.add_argument('-tf','--tally_files', dest='tally_files', help='tally files to be parsed and plotted (tally_file1.txt tally_file2.txt etc...)', nargs='+', action='append')
         plot_parser.add_argument('-sk','--series_key', dest='series_key', help='Series key string to access the data (i.e time or cycle)', nargs='?', required=True)
         plot_parser.add_argument('-sv','--series_value', dest='series_value', help='Series value to plot the data at (default is the last value of the series_key data)', nargs='?', type=float, default=None)
+        plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
         self.dict_ploter = plot_dictionary()
         self.dict_ploter.setup_parser(plot_parser)
         plot_parser.set_defaults(func=self.plot_tally)
@@ -1001,6 +1007,7 @@ class interactive_tally_parser:
         input_type_parser = plot_parser.add_mutually_exclusive_group(required=True)
         input_type_parser.add_argument('-pf','--pickle_files', dest='pickle_files', help='pickle files to be plotted (run1.p run2.p etc...)', nargs='+' )
         input_type_parser.add_argument('-tf','--tally_files', dest='tally_files', help='tally files to be parsed and plotted (tally_file1.txt tally_file2.txt etc...)', nargs='+', action='append')
+        plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
         
         plot_parser.set_defaults(func=self.plot_interactive_tally)
     

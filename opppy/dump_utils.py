@@ -40,9 +40,6 @@ else:
 
 from opppy.progress import progress
 
-USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
-NTHREADS = int(os.getenv("OPPPY_N_THREADS", str(min(cpu_count(),4))))
-
 def point_value_1d(data, x_key, value_key, x_value, method='nearest'):
     '''
     Grid data function. This function takes a 1D data structure from dictionary
@@ -493,7 +490,7 @@ def extract_series_2d_slice(data_list,series_key,value_key,dim_keys, slice_value
 
     return t, grid
 
-def append_dumps(data, dump_files, opppy_parser, key_words=None):
+def append_dumps(data, dump_files, opppy_parser, key_words=None, nthreads=0):
     '''
     Append output data from a list of output_files to a user provided dictionary using a user proved
     opppy_parser. By default this function will use the multiprocessing option to parallelize the
@@ -504,20 +501,21 @@ def append_dumps(data, dump_files, opppy_parser, key_words=None):
         data opppy input dictionary to be append to (must have a 'verion' opppy key)
         output_files a list of output files to parse
         opppy_parser a user defined OPPPY parser for the output files
-        append_date bool to specify if the data should be appended to the file
-            name for tracking purposes 
+        key_words limit the extrated dump data to the variables in the key_words list
+        nthreads specify the number of threads to use for parsing (-1 nthreads=cpu_count, 0 serial, >0 user_specified number of threads)
     '''
 
     total = len(dump_files)
     count = 0
     print('')
     print("Number of files to be read: ", total)
-    if(USE_THREADS):
+    nthreads = cpu_count() if nthreads < 0 else nthreads
+    if(nthreads>0):
         def thread_all(file_name, key_words, result_d):
             result_d[file_name.split('/')[-1]] = opppy_parser.build_data_dictionary(file_name,key_words)
-        print("Number of threads used for processing: ",NTHREADS)
-        for stride in range(math.ceil(float(total)/float(NTHREADS))):
-            files = dump_files[NTHREADS*stride:min(NTHREADS*(stride+1),len(dump_files))]
+        print("Number of threads used for processing: ",nthreads)
+        for stride in range(math.ceil(float(total)/float(nthreads))):
+            files = dump_files[nthreads*stride:min(nthreads*(stride+1),len(dump_files))]
             with Manager() as manager:
                 result_d = manager.dict()
                 threads = []

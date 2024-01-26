@@ -39,9 +39,6 @@ from opppy.version import __version__
 from opppy.progress import *
 from opppy.output import *
 
-USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
-NTHREADS = int(os.getenv("OPPPY_N_THREADS", str(min(cpu_count(),4))))
-
 def append_tally_data(cycle_data, data, sort_key_string):
     '''
     This function appends a dictionary of tally cycle data to an
@@ -221,12 +218,11 @@ def print_tally_data(data):
     print('')
     print("######################################################")
 
-def append_tally_dictionary(data, output_files, opppy_parser, append_date=False):
+def append_tally_dictionary(data, output_files, opppy_parser, append_date=False, nthreads=0):
     '''
     Append tally data from a list of output_files to a user provided dictionary using a user proved
     opppy_parser. By default this function will use the multiprocessing option to parallelize the
-    parsing of multiple dumps. The parallel parsing can be disabled by setting the environment
-    variable 'OPPPY_USE_THREADS=False'
+    parsing of multiple dumps.'
 
 
     arguments:
@@ -258,7 +254,8 @@ def append_tally_dictionary(data, output_files, opppy_parser, append_date=False)
     total = len(output_files) 
     print('')
     print("Number of files to be read: ", total)
-    if(USE_THREADS):
+    nthreads = cpu_count() if nthreads < 0 else nthreads
+    if(nthreads>0):
       def thread_all(file_name, file_index, result_l):
           thread_cycle_string_list = get_output_lines(file_name, opppy_parser.cycle_opening_string, opppy_parser.cycle_closing_string, opppy_parser.file_end_string)
           thread_data=[]
@@ -266,9 +263,9 @@ def append_tally_dictionary(data, output_files, opppy_parser, append_date=False)
               thread_data.append(extract_cycle_data(cycle_string, opppy_parser))
           result_l[file_index] = thread_data
           
-      print("Number of threads used for processing: ",NTHREADS)
-      for stride in range(math.ceil(float(total)/float(NTHREADS))):
-          files = output_files[NTHREADS*stride:min(NTHREADS*(stride+1),len(output_files))]
+      print("Number of threads used for processing: ",nthreads)
+      for stride in range(math.ceil(float(total)/float(nthreads))):
+          files = output_files[nthreads*stride:min(nthreads*(stride+1),len(output_files))]
           with Manager() as manager:
                 result_l = manager.list(range(len(files)))
                 threads = []
