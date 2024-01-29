@@ -611,7 +611,7 @@ class interactive_dump_parser:
         input_type_parser.add_argument('-cf','--case_file', dest='case_file', help='Case file to be pickled', nargs='?')
         pickle_parser.add_argument('-pf','--pickle_file', dest='pickle_name', help='Pickle file name to be created or appended to', required=True )
         pickle_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
-        pickle_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Specify number of threads for dump parsing', nargs='?', default=0 )
+        pickle_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Specify number of threads for dump parsing', nargs='?', type=int, default=0 )
         pickle_parser.set_defaults(func=self.pickle_dumps)
  
     def pickle_dumps(self, args):
@@ -665,6 +665,7 @@ class interactive_dump_parser:
         input_type_parser.add_argument('-pf','--pickle_files', dest='pickle_files', help='pickle files to be plotted (run1.p run2.p etc...)', nargs='+')
         input_type_parser.add_argument('-df','--dump_files', dest='dump_files', help='dump files to be parsed and plotted (output_file1.txt output_file2.txt etc...)', nargs='+', action='append')
         input_type_parser.add_argument('-cf','--case_files', dest='case_files', help='Case file to be ploted', nargs='+')
+        plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Specify number of threads for dump parsing', nargs='?', type=int, default=0 )
         plot_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
         plot_parser.add_argument('-dk','--dimension_keys', dest='dimension_keys', help='keys used to extract the points (e.g. [x], [x,y], or [x,y,x]', nargs='+', required=True )
         plot_parser.add_argument('-p','--point', dest='point', help='point location to extract data (e.g. [1], [1,2], or [1,2,3]', nargs='+', required=True, type=float )
@@ -730,6 +731,7 @@ class interactive_dump_parser:
         input_type_parser.add_argument('-pf','--pickle_files', dest='pickle_files', help='pickle files to be plotted (run1.p run2.p etc...)', nargs='+')
         input_type_parser.add_argument('-cf','--case_files', dest='case_files', help='Case file to be ploted', nargs='+')
         input_type_parser.add_argument('-df','--dump_files', dest='dump_files', help='dump files to be parsed and plotted (output_file1.txt output_file2.txt etc...)', nargs='+', action='append')
+        plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Specify number of threads for dump parsing', nargs='?', type=int, default=0 )
         plot_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
         plot_parser.add_argument('-dk','--dimension_keys', dest='dimension_keys', help='keys used to extract the points (e.g. [x], [x,y], or [x,y,x]', nargs='+', required=True )
         plot_parser.add_argument('-p0','--point0', dest='point0', help='beginning point location to extract data (e.g. [1], [1,2], or [1,2,3]', nargs='+', required=True, type=float )
@@ -788,6 +790,7 @@ class interactive_dump_parser:
         input_type_parser.add_argument('-pf','--pickle_file', dest='pickle_file', help='pickle file to be plotted', nargs='?')
         input_type_parser.add_argument('-cf','--case_file', dest='case_file', help='Case file to be ploted', nargs='?')
         input_type_parser.add_argument('-df','--dump_files', dest='dump_files', help='dump files to be parsed and plotted (output_file1.txt output_file2.txt etc...)', nargs='+')
+        plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Specify number of threads for dump parsing', nargs='?', type=int, default=0 )
         plot_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
         plot_parser.add_argument('-dk','--dimension_keys', dest='dimension_keys', help='keys used to extract the points dimensions in the dictionary (e.g. [x,y], or [my_x,my_y,my_z]', nargs='+', required=True )
         plot_parser.add_argument('-zs','--z_slice_location', dest='z_slice_location', help='location along the z plane to slice the data', nargs='?', type=float, default=None)
