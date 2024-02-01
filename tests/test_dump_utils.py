@@ -55,7 +55,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         assert(data.keys()==gold_data.keys())
         for k, v in gold_data.items():
             try:
-                assert((data[k]==v).all())
+                np.testing.assert_allclose(data[k],v)
             except:
                 assert(data[k]==v)
 
@@ -76,7 +76,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         assert(sub_data.keys()==gold_data.keys())
         for k, v in gold_data.items():
             try:
-                assert((sub_data[k]==v).all())
+                np.testing.assert_allclose(sub_data[k],v)
             except:
                 assert(sub_data[k]==v)
 
@@ -129,7 +129,7 @@ class test_opppy_dump_utils(unittest.TestCase):
             assert(data[dump_name].keys()==dump_dic.keys())
             for k, v in dump_dic.items():
                 try:
-                    assert((data[dump_name][k]==v).all())
+                    np.testing.assert_allclose(data[dump_name][k],v)
                 except:
                     assert(data[dump_name][k]==v)
 
@@ -151,9 +151,33 @@ class test_opppy_dump_utils(unittest.TestCase):
             assert(data2[dump_name].keys()==dump_dic.keys())
             for k, v in dump_dic.items():
                 try:
-                    assert((data2[dump_name][k]==v).all())
+                    np.testing.assert_allclose(data2[dump_name][k],v)
                 except:
                     assert(data2[dump_name][k]==v)
+
+        # TEST WITH THREADS
+        # initialize a new data dictionary
+        data3 = {}
+        data3['version'] = __version__
+      
+      
+        # Append the thrid output file
+        filenames = [dir_path+"example_dump.txt",dir_path+"example_dump2.txt",dir_path+"example_dump3.txt"]
+        # Build initial pickle
+        append_dumps(data3, filenames, dump_parser, nthreads=-1)
+     
+        print(data3)
+        # Don't check the version for a match
+        data3.pop('version')
+        assert(data3.keys()==gold_data.keys())
+        for dump_name, dump_dic in gold_data.items():
+            assert(data3[dump_name].keys()==dump_dic.keys())
+            for k, v in dump_dic.items():
+                try:
+                    np.testing.assert_allclose(data3[dump_name][k],v)
+                except:
+                    assert(data3[dump_name][k]==v)
+
 
         # extract subset of dump data
         sub_data = {}
@@ -178,9 +202,28 @@ class test_opppy_dump_utils(unittest.TestCase):
             assert(sub_data[dump_name].keys()==dump_dic.keys())
             for k, v in dump_dic.items():
                 try:
-                    assert((sub_data[dump_name][k]==v).all())
+                    np.testing.assert_allclose(sub_data[dump_name][k],v)
                 except:
                     assert(sub_data[dump_name][k]==v)
+
+        # TEST WITH THREADS
+        # extract subset of dump data
+        sub_data2 = {}
+        sub_data2['version'] = __version__
+        filenames = [dir_path+"example_dump.txt",dir_path+"example_dump2.txt",dir_path+"example_dump3.txt"]
+        # Build initial pickle
+        append_dumps(sub_data2, filenames, dump_parser, ['time','density'], nthreads=-1)
+     
+        sub_data2.pop('version')
+        assert(sub_data2.keys()==gold_data.keys())
+        for dump_name, dump_dic in gold_data.items():
+            assert(sub_data2[dump_name].keys()==dump_dic.keys())
+            for k, v in dump_dic.items():
+                try:
+                    np.testing.assert_allclose(sub_data2[dump_name][k],v)
+                except:
+                    assert(sub_data2[dump_name][k]==v)
+
 
 
     def test_point_value(self):
@@ -263,7 +306,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         gold_data = pickle.load(goldfile)
         goldfile.close()
         for k, v in gold_data.items():
-            assert((tracer_data[k]==v).all())
+            np.testing.assert_allclose(tracer_data[k],v)
 
 
     
@@ -315,7 +358,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         goldfile.close()
         for key, gold_dic in  gold_data.items():
             for k, v in gold_dic.items():
-                assert((check_data[key][k]==v).all())
+                np.testing.assert_allclose(check_data[key][k],v)
 
 
 
@@ -364,7 +407,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         gold_data = pickle.load(goldfile)
         goldfile.close()
         for k, v in  gold_data.items():
-            assert((check_data[k]==v).all())
+            np.testing.assert_allclose(check_data[k],v)
 
 
     def test_2D_slice_series(self):
@@ -400,7 +443,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         gold_data = pickle.load(goldfile)
         goldfile.close()
         for k, v in  gold_data.items():
-            assert((check_data[k]==v).all())
+            np.testing.assert_allclose(check_data[k],v)
 
 
     def test_data_2_line(self):
@@ -446,7 +489,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         gold_data = pickle.load(goldfile)
         goldfile.close()
         for k, v in  gold_data.items():
-            assert((check_data[k]==v).all())
+            np.testing.assert_allclose(check_data[k],v)
 
        
 
@@ -500,6 +543,6 @@ class test_opppy_dump_utils(unittest.TestCase):
         gold_data = pickle.load(goldfile)
         goldfile.close()
         for k, v in  gold_data.items():
-            assert((check_data[k]==v).all())
+            np.testing.assert_allclose(check_data[k],v)
 
 

@@ -115,3 +115,20 @@ class test_opppy_tally(unittest.TestCase):
     data2.pop('version')
     for dic, gold_dic in zip(data2,gold_data):
         assert(dic==gold_dic)
+
+    # initialize a new data dictionary
+    data3 = {}
+    data3['version'] = __version__
+  
+  
+    # WITH THREADS
+    # Append the thrid tally file
+    tally_files = [dir_path+"example_tally1.txt",dir_path+"example_tally2.txt",dir_path+"example_tally3.txt"]
+    # Build initial pickle
+    append_tally_dictionary(data3, tally_files, opppy_parser, nthreads=-1)
+
+    print(data3)
+    # Don't check the version for a match
+    data3.pop('version')
+    for dic, gold_dic in zip(data3,gold_data):
+        assert(dic==gold_dic)

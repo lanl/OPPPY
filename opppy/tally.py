@@ -23,17 +23,21 @@ Utilities to extract cycle tally data
 #----------------------------------------------------------#
 
 import sys
-import pickle
 import io
 import os
+import math
+import platform
 import numpy as np
-from multiprocessing import Process, Manager
+import pickle
+if "linux" in platform.system().lower(): 
+    from multiprocessing import Process, Manager, cpu_count
+else:
+    # Protect against multiprocessing fork issue on Windows and Mac
+    from multiprocess import Process, Manager, cpu_count
 
 from opppy.version import __version__
 from opppy.progress import *
 from opppy.output import *
-
-USE_THREADS = os.getenv("OPPPY_USE_THREADS", 'True').lower() in ('true', '1', 't')
 
 def append_tally_data(cycle_data, data, sort_key_string):
     '''
@@ -214,12 +218,11 @@ def print_tally_data(data):
     print('')
     print("######################################################")
 
-def append_tally_dictionary(data, output_files, opppy_parser, append_date=False):
+def append_tally_dictionary(data, output_files, opppy_parser, append_date=False, nthreads=0):
     '''
     Append tally data from a list of output_files to a user provided dictionary using a user proved
     opppy_parser. By default this function will use the multiprocessing option to parallelize the
-    parsing of multiple dumps. The parallel parsing can be disabled by setting the environment
-    variable 'OPPPY_USE_THREADS=False'
+    parsing of multiple dumps.'
 
 
     arguments:
@@ -242,60 +245,51 @@ def append_tally_dictionary(data, output_files, opppy_parser, append_date=False)
     time = ''
     if append_date:
       time = time+'.'+datetime.datetime.now().strftime ("%Y%m%d%H%M%S")
-    count = 0
-    total = len(output_files) 
-    print('')
-    print("Number of files to be read: ", total)
-    data_list = []
-    if(USE_THREADS):
-      def thread_all(file_name, result_d):
-          thread_cycle_string_list = get_output_lines(file_name, opppy_parser.cycle_opening_string, opppy_parser.cycle_closing_string, opppy_parser.file_end_string)
-          thread_data=[]
-          for cycle_string in thread_cycle_string_list:
-              thread_data.append(extract_cycle_data(cycle_string, opppy_parser))
-          result_d[file_name] = thread_data
-
-      with Manager() as manager:
-            result_d = manager.dict()
-            threads = []
-            for file_name in output_files:
-                thread = Process(target=thread_all, args=(file_name, result_d,))
-                thread.start()
-                threads.append(thread)
-            for thread in threads:
-                thread.join()
-                count += 1
-                progress(count,total, 'of input files read')
-            for file_name in output_files:
-                data_list += result_d[file_name]
-    else:
-      cycle_string_list=[]
-      for file_name in output_files:
-        cycle_string_list+=get_output_lines(file_name, opppy_parser.cycle_opening_string, opppy_parser.cycle_closing_string, opppy_parser.file_end_string)
-        if 'appended_files' in data:
-            data['appended_files'].append(file_name.split('/')[-1]+time)
-        else:
-            data['appended_files'] = [file_name.split('/')[-1]+time]
-        count += 1
-        progress(count,total, 'of input files read')
-
-      total = len(cycle_string_list) 
-      count = 0
-      print('')
-      print("Number of cycles to be parsed: ", total)
-      for cycle_string in cycle_string_list:
-        data_list.append(extract_cycle_data(cycle_string, opppy_parser))
-        count += 1
-        progress(count,total, 'of cycles parsed')
-      print('')
-
     for file_name in output_files:
         if 'appended_files' in data:
             data['appended_files'].append(file_name.split('/')[-1]+time)
         else:
             data['appended_files'] = [file_name.split('/')[-1]+time]
-    for cycle_data in data_list:
-        data = append_tally_data(cycle_data,data,opppy_parser.sort_key_string)
+    count = 0
+    total = len(output_files) 
+    print('')
+    print("Number of files to be read: ", total)
+    nthreads = cpu_count() if nthreads < 0 else nthreads
+    if(nthreads>0):
+      def thread_all(file_name, file_index, result_l):
+          thread_cycle_string_list = get_output_lines(file_name, opppy_parser.cycle_opening_string, opppy_parser.cycle_closing_string, opppy_parser.file_end_string)
+          thread_data=[]
+          for cycle_string in thread_cycle_string_list:
+              thread_data.append(extract_cycle_data(cycle_string, opppy_parser))
+          result_l[file_index] = thread_data
+          
+      print("Number of threads used for processing: ",nthreads)
+      for stride in range(math.ceil(float(total)/float(nthreads))):
+          files = output_files[nthreads*stride:min(nthreads*(stride+1),len(output_files))]
+          with Manager() as manager:
+                result_l = manager.list(range(len(files)))
+                threads = []
+                for file_index, file_name in enumerate(files):
+                    thread = Process(target=thread_all, args=(file_name, file_index, result_l,))
+                    thread.start()
+                    threads.append(thread)
+                for thread in threads:
+                    thread.join()
+                    count += 1
+                    progress(count,total, 'of input files read')
+                for file_data in result_l:
+                    for cycle_data in file_data:
+                       data = append_tally_data(cycle_data,data,opppy_parser.sort_key_string)
+                del result_l
+                del threads
+    else:
+      for file_name in output_files:
+        cycle_string_list = get_output_lines(file_name, opppy_parser.cycle_opening_string, opppy_parser.cycle_closing_string, opppy_parser.file_end_string)
+        for cycle_string in cycle_string_list:
+            cycle_data = extract_cycle_data(cycle_string, opppy_parser)
+            data = append_tally_data(cycle_data,data,opppy_parser.sort_key_string)
+        count += 1
+        progress(count,total, 'of input files read')
 
     print('')
     print('')

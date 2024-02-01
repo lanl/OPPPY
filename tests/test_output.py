@@ -142,3 +142,18 @@ class test_opppy_outputs(unittest.TestCase):
     data2.pop('version')
     assert(data2==gold_data)
 
+    # initialize a new data dictionary
+    data3 = {}
+    data3['version'] = __version__
+  
+  
+    # Append the thrid output file
+    output_files = [dir_path+"output_example1.txt",dir_path+"output_example2.txt",dir_path+"output_example3.txt"]
+    # Build initial pickle
+    append_output_dictionary(data3, output_files, opppy_parser, nthreads=-1)
+
+    print(data3)
+    # Don't check the version for a match
+    data3.pop('version')
+    assert(data3==gold_data)
+
