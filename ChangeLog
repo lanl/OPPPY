@@ -1,3 +1,43 @@
+2024-02-02 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_9
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+		+ h5py
+        + sphinx (to build documentation)
+		+ multiprocess (for non-linux builds, multiprocessing for linux)
+
+    * Summary of changes:
+		+ Remove debug print statment
+		+ Threading is now controlled via function/argparse arguments rather than an environment
+		variable 
+		    + Remove OPPPY_USE_THREADS enviroment variable
+			+ Limit memory duplication by batching threaded parsing based on requested number of
+			threads
+			+ nthreads was added to each (output, dump, tally) append parsing function
+			+ -nt or --nthreads was added the default argparse options for (output, dumps, and
+			tallies)
+			+ default behavior is serial (nthreads=0), nthreads=-1 uses maximum number of threads equal to the
+			number of processors, while all positive values of nthreads set a fixed number of threads.
+
+
+    * Corrected defects:
+		+ Reduced threading memory burden when parsing multiple files
+
+    * New Features:
+        + Parallel parsing is off by default but controlled with the nthreads variable
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+
+
 2024-01-09 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
         + OPPPY-0_1_8
