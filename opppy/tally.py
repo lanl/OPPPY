@@ -295,7 +295,7 @@ def append_tally_dictionary(data, output_files, opppy_parser, append_date=False,
     print('')
     print_tally_data(data)
 
-def build_tally_dictionary_list(file_lists, opppy_parser):
+def build_tally_dictionary_list(file_lists, opppy_parser, nthreads=0):
     '''
     append_pickle - 
       This function generates a opppy output dictionary
@@ -312,7 +312,7 @@ def build_tally_dictionary_list(file_lists, opppy_parser):
         # build a new dictionary
         data = {}
         data['version'] = __version__
-        append_tally_dictionary(data, output_files, opppy_parser)
+        append_tally_dictionary(data, output_files, opppy_parser, nthreads=nthreads)
         dictionary_data.append(data)
     
     
