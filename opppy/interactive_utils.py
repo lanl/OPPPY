@@ -196,7 +196,8 @@ class interactive_output_parser:
         dictionaries = []
         file_names = []
         if args.output_files is not None:
-            dictionaries, file_names = build_output_dictionary_list(args.output_files, self.opppy_parser)
+            dictionaries, file_names = build_output_dictionary_list(args.output_files,
+                                                                    self.opppy_parser, nthreads=args.nthreads)
         else:
             # get the dictionaries from the pickle files
             file_names = args.pickle_files
@@ -266,7 +267,9 @@ class interactive_output_parser:
         dictionary_data=[]
         dictionary_names=[]
         if args.output_files is not None:
-            dictionary_data, dictionary_names = build_output_dictionary_list(args.output_files, self.opppy_parser)
+            dictionary_data, dictionary_names = build_output_dictionary_list(args.output_files,
+                                                                             self.opppy_parser,
+                                                                             nthreads=args.nthreads)
         else:
             # We no longer flatten this data
             #file_list = []
@@ -974,7 +977,8 @@ class interactive_tally_parser:
         raw_dictionary_data=[]
         raw_dictionary_names=[]
         if args.tally_files is not None:
-            raw_dictionary_data, raw_dictionary_names = build_tally_dictionary_list(args.tally_files, self.opppy_parser)
+            raw_dictionary_data, raw_dictionary_names = build_tally_dictionary_list(args.tally_files, 
+                                                                                    self.opppy_parser, nthreads=args.nthreads)
         else:
             for pickle_file_name in args.pickle_files:
                 raw_dictionary_names.append(pickle_file_name.split('/')[-1].split('.p')[0])
@@ -1066,7 +1070,8 @@ class interactive_tally_parser:
         raw_dictionary_data=[]
         raw_dictionary_names=[]
         if args.tally_files is not None:
-            raw_dictionary_data, raw_dictionary_names = build_tally_dictionary_list(args.tally_files, self.opppy_parser)
+            raw_dictionary_data, raw_dictionary_names = build_tally_dictionary_list(args.tally_files, 
+                                        self.opppy_parser, nthreads=args.nthreads)
         else:
             for pickle_file_name in args.pickle_files:
                 raw_dictionary_names.append(pickle_file_name.split('/')[-1].split('.p')[0])
