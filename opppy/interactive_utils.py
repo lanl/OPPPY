@@ -250,6 +250,7 @@ class interactive_output_parser:
       parser.add_argument('-p','--plot', dest='plot', help='re-open plot', nargs='?', type=bool, const=True, default=False)
       parser.add_argument('-l','--labels', dest='legend_labels', help='specify the legend labels [line1_label, line2_label,...]', type=str, nargs='+')
       parser.add_argument('-rs','--resize', dest='plot_size', help='specify the plot size [x_size, y_size]', type=float, nargs=2)
+      parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
     
       add_plot_options(parser)
       return parser
