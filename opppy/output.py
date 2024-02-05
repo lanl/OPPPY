@@ -395,7 +395,7 @@ def append_output_dictionary(data, output_files, opppy_parser, append_date=False
     print('')
     print_dictionary_data(data)
 
-def build_output_dictionary_list(file_lists, opppy_parser, nthreads):
+def build_output_dictionary_list(file_lists, opppy_parser, nthreads=0):
     '''
     append_pickle - 
       This function generates a opppy output dictionary
