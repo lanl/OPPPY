@@ -1,3 +1,32 @@
+2024-02-05 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_10
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+		+ h5py
+        + sphinx (to build documentation)
+		+ multiprocess (for non-linux builds, multiprocessing for linux)
+
+    * Summary of changes:
+		+ Thread support for interactive parser
+
+    * Corrected defects:
+		+ Allow threads in the interactive parser via the build_data_list calls
+
+    * New Features:
+        + Threaded interactive data parsing
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+
+
 2024-02-02 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
         + OPPPY-0_1_9
