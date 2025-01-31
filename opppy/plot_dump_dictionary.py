@@ -773,17 +773,23 @@ class plot_line_series_dictionary():
                 if(args.data_file_name is not None):
                     outputfile = open(args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat', 'w')
 
-                xmin=(np.array(series_data[0][xname])*scale_x).min()
-                xmax=(np.array(series_data[0][xname])*scale_x).max()
-                ymin=(np.array(series_data[0][yname])*scale_y).min()
-                ymax=(np.array(series_data[0][yname])*scale_y).max()
+                xmin=(np.array(series_data[0][xname])).min()
+                xmax=(np.array(series_data[0][xname])).max()
+                ymin=(np.array(series_data[0][yname])).min()
+                ymax=(np.array(series_data[0][yname])).max()
                 for data, index_value in zip(series_data, series_pair.index[index_key]):
-                    x = np.array(data[xname])*scale_x
-                    y = np.array(data[yname])*scale_y
+                    x = np.array(data[xname])
+                    y = np.array(data[yname])
                     xmin = min(x.min(),xmin)
                     xmax = max(x.max(),xmax)
                     ymin = min(y.min(),ymin)
                     ymax = max(y.max(),ymax)
+                    x = x*scale_x
+                    y = y*scale_y
+                    xmin = xmin*scale_x
+                    xmax = xmax*scale_x
+                    ymin = ymin*scale_y
+                    ymax = ymax*scale_y
                     if(args.data_file_name is not None):
                         if(args.x_label is not None):
                             header_xlabel = args.x_label
@@ -797,7 +803,7 @@ class plot_line_series_dictionary():
         
                         print('# ', index_key, header_xlabel, header_ylabel, file=outputfile)
                         for x_value, y_value in zip(x, y):
-                            outstring = "%.9e"%(index_value)+" %.9e"%(x_value*scale_x)+" %.9e"%(y_value*scale_y)+"\n"
+                            outstring = "%.9e"%(index_value)+" %.9e"%(x_value)+" %.9e"%(y_value)+"\n"
                             outputfile.write(outstring)
                 if(args.data_file_name is not None):
                     print("data saved as -- "+args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat')
@@ -1003,28 +1009,40 @@ class plot_2d_series_dictionary():
             if(args.data_file_name is not None):
                 outputfile = open(args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat', 'w')
 
-            vmin=(np.array(series_data[0][dname])*args.scale_value).min()
-            vmax=(np.array(series_data[0][dname])*args.scale_value).max()
-            xmin=(np.array(series_data[0][xname])*args.scale_x).min()
-            xmax=(np.array(series_data[0][xname])*args.scale_x).max()
-            ymin=(np.array(series_data[0][yname])*args.scale_y).min()
-            ymax=(np.array(series_data[0][yname])*args.scale_y).max()
+            vmin=(np.array(series_data[0][dname])).min()
+            vmax=(np.array(series_data[0][dname])).max()
+            xmin=(np.array(series_data[0][xname])).min()
+            xmax=(np.array(series_data[0][xname])).max()
+            ymin=(np.array(series_data[0][yname])).min()
+            ymax=(np.array(series_data[0][yname])).max()
             bias = 0.0
             for data, index_value in zip(series_data, series_pair.index[index_key]):
-                v = np.array(data[dname])*args.scale_value
+                v = np.array(data[dname])
                 if(args.log_scale):
                     bias = v.min()
                     bias = 0.0 if bias>0.0 else abs(bias)
                     v = np.array([ [log10(val+bias) if (val+bias)>0.0 else 0.0 
                         for val in vals] for vals in v])
-                x = np.array(data[xname])*args.scale_x
-                y = np.array(data[yname])*args.scale_y
+                    vmin = v.min()
+                    vmax = v.max()
+                x = np.array(data[xname])
+                y = np.array(data[yname])
                 vmin = min(v.min(),vmin)
                 vmax = max(v.max(),vmax)
                 xmin = min(x.min(),xmin)
                 xmax = max(x.max(),xmax)
                 ymin = min(y.min(),ymin)
                 ymax = max(y.max(),ymax)
+                # apply scaling
+                v = v*args.scale_value
+                x = x*args.scale_x
+                y = y*args.scale_y
+                vmin = vmin*args.scale_value
+                vmax = vmax*args.scale_value
+                xmin = xmin*args.scale_x
+                xmax = xmax*args.scale_x
+                ymin = ymin*args.scale_y
+                ymax = ymax*args.scale_y
                 if(args.data_file_name is not None):
                     if(args.x_label is not None):
                         header_xlabel = args.x_label
@@ -1038,7 +1056,7 @@ class plot_2d_series_dictionary():
         
                     print('# ', index_key, header_xlabel, header_ylabel, dname, file=outputfile)
                     for x_value, y_value, v_value in zip(x, y, v):
-                        outstring = "%.9e"%(index_value)+" %.9e"%(x_value*args.scale_x)+" %.9e"%(y_value*args.scale_y)+" %.9e"%(v_value*args.scale_value)+"\n"
+                        outstring = "%.9e"%(index_value)+" %.9e"%(x_value)+" %.9e"%(y_value)+" %.9e"%(v_value)+"\n"
                         outputfile.write(outstring)
             if(args.data_file_name is not None):
                 print("data saved as -- "+args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',dname)+'.dat')

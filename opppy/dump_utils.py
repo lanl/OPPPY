@@ -515,7 +515,7 @@ def append_dumps(data, dump_files, opppy_parser, key_words=None, nthreads=0):
             result_d[file_name.split('/')[-1]] = opppy_parser.build_data_dictionary(file_name,key_words)
         print("Number of threads used for processing: ",nthreads)
         for stride in range(math.ceil(float(total)/float(nthreads))):
-            files = dump_files[nthreads*stride:min(nthreads*(stride+1),len(dump_files))]
+            files = dump_files[nthreads*stride:min(int(nthreads*(stride+1)),len(dump_files))]
             with Manager() as manager:
                 result_d = manager.dict()
                 threads = []
