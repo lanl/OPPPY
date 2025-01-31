@@ -780,10 +780,10 @@ class plot_line_series_dictionary():
                 for data, index_value in zip(series_data, series_pair.index[index_key]):
                     x = np.array(data[xname])
                     y = np.array(data[yname])
-                    xmin = min(x.min(),xmin)
-                    xmax = max(x.max(),xmax)
-                    ymin = min(y.min(),ymin)
-                    ymax = max(y.max(),ymax)
+                    xmin = np.array([x.min(),xmin]).min()
+                    xmax = np.array([x.max(),xmax]).max()
+                    ymin = np.array([y.min(),ymin]).min()
+                    ymax = np.array([y.max(),ymax]).max()
                     x = x*scale_x
                     y = y*scale_y
                     xmin = xmin*scale_x
@@ -1025,12 +1025,12 @@ class plot_2d_series_dictionary():
                         for val in vals] for vals in v])
                 x = np.array(data[xname])
                 y = np.array(data[yname])
-                vmin = min(v.min(),vmin)
-                vmax = max(v.max(),vmax)
-                xmin = min(x.min(),xmin)
-                xmax = max(x.max(),xmax)
-                ymin = min(y.min(),ymin)
-                ymax = max(y.max(),ymax)
+                vmin = np.array([v.min(),vmin]).min()
+                vmax = np.array([v.max(),vmax]).max()
+                xmin = np.array([x.min(),xmin]).min()
+                xmax = np.array([x.max(),xmax]).max()
+                ymin = np.array([y.min(),ymin]).min()
+                ymax = np.array([y.max(),ymax]).max()
                 # apply scaling
                 v = v*args.scale_value
                 x = x*args.scale_x
