@@ -502,32 +502,49 @@ class test_opppy_dump_utils(unittest.TestCase):
         # initialize my test dump parser
         dump_parser = my_test_opppy_dump_parser()
         
-        data = []
+        data3d = []
         filename = dir_path + "example_dump.txt"
         # extract all data from the example dump file
-        data.append(dump_parser.build_data_dictionary(filename))
+        data3d.append(dump_parser.build_data_dictionary(filename))
         filename = dir_path + "example_dump2.txt"
-        data.append(dump_parser.build_data_dictionary(filename))
+        data3d.append(dump_parser.build_data_dictionary(filename))
         filename = dir_path + "example_dump3.txt"
-        data.append(dump_parser.build_data_dictionary(filename))
+        data3d.append(dump_parser.build_data_dictionary(filename))
+        data2d = []
+        filename = dir_path + "example_2d_dump.txt"
+        # extract all data from the example dump file
+        data2d.append(dump_parser.build_data_dictionary(filename))
+        filename = dir_path + "example_2d_dump_2.txt"
+        data2d.append(dump_parser.build_data_dictionary(filename))
+        filename = dir_path + "example_2d_dump_3.txt"
+        data2d.append(dump_parser.build_data_dictionary(filename))
+        data1d = []
+        filename = dir_path + "example_1d_dump.txt"
+        # extract all data from the example dump file
+        data1d.append(dump_parser.build_data_dictionary(filename))
+        filename = dir_path + "example_1d_dump_2.txt"
+        data1d.append(dump_parser.build_data_dictionary(filename))
+        filename = dir_path + "example_1d_dump_3.txt"
+        data1d.append(dump_parser.build_data_dictionary(filename))
         
+
         check_data = {}
         # extract a 1D data value
-        tracer_t, tracer_grid = extract_series_line(data,'time',"temperature",['x'], [1.0],  [5.0], npts=5 )
+        tracer_t, tracer_grid = extract_series_line(data1d,'time',"temperature",['x'], [1.0],  [5.0], npts=5 )
         check_data['time1'] = np.array([t[0] for t in tracer_t['time']])
         for i in range(len(check_data['time1'])):
             check_data['temperature1'+str(i)] = tracer_grid[i]['temperature']
             check_data['x1'+str(i)] = tracer_grid[i]['distance']
  
         print(tracer_t, tracer_grid)
-        tracer_t, tracer_grid = extract_series_line(data,'time',"temperature",['x','y'], [5.0, 1.0],  [5.0, 2.0], npts=5 )
+        tracer_t, tracer_grid = extract_series_line(data2d,'time',"temperature",['x','y'], [5.0, 1.0],  [5.0, 2.0], npts=5 )
         check_data['time2'] = np.array([t[0] for t in tracer_t['time']])
         for i in range(len(check_data['time2'])):
             check_data['temperature2'+str(i)] = tracer_grid[i]['temperature']
             check_data['x2'+str(i)] = tracer_grid[i]['distance']
  
         print(tracer_t, tracer_grid)
-        tracer_t, tracer_grid = extract_series_line(data,'time',"temperature",['x','y','z'], [5.0, 1.0, 1.2],  [5.0, 2.0, 1.75], npts=5  )
+        tracer_t, tracer_grid = extract_series_line(data3d,'time',"temperature",['x','y','z'], [5.0, 1.0, 1.2],  [5.0, 2.0, 1.75], npts=5  )
         check_data['time3'] = np.array([t[0] for t in tracer_t['time']])
         for i in range(len(check_data['time3'])):
             check_data['temperature3'+str(i)] = tracer_grid[i]['temperature']
