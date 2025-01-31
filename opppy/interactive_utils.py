@@ -156,10 +156,17 @@ class interactive_output_parser:
           print("This version of OPPPY is ", __version__)
           print("Delete the old ", args.pickle_name, "file and rebuild it")
           sys.exit(0)
-    
+
+        if hasattr(self.opppy_parser, "pre_parse"):
+            self.opppy_parser.pre_parse(args)
+
         # append new dictionary data to the pickle file
         append_output_dictionary(data, args.output_files, self.opppy_parser, args.append_date, args.nthreads)
-    
+
+        if hasattr(self.opppy_parser, "post_parse"):
+            self.opppy_parser.post_parse(args, data)
+
+   
         pickle.dump(data,open(args.pickle_name,"wb"))
         print("Output Data Saved To: ", args.pickle_name)
 
@@ -170,6 +177,8 @@ class interactive_output_parser:
         pickle_parser.add_argument('-pf','--pickle_file', dest='pickle_name', help='Pickle file name to be created or appended to', required=True )
         pickle_parser.add_argument('-ad','--append_date', dest='append_date', help='Append the date and time to the output file name', nargs='?', type=bool, const=True, default=False)
         pickle_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
+        if hasattr(self.opppy_parser, "add_parser_args"):
+            self.opppy_parser.add_parser_args(pickle_parser)
         pickle_parser.set_defaults(func=self.append_pickle)
  
 
@@ -184,6 +193,8 @@ class interactive_output_parser:
         plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
         self.dict_ploter = plot_dictionary()
         self.dict_ploter.setup_parser(plot_parser)
+        if hasattr(self.opppy_parser, "add_parser_args"):
+            self.opppy_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_dictionary)
     
     def plot_dictionary(self, args):
@@ -196,8 +207,14 @@ class interactive_output_parser:
         dictionaries = []
         file_names = []
         if args.output_files is not None:
+            if hasattr(self.opppy_parser, "pre_parse"):
+                self.opppy_parser.pre_parse(args)
             dictionaries, file_names = build_output_dictionary_list(args.output_files,
-                                                                    self.opppy_parser, nthreads=args.nthreads)
+                                                                    self.opppy_parser,
+                                                                    nthreads=args.nthreads)
+            if hasattr(self.opppy_parser, "post_parse"):
+                for data in dictionaries:
+                    self.opppy_parser.post_parse(args, data)
         else:
             # get the dictionaries from the pickle files
             file_names = args.pickle_files
@@ -214,6 +231,8 @@ class interactive_output_parser:
         input_type_parser.add_argument('-pf','--pickle_files', dest='pickle_files', help='pickle files to be plotted (run1.p run2.p etc...)', nargs='+' )
         input_type_parser.add_argument('-of','--output_files', dest='output_files', help='output files to be parsed and plotted (output_file1.txt output_file2.txt etc...)', nargs='+', action='append')
         plot_output_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
+        if hasattr(self.opppy_parser, "add_parser_args"):
+            self.opppy_parser.add_parser_args(plot_output_parser)
         plot_output_parser.set_defaults(func=self.plot_output)
     
     def get_plot_option(self):
@@ -268,9 +287,14 @@ class interactive_output_parser:
         dictionary_data=[]
         dictionary_names=[]
         if args.output_files is not None:
+            if hasattr(self.opppy_parser, "pre_parse"):
+                self.opppy_parser.pre_parse(args)
             dictionary_data, dictionary_names = build_output_dictionary_list(args.output_files,
                                                                              self.opppy_parser,
                                                                              nthreads=args.nthreads)
+            if hasattr(self.opppy_parser, "post_parse"):
+                for data in dictionary_data:
+                    self.opppy_parser.post_parse(args, data)
         else:
             # We no longer flatten this data
             #file_list = []
@@ -358,19 +382,19 @@ class interactive_output_parser:
             plabels = []
             x = []
             y = []
-            xmin.append(min(data[plot_args.x_value_name])*scale_x)
-            xmax.append(max(data[plot_args.x_value_name])*scale_x)
-            ymin.append(min(data[plot_args.y_value_names[0]])*scale_y)
-            ymax.append(max(data[plot_args.y_value_names[0]])*scale_y)
+            xmin.append(min(data[plot_args.x_value_name]))
+            xmax.append(max(data[plot_args.x_value_name]))
+            ymin.append(min(data[plot_args.y_value_names[0]]))
+            ymax.append(max(data[plot_args.y_value_names[0]]))
             # material specific plot
             for yname in plot_args.y_value_names:
-              x.append(array(data[plot_args.x_value_name])*scale_x)
-              ymin[-1] = min(ymin[-1],min(data[yname])*scale_y)
-              ymax[-1] = max(ymin[-1],max(data[yname])*scale_y)
+              x.append(array(data[plot_args.x_value_name]))
+              ymin[-1] = array([ymin[-1],min(data[yname])]).min()
+              ymax[-1] = array([ymin[-1],max(data[yname])]).max()
               plabels.append(label+" "+yname)
               if (option.no_y_names):
                   plabels[-1] = ''
-              y.append(array(data[yname])*scale_y)
+              y.append(array(data[yname]))
     
             xmin = array(xmin)
             xmax = array(xmax)
@@ -390,6 +414,10 @@ class interactive_output_parser:
             last_xmax = xmax
             last_ymin = ymin
             last_ymax = ymax
+            xmin = xmin*scale_x
+            xmax = xmax*scale_x
+            ymin = ymin*scale_y
+            ymax = ymax*scale_y
     
             xlab = plot_args.x_label
             ylab = plot_args.y_label
@@ -415,7 +443,7 @@ class interactive_output_parser:
                 show(block=False)
     
             for i in range(len(x)):
-              logplot(option.log_x,option.log_y,x[i],y[i],label=name+" "+plabels[i])
+              logplot(option.log_x,option.log_y,x[i]*scale_x,y[i]*scale_y,label=name+" "+plabels[i])
     
             if option.data_file_name is not None:
               output_file_temp = option.data_file_name 
@@ -424,7 +452,7 @@ class interactive_output_parser:
                 outfile =  open(outfile_name,'w')
                 print("# ", xlab, ylab, file=outfile)
                 for j in range(len(x[i])):
-                  print('%15e  %15e' %(x[i][j], y[i][j]), file=outfile)
+                  print('%15e  %15e' %(x[i][j]*scale_x, y[i][j]*scale_y), file=outfile)
                 print("Data written to - ", outfile_name)
                 outfile.close()
       
@@ -502,6 +530,8 @@ class interactive_output_parser:
       parser.add_argument('-dn','--dictionary_name', dest='dictionary_name', help='dictionary that the plotting data is contained in', required=True, type=str)
       parser.add_argument('-x','--x_data', dest='x_value_name', help='dictionary data to be plotted on the x axis.', required=True)
       parser.add_argument('-y','--y_data', dest='y_value_names', help='dictionary data to be plotted on the y axis.', required=True, action='append')
+      if hasattr(self.opppy_parser, "add_parser_args"):
+          self.opppy_parser.add_parser_args(parser)
       add_plot_options(parser);
     
       return parser.parse_args(shlex.split(input_string))
@@ -534,7 +564,6 @@ class interactive_dump_parser:
         '''
         self.dump_parser = opppy_dump_parser
         self.parser = argument_parser
-        
         self.subparser = self.parser.add_subparsers(help="Dump options", dest='command')
         self.pickle_dumps_parser(self.subparser)
         self.plot_1d_parser(self.subparser)
@@ -558,6 +587,8 @@ class interactive_dump_parser:
         plot_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
         self.ploter_1d = plot_1d_dump_dictionary()
         self.ploter_1d.setup_parser(plot_parser)
+        if hasattr(self.dump_parser, "add_parser_args"):
+          self.dump_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_1d)
 
     def plot_2d_parser(self, subparser):
@@ -574,6 +605,8 @@ class interactive_dump_parser:
         plot_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
         self.ploter_2d = plot_2d_dump_dictionary()
         self.ploter_2d.setup_parser(plot_parser)
+        if hasattr(self.dump_parser, "add_parser_args"):
+          self.dump_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_2d)
 
     def plot_3d_parser(self, subparser):
@@ -590,6 +623,8 @@ class interactive_dump_parser:
         plot_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
         self.ploter_3d = plot_3d_dump_dictionary()
         self.ploter_3d.setup_parser(plot_parser)
+        if hasattr(self.dump_parser, "add_parser_args"):
+          self.dump_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_3d)
 
     def plot_3d(self, args):
@@ -616,6 +651,8 @@ class interactive_dump_parser:
         pickle_parser.add_argument('-pf','--pickle_file', dest='pickle_name', help='Pickle file name to be created or appended to', required=True )
         pickle_parser.add_argument('-kw','--key_words', dest='key_words', help='Only extract the specified key_words', nargs='+', default=None )
         pickle_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Specify number of threads for dump parsing', nargs='?', type=int, default=0 )
+        if hasattr(self.dump_parser, "add_parser_args"):
+          self.dump_parser.add_parser_args(pickle_parser)
         pickle_parser.set_defaults(func=self.pickle_dumps)
  
     def pickle_dumps(self, args):
@@ -682,6 +719,8 @@ class interactive_dump_parser:
         # suppress the x and y variable request
         plot_parser.add_argument('-x','--x_data',dest='x_value_name', help=argparse.SUPPRESS)
         plot_parser.add_argument('-y','--y_data',dest='y_value_name', help=argparse.SUPPRESS)
+        if hasattr(self.dump_parser, "add_parser_args"):
+          self.dump_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_series_point)
 
     def plot_series_point(self, args):
@@ -749,6 +788,8 @@ class interactive_dump_parser:
         # suppress the x and y variable request
         plot_parser.add_argument('-x','--x_data',dest='x_value_name', help=argparse.SUPPRESS)
         plot_parser.add_argument('-y','--y_data',dest='y_value_name', help=argparse.SUPPRESS)
+        if hasattr(self.dump_parser, "add_parser_args"):
+          self.dump_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_series_line)
 
     def plot_series_line(self, args):
@@ -806,6 +847,8 @@ class interactive_dump_parser:
         # suppress the x and y variable request
         plot_parser.add_argument('-x','--x_data',dest='x_value_name', help=argparse.SUPPRESS)
         plot_parser.add_argument('-y','--y_data',dest='y_value_name', help=argparse.SUPPRESS)
+        if hasattr(self.dump_parser, "add_parser_args"):
+          self.dump_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_series_contour)
 
     def plot_series_contour(self, args):
@@ -937,8 +980,14 @@ class interactive_tally_parser:
           print("Delete the old ", args.pickle_name, "file and rebuild it")
           sys.exit(0)
     
+        if hasattr(self.opppy_parser, "pre_parse"):
+            self.opppy_parser.pre_parse(args)
+
         # append new dictionary data to the pickle file
         append_tally_dictionary(data, args.tally_files, self.opppy_parser, args.append_date, args.nthreads)
+
+        if hasattr(self.opppy_parser, "post_parse"):
+            self.opppy_parser.post_parse(args, data)
     
         pickle.dump(data,open(args.pickle_name,"wb"))
         print("Output Data Saved To: ", args.pickle_name)
@@ -950,6 +999,8 @@ class interactive_tally_parser:
         pickle_parser.add_argument('-pf','--pickle_file', dest='pickle_name', help='Pickle file name to be created or appended to', required=True )
         pickle_parser.add_argument('-ad','--append_date', dest='append_date', help='Append the date and time to the output file name', nargs='?', type=bool, const=True, default=False)
         pickle_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
+        if hasattr(self.opppy_parser, "add_parser_args"):
+          self.opppy_parser.add_parser_args(pickle_parser)
         pickle_parser.set_defaults(func=self.append_pickle)
  
 
@@ -966,6 +1017,8 @@ class interactive_tally_parser:
         plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
         self.dict_ploter = plot_dictionary()
         self.dict_ploter.setup_parser(plot_parser)
+        if hasattr(self.opppy_parser, "add_parser_args"):
+          self.opppy_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_tally)
     
     def plot_tally(self, args):
@@ -978,8 +1031,14 @@ class interactive_tally_parser:
         raw_dictionary_data=[]
         raw_dictionary_names=[]
         if args.tally_files is not None:
+            if hasattr(self.opppy_parser, "pre_parse"):
+                self.opppy_parser.pre_parse(args)
             raw_dictionary_data, raw_dictionary_names = build_tally_dictionary_list(args.tally_files, 
-                                                                                    self.opppy_parser, nthreads=args.nthreads)
+                                                                                    self.opppy_parser, 
+                                                                                    nthreads=args.nthreads)
+            if hasattr(self.opppy_parser, "post_parse"):
+                for data in raw_dictionary_data:
+                    self.opppy_parser.post_parse(args, data)
         else:
             for pickle_file_name in args.pickle_files:
                 raw_dictionary_names.append(pickle_file_name.split('/')[-1].split('.p')[0])
@@ -1016,7 +1075,8 @@ class interactive_tally_parser:
         input_type_parser.add_argument('-pf','--pickle_files', dest='pickle_files', help='pickle files to be plotted (run1.p run2.p etc...)', nargs='+' )
         input_type_parser.add_argument('-tf','--tally_files', dest='tally_files', help='tally files to be parsed and plotted (tally_file1.txt tally_file2.txt etc...)', nargs='+', action='append')
         plot_parser.add_argument('-nt','--nthreads', dest='nthreads', help='Number of threads to use during parsing', nargs='?', type=int, default=0)
-        
+        if hasattr(self.opppy_parser, "add_parser_args"):
+          self.opppy_parser.add_parser_args(plot_parser)
         plot_parser.set_defaults(func=self.plot_interactive_tally)
     
     def get_plot_option(self):
@@ -1053,9 +1113,9 @@ class interactive_tally_parser:
       parser.add_argument('-p','--plot', dest='plot', help='re-open plot', nargs='?', type=bool, const=True, default=False)
       parser.add_argument('-l','--labels', dest='legend_labels', help='specify the legend labels [line1_label, line2_label,...]', type=str, nargs='+')
       parser.add_argument('-rs','--resize', dest='plot_size', help='specify the plot size [x_size, y_size]', type=float, nargs=2)
-      
-    
       add_plot_options(parser)
+      if hasattr(self.opppy_parser, "add_parser_args"):
+          self.opppy_parser.add_parser_args(parser)
       return parser
     
     def plot_interactive_tally(self, args):
@@ -1071,8 +1131,14 @@ class interactive_tally_parser:
         raw_dictionary_data=[]
         raw_dictionary_names=[]
         if args.tally_files is not None:
-            raw_dictionary_data, raw_dictionary_names = build_tally_dictionary_list(args.tally_files, 
-                                        self.opppy_parser, nthreads=args.nthreads)
+            if hasattr(self.opppy_parser, "pre_parse"):
+                self.opppy_parser.pre_parse(args)
+            raw_dictionary_data, raw_dictionary_names = build_tally_dictionary_list(args.tally_files,
+                                                                                    self.opppy_parser,
+                                                                                    nthreads=args.nthreads)
+            if hasattr(self.opppy_parser, "post_parse"):
+                for data in raw_dictionary_data:
+                    self.opppy_parser.post_parse(args, data)
         else:
             for pickle_file_name in args.pickle_files:
                 raw_dictionary_names.append(pickle_file_name.split('/')[-1].split('.p')[0])
@@ -1175,19 +1241,19 @@ class interactive_tally_parser:
             plabels = []
             x = []
             y = []
-            xmin.append(min(data[plot_args.x_value_name])*scale_x)
-            xmax.append(max(data[plot_args.x_value_name])*scale_x)
-            ymin.append(min(data[plot_args.y_value_names[0]])*scale_y)
-            ymax.append(max(data[plot_args.y_value_names[0]])*scale_y)
+            xmin.append(min(data[plot_args.x_value_name]))
+            xmax.append(max(data[plot_args.x_value_name]))
+            ymin.append(min(data[plot_args.y_value_names[0]]))
+            ymax.append(max(data[plot_args.y_value_names[0]]))
             # material specific plot
             for yname in plot_args.y_value_names:
-              x.append(array(data[plot_args.x_value_name])*scale_x)
-              ymin[-1] = min(ymin[-1],min(data[yname])*scale_y)
-              ymax[-1] = max(ymin[-1],max(data[yname])*scale_y)
+              x.append(array(data[plot_args.x_value_name]))
+              ymin[-1] = array([ymin[-1],min(data[yname])]).min()
+              ymax[-1] = array([ymin[-1],max(data[yname])]).max()
               plabels.append(label+" "+yname)
               if (option.no_y_names):
                   plabels[-1] = ''
-              y.append(array(data[yname])*scale_y)
+              y.append(array(data[yname]))
     
             xmin = array(xmin)
             xmax = array(xmax)
@@ -1207,6 +1273,10 @@ class interactive_tally_parser:
             last_xmax = xmax
             last_ymin = ymin
             last_ymax = ymax
+            xmin = xmin*scale_x
+            xmax = xmax*scale_x
+            ymin = ymin*scale_y
+            ymax = ymax*scale_y
     
             xlab = plot_args.x_label
             ylab = plot_args.y_label
@@ -1232,7 +1302,7 @@ class interactive_tally_parser:
                 show(block=False)
     
             for i in range(len(x)):
-              logplot(option.log_x,option.log_y,x[i],y[i],label=name+" "+plabels[i])
+              logplot(option.log_x,option.log_y,(x[i]*scale_x),(y[i]*scale_y),label=name+" "+plabels[i])
     
             if option.data_file_name is not None:
               output_file_temp = option.data_file_name 
@@ -1241,7 +1311,7 @@ class interactive_tally_parser:
                 outfile =  open(outfile_name,'w')
                 print("# ", xlab, ylab, file=outfile)
                 for j in range(len(x[i])):
-                  print('%15e  %15e' %(x[i][j], y[i][j]), file=outfile)
+                  print('%15e  %15e' %(x[i][j]*scale_x, y[i][j]*scale_y), file=outfile)
                 print("Data written to - ", outfile_name)
                 outfile.close()
       
@@ -1321,6 +1391,8 @@ class interactive_tally_parser:
       parser.add_argument('-y','--y_data', dest='y_value_names', help='dictionary data to be plotted on the y axis.', required=True, action='append')
       parser.add_argument('-sk','--series_key', dest='series_key', help='Series key string to access the data (i.e time or cycle)', nargs='?', required=True)
       parser.add_argument('-sv','--series_value', dest='series_value', help='Series value to plot the data at (default is the last value of the series_key data)', nargs='?', action='append', type=float, default=None)
+      if hasattr(self.opppy_parser, "add_parser_args"):
+          self.opppy_parser.add_parser_args(parser)
       add_plot_options(parser);
     
       return parser.parse_args(shlex.split(input_string))

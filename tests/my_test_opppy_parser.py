@@ -14,6 +14,15 @@ class my_test_opppy_parser():
       self.file_end_string = None
       print("Initializing my_test_opppy_parser")
 
+    def add_parser_args(self, parser):
+        parser.add_argument('-ppt', '--pre_parser_test', dest="pre_parser_test", nargs="?", default=None)
+
+    def pre_parse(self, args):
+        if(args.pre_parser_test is not None):
+            print("pre_parse hook works: args.pre_parser_test")
+        else:
+            print("pre_parse hook works: None")
+
     def parse_cycle_string(self,cycle_string):
       # return dictionary of dictionaries 
       data_dict = {}
@@ -53,8 +62,13 @@ class my_test_opppy_parser():
       # append dictionary with multiple entries
       data_dict['density'] = density_data
 
-
-
-
       return data_dict
-        
+
+    def post_parse(self, args, data):
+       if(args.pre_parser_test is not None):
+           data["post_parse_test_"+args.pre_parser_test]=data['test_data1']
+       else:
+           data['post_parser_test']=data['test_data1']
+
+
+       

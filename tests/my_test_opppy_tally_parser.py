@@ -20,6 +20,16 @@ class my_test_opppy_tally_parser():
       self.file_end_string = None
       print("Initializing my_test_opppy_tally_parser")
 
+    def add_parser_args(self, parser):
+        parser.add_argument('-ppt', '--pre_parser_test', dest="pre_parser_test", nargs="?", default=None)
+
+    def pre_parse(self, args):
+        if(args.pre_parser_test is not None):
+            print("pre_parse hook works: args.pre_parser_test")
+        else:
+            print("pre_parse hook works: None")
+
+
     def parse_cycle_string(self,cycle_string):
       cycle_data_keys = ['bins','odd_counts','even_counts']
       cycle_info_keys = ['time', 'cycle']
@@ -58,4 +68,8 @@ class my_test_opppy_tally_parser():
       data_dict['cool_counts'] = counts
 
       return data_dict
-        
+
+    def post_parse(self, args, data):
+       print("Post Parse Test Data keys: ",data.keys())
+
+
