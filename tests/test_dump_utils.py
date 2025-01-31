@@ -495,7 +495,7 @@ class test_opppy_dump_utils(unittest.TestCase):
 
     def test_line_series(self):
         '''
-        Thest the three different point value extraction functions
+        Test the three different point value extraction functions
         '''
         from my_test_opppy_dump_parser import my_test_opppy_dump_parser
 
@@ -543,6 +543,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         gold_data = pickle.load(goldfile)
         goldfile.close()
         for k, v in  gold_data.items():
+            print(k,v,check_data[k])
             np.testing.assert_allclose(check_data[k],v)
 
 
