@@ -1237,24 +1237,24 @@ class interactive_tally_parser:
             plabels = []
             x = []
             y = []
-            xmin.append(min(data[plot_args.x_value_name])*scale_x)
-            xmax.append(max(data[plot_args.x_value_name])*scale_x)
-            ymin.append(min(data[plot_args.y_value_names[0]])*scale_y)
-            ymax.append(max(data[plot_args.y_value_names[0]])*scale_y)
+            xmin.append(min(data[plot_args.x_value_name]))
+            xmax.append(max(data[plot_args.x_value_name]))
+            ymin.append(min(data[plot_args.y_value_names[0]]))
+            ymax.append(max(data[plot_args.y_value_names[0]]))
             # material specific plot
             for yname in plot_args.y_value_names:
               x.append(array(data[plot_args.x_value_name])*scale_x)
-              ymin[-1] = min(ymin[-1],min(data[yname])*scale_y)
-              ymax[-1] = max(ymin[-1],max(data[yname])*scale_y)
+              ymin[-1] = min(ymin[-1],min(data[yname]))
+              ymax[-1] = max(ymin[-1],max(data[yname]))
               plabels.append(label+" "+yname)
               if (option.no_y_names):
                   plabels[-1] = ''
               y.append(array(data[yname])*scale_y)
     
-            xmin = array(xmin)
-            xmax = array(xmax)
-            ymin = array(ymin)
-            ymax = array(ymax)
+            xmin = array(xmin*scale_x)
+            xmax = array(xmax*scale_x)
+            ymin = array(ymin*scale_y)
+            ymax = array(ymax*scale_y)
             if last_xmin is not None:
               xmin = min(last_xmin,xmin.min())
               xmax = max(last_xmax,xmax.max())
