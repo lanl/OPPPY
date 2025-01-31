@@ -389,8 +389,8 @@ class interactive_output_parser:
             # material specific plot
             for yname in plot_args.y_value_names:
               x.append(array(data[plot_args.x_value_name]))
-              ymin[-1] = min(ymin[-1],min(data[yname]))
-              ymax[-1] = max(ymin[-1],max(data[yname]))
+              ymin[-1] = array([ymin[-1],min(data[yname])]).min()
+              ymax[-1] = array([ymin[-1],max(data[yname])]).max()
               plabels.append(label+" "+yname)
               if (option.no_y_names):
                   plabels[-1] = ''
@@ -1248,8 +1248,8 @@ class interactive_tally_parser:
             # material specific plot
             for yname in plot_args.y_value_names:
               x.append(array(data[plot_args.x_value_name]))
-              ymin[-1] = min(ymin[-1],min(data[yname]))
-              ymax[-1] = max(ymin[-1],max(data[yname]))
+              ymin[-1] = array([ymin[-1],min(data[yname])]).min()
+              ymax[-1] = array([ymin[-1],max(data[yname])]).max()
               plabels.append(label+" "+yname)
               if (option.no_y_names):
                   plabels[-1] = ''
