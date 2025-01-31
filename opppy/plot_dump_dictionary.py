@@ -773,10 +773,10 @@ class plot_line_series_dictionary():
                 if(args.data_file_name is not None):
                     outputfile = open(args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat', 'w')
 
-                xmin=(np.array(series_data[0][xname])).min()
-                xmax=(np.array(series_data[0][xname])).max()
-                ymin=(np.array(series_data[0][yname])).min()
-                ymax=(np.array(series_data[0][yname])).max()
+                xmin=np.array(series_data[0][xname]).min()
+                xmax=np.array(series_data[0][xname]).max()
+                ymin=np.array(series_data[0][yname]).min()
+                ymax=np.array(series_data[0][yname]).max()
                 for data, index_value in zip(series_data, series_pair.index[index_key]):
                     x = np.array(data[xname])
                     y = np.array(data[yname])
@@ -1009,13 +1009,12 @@ class plot_2d_series_dictionary():
             if(args.data_file_name is not None):
                 outputfile = open(args.data_file_name+'_'+filename.split('/')[-1]+'.'+re.sub(r'[^\w]','',yname)+'.dat', 'w')
 
-            vmin=(np.array(series_data[0][dname])).min()
-            vmax=(np.array(series_data[0][dname])).max()
-            xmin=(np.array(series_data[0][xname])).min()
-            xmax=(np.array(series_data[0][xname])).max()
-            ymin=(np.array(series_data[0][yname])).min()
-            ymax=(np.array(series_data[0][yname])).max()
-            bias = 0.0
+            vmin=np.array(series_data[0][dname]).min()
+            vmax=np.array(series_data[0][dname]).max()
+            xmin=np.array(series_data[0][xname]).min()
+            xmax=np.array(series_data[0][xname]).max()
+            ymin=np.array(series_data[0][yname]).min()
+            ymax=np.array(series_data[0][yname]).max()
             for data, index_value in zip(series_data, series_pair.index[index_key]):
                 v = np.array(data[dname])
                 if(args.log_scale):
