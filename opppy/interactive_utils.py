@@ -1243,18 +1243,18 @@ class interactive_tally_parser:
             ymax.append(max(data[plot_args.y_value_names[0]]))
             # material specific plot
             for yname in plot_args.y_value_names:
-              x.append(array(data[plot_args.x_value_name])*scale_x)
+              x.append(array(data[plot_args.x_value_name]))
               ymin[-1] = min(ymin[-1],min(data[yname]))
               ymax[-1] = max(ymin[-1],max(data[yname]))
               plabels.append(label+" "+yname)
               if (option.no_y_names):
                   plabels[-1] = ''
-              y.append(array(data[yname])*scale_y)
+              y.append(array(data[yname]))
     
-            xmin = array(xmin*scale_x)
-            xmax = array(xmax*scale_x)
-            ymin = array(ymin*scale_y)
-            ymax = array(ymax*scale_y)
+            xmin = array(xmin)
+            xmax = array(xmax)
+            ymin = array(ymin)
+            ymax = array(ymax)
             if last_xmin is not None:
               xmin = min(last_xmin,xmin.min())
               xmax = max(last_xmax,xmax.max())
@@ -1269,6 +1269,10 @@ class interactive_tally_parser:
             last_xmax = xmax
             last_ymin = ymin
             last_ymax = ymax
+            xmin = xmin*scale_x
+            xmax = xmax*scale_x
+            ymin = ymin*scale_y
+            ymax = ymax*scale_y
     
             xlab = plot_args.x_label
             ylab = plot_args.y_label
@@ -1294,7 +1298,7 @@ class interactive_tally_parser:
                 show(block=False)
     
             for i in range(len(x)):
-              logplot(option.log_x,option.log_y,x[i],y[i],label=name+" "+plabels[i])
+              logplot(option.log_x,option.log_y,(x[i]*scale_x),(y[i]*scale_y),label=name+" "+plabels[i])
     
             if option.data_file_name is not None:
               output_file_temp = option.data_file_name 
@@ -1303,7 +1307,7 @@ class interactive_tally_parser:
                 outfile =  open(outfile_name,'w')
                 print("# ", xlab, ylab, file=outfile)
                 for j in range(len(x[i])):
-                  print('%15e  %15e' %(x[i][j], y[i][j]), file=outfile)
+                  print('%15e  %15e' %(x[i][j]*scale_x, y[i][j]*scale_y), file=outfile)
                 print("Data written to - ", outfile_name)
                 outfile.close()
       
