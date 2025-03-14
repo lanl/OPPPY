@@ -443,7 +443,7 @@ def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, meth
     for data in data_list:
         T.append(data[series_key])
         if len(box) == 0:
-            if(data[data_name].ndim == 2 and 
+            if(data[value_key].ndim == 2 and 
                data[value_key].shape[1] == data[dim_keys[0]].shape[0] and 
                data[value_key].shape[0] == data[dim_keys[1]].shape[0]):
                 grid.append(data)
