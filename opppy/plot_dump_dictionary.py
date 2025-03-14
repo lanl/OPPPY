@@ -476,7 +476,7 @@ class plot_2d_dump_dictionary():
                         args.y_limits[0], args.x_limits[1], args.y_limits[1], args.num_grid, 
                         args.interp_method,args.log_scale)
             else:
-                if(director[data_name].ndim == 2 and
+                if(dictionary[data_name].ndim == 2 and
                    dictionary[data_name].shape[1] == dictionary[xname].shape[0] and 
                    dictionary[data_name].shape[0] == dictionary[yname].shape[0]):
                     griddata = dictionary
