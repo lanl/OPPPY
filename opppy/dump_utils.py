@@ -143,7 +143,6 @@ def data2grid(data, x_key, y_key, value_key, npts=500, method='nearest', log_sca
     X = data[x_key]
     Y = data[y_key]
     xi, yi = mgrid[X.min():X.max():complex(npts), Y.min():Y.max():complex(npts)]
-
     grid_data = {}
     value = data[value_key]
     grid_data[value_key] = griddata((X, Y), value, (xi, yi), method).T
@@ -444,7 +443,11 @@ def extract_series_2d(data_list, series_key, value_key, dim_keys, npts=500, meth
     for data in data_list:
         T.append(data[series_key])
         if len(box) == 0:
-            grid.append(data2grid(data, dim_keys[0], dim_keys[1], value_key, npts, method, log_scale))
+            if(data[value_key].shape[1] == data[dim_keys[0]].shape[0] and data[value_key].shape[0] ==
+               data[dim_keys[1]].shape[0]):
+                grid.append(data)
+            else:
+                grid.append(data2grid(data, dim_keys[0], dim_keys[1], value_key, npts, method, log_scale))
         else:
             grid.append(data2gridbox(data, dim_keys[0], dim_keys[1], value_key, box[0], box[1],
                 box[2], box[3],npts,method, log_scale))
