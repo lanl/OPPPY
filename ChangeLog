@@ -1,3 +1,34 @@
+2025-03-14 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_11
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+		+ h5py
+        + sphinx (to build documentation)
+		+ multiprocess (for non-linux builds, multiprocessing for linux)
+
+    * Summary of changes:
+		+ Add pre/post parser hooks such that the parser and the resulting dictionaries can be
+        modified as a whole
+        + Fixed contour plotting for parsed 2D data
+
+    * Corrected defects:
+        + Fixed contour plotting for parsed 2D data
+
+    * New Features:
+		+ Add pre/post parser hooks such that the parser and the resulting dictionaries can be
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+
+
 2024-02-05 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
         + OPPPY-0_1_10
