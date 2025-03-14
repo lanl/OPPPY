@@ -476,11 +476,13 @@ class plot_2d_dump_dictionary():
                         args.y_limits[0], args.x_limits[1], args.y_limits[1], args.num_grid, 
                         args.interp_method,args.log_scale)
             else:
-                try:
+                if(dictionary[data_name].ndim == 2 and
+                   dictionary[data_name].shape[1] == dictionary[xname].shape[0] and 
+                   dictionary[data_name].shape[0] == dictionary[yname].shape[0]):
+                    griddata = dictionary
+                else:
                     griddata = data2grid(dictionary, xname, yname, data_name, args.num_grid,
                             args.interp_method, args.log_scale)
-                except:
-                    griddata = dictionary
 
           
             PyPloter.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
