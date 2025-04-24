@@ -47,7 +47,7 @@ class my_test_opppy_tally_parser():
                         data_dict["n_"+key] = sum(counts[key])
 
                     # store problem data
-                    if key is 'bins':
+                    if key == 'bins':
                         problem_data_dict[key] = array(str_vector_to_float_vector(line.strip('\n').split(' ')[1:]))
                         problem_data_dict['number_of_bins'] = len(problem_data_dict[key])
        

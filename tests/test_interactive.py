@@ -142,6 +142,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py tally iplot -tf "+dir_path+"example_tally*.txt < "+dir_path+"interactive_tally_input.txt")==0)
         # parse and plot the output data files
         assert(os.system("python my_interactive_parser.py tally plot -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts [#]'")==0)
+        assert(os.system("python my_interactive_parser.py tally plot -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x cycle -xlab 'Cycle [#]'  -y odd_counts.0  -ylab 'Counts[0] [#]'")==0)
         assert(os.system("python my_interactive_parser.py tally plot -pf interactive_tally.p -sk time -sv 5.0 -dn cool_counts -x bins -xlab 'bin [#]'  -y even_counts  -ylab 'Counts [#]'")==0)
         # test scaling and log axis
         assert(os.system("python my_interactive_parser.py tally plot -tf "+dir_path+"example_tally*.txt -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts  [#]' -lx -ly -sx 10 -sx 1e-3 -sy 10 -sy 1e-3 -xl 0.00001 1000 -yl 0.00001 10000")==0)
