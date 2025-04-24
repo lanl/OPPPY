@@ -157,6 +157,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py tally iplot -nt -1 -tf "+dir_path+"example_tally*.txt < "+dir_path+"interactive_tally_input.txt")==0)
         # parse and plot the output data files
         assert(os.system("python my_interactive_parser.py tally plot -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts [#]'")==0)
+        assert(os.system("python my_interactive_parser.py tally plot -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x cycle -xlab 'Cycle [#]'  -y odd_counts.0  -ylab 'Counts[0] [#]'")==0)
         assert(os.system("python my_interactive_parser.py tally plot -pf interactive_tally.p -sk time -sv 5.0 -dn cool_counts -x bins -xlab 'bin [#]'  -y even_counts  -ylab 'Counts [#]'")==0)
         # parse and plot the output data files with threads
         assert(os.system("python my_interactive_parser.py tally plot -nt -1 -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts [#]'")==0)

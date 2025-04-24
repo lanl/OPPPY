@@ -1044,27 +1044,50 @@ class interactive_tally_parser:
                 raw_dictionary_names.append(pickle_file_name.split('/')[-1].split('.p')[0])
                 raw_dictionary_data.append(pickle.load(open(pickle_file_name,'rb')))
 
+        y_index = []
+        y_names = []
+        time_dependent = False
+        if args.x_value_name == args.series_key:
+            time_dependent = True
+            for yname in args.y_value_names:
+                if("." in yname):
+                    y_index.append(int(yname.split(".")[-1]))
+                    y_names.append(yname.split(".")[0])
+
         # build up plotting dictionary list and names
         dictionary_data = []
         dictionary_names = []
         for dictionary, name in zip(raw_dictionary_data,raw_dictionary_names):
             found = False
             times = dictionary[args.series_key]
-            if args.series_value is not None:
-                for index, time in enumerate(times):
-                    if(time >= args.series_value):
-                        found = True
-                        tally = dictionary['tally_cycle_data'][index]
-                        dictionary_data.append(tally)  
-                        dictionary_names.append(name + ' ' + args.series_key + " = " + str(time))
-                        break
-                    
-            if not found:
-                tally = dictionary['tally_cycle_data'][-1]
-                dictionary_data.append(tally)  
-                dictionary_names.append(name + ' ' + args.series_key + " = " + str(times[-1]))
-
-
+            if(time_dependent):
+                my_dictionary = {}
+                my_dictionary[args.series_key] = times
+                for index, yname in enumerate(args.y_value_names):
+                    if(len(y_index)>0):
+                       my_dictionary[yname] = [
+                               tally[args.dictionary_name][y_names[index]][y_index[index]] for tally in
+                                                              dictionary['tally_cycle_data']]
+                    else:
+                        my_dictionary[yname] = [ tally[yname] for tally in
+                                                              dictionary['tally_cycle_data']]
+                
+                dictionary_data.append({args.dictionary_name: my_dictionary})
+                dictionary_names.append(name)
+            else:
+                if args.series_value is not None:
+                    for index, time in enumerate(times):
+                        if(time >= args.series_value):
+                            found = True
+                            tally = dictionary['tally_cycle_data'][index]
+                            dictionary_data.append(tally)  
+                            dictionary_names.append(name + ' ' + args.series_key + " = " + str(time))
+                            break
+                        
+                if not found:
+                    tally = dictionary['tally_cycle_data'][-1]
+                    dictionary_data.append(tally)  
+                    dictionary_names.append(name + ' ' + args.series_key + " = " + str(times[-1]))
 
         # plot dictionaries based on input arguments
         self.dict_ploter.plot_dict(args,dictionary_data,dictionary_names)
@@ -1180,7 +1203,18 @@ class interactive_tally_parser:
             plot_num = get_option_num(counter)-1
             label = labels[plot_num][0]
             plot_args = labels[plot_num][-1]
-            plot_args.series_value = get_option_series_value(plot_args.series_key,raw_dictionary_data[0][plot_args.series_key])
+            plot_args.series_value = ( get_option_series_value(plot_args.series_key,raw_dictionary_data[0][plot_args.series_key]) 
+                                      if plot_args.series_key!=plot_args.x_value_name else None)
+
+            y_index = []
+            y_names = []
+            time_dependent = False
+            if plot_args.x_value_name == plot_args.series_key:
+                time_dependent = True
+                for yname in plot_args.y_value_names:
+                    if("." in yname):
+                        y_index.append(int(yname.split(".")[-1]))
+                        y_names.append(yname.split(".")[0])
 
             # build up plotting dictionary list and names
             dictionary_data = []
@@ -1188,20 +1222,34 @@ class interactive_tally_parser:
             for dictionary, name in zip(raw_dictionary_data,raw_dictionary_names):
                 found = False
                 times = dictionary[plot_args.series_key]
-                if plot_args.series_value is not None:
-                    for index, time in enumerate(times):
-                        if(time >= plot_args.series_value):
-                            found = True
-                            tally = dictionary['tally_cycle_data'][index]
-                            dictionary_data.append(tally)  
-                            dictionary_names.append(name + ' ' + plot_args.series_key + " = " + str(time))
-                            break
-                        
-                if not found:
-                    tally = dictionary['tally_cycle_data'][-1]
-                    dictionary_data.append(tally)  
-                    dictionary_names.append(name + ' ' + plot_args.series_key + " = " + str(times[-1]))
-
+                if(time_dependent):
+                    my_dictionary = {}
+                    my_dictionary[plot_args.series_key] = times
+                    for index, yname in enumerate(plot_args.y_value_names):
+                        if(len(y_index)>0):
+                           my_dictionary[yname] = [
+                                   tally[plot_args.dictionary_name][y_names[index]][y_index[index]] for tally in
+                                                                  dictionary['tally_cycle_data']]
+                        else:
+                            my_dictionary[yname] = [ tally[yname] for tally in
+                                                                  dictionary['tally_cycle_data']]
+                    
+                    dictionary_data.append({plot_args.dictionary_name: my_dictionary})
+                    dictionary_names.append(name)
+                else:
+                    if plot_args.series_value is not None:
+                        for index, time in enumerate(times):
+                            if(time >= plot_args.series_value):
+                                found = True
+                                tally = dictionary['tally_cycle_data'][index]
+                                dictionary_data.append(tally)  
+                                dictionary_names.append(name + ' ' + plot_args.series_key + " = " + str(time))
+                                break
+                            
+                    if not found:
+                        tally = dictionary['tally_cycle_data'][-1]
+                        dictionary_data.append(tally)  
+                        dictionary_names.append(name + ' ' + plot_args.series_key + " = " + str(times[-1]))
 
             if plot_args.y_value_names[0] == "select_key":    
                 keys = list(dictionary_data[-1][plot_args.dictionary_name].keys())

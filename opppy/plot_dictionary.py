@@ -54,6 +54,7 @@ class plot_dictionary():
             args parsed dictionary plotting arguments 
             dictonary the dictonary to search for the x and y data value names
         '''
+        
         try:
             data = dictionary[args.dictionary_name]
             x = data[args.x_value_name]
@@ -62,7 +63,13 @@ class plot_dictionary():
                     y = data[yname]
             return True
         except:
-            return False
+            try:
+                if(args.series_key==args.x_value_name):
+                    return True
+                else:
+                    return False
+            except:
+                return False
  
     def setup_parser(self, parser):
         '''
