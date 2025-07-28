@@ -1,0 +1,19 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=61.0",
+    "setuptools_scm[toml]>=6.2"
+]
+
+[project]
+name = "opppy"
+version = "0.1.12"
+dependencies = [
+"numpy",
+"scipy",
+"matplotlib",
+"h5py",
+]
+
+[tool.setuptools]
+packages=['opppy']
