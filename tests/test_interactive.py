@@ -53,7 +53,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py output pickle -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
 
     def test_plot_pickle(self):
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = tempfile.TemporaryDirectory()+"/"
         # This uses glob to pickle all the output data
         assert(os.system("python my_interactive_parser.py output pickle -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
         # This uses glob to pickle all the output data
@@ -64,7 +64,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py output iplot -nt -1 -of "+dir_path+"output_example*.txt < "+dir_path+"interactive_input.txt")==0)
 
     def test_plot_dictionary(self):
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = tempfile.TemporaryDirectory()+"/"
         # This uses glob to pickle all the output data
         assert(os.system("python my_interactive_parser.py output pickle -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
         # This uses glob to pickle all the output data
@@ -75,7 +75,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py output plot -nt -1 -of "+dir_path+"output_example*.txt -dn density -x time -y mat1 -sa "+tmp_dir.name+"density_mat1_pp.png -hp")==0)
 
     def test_pickle_dumps(self):
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = tempfile.TemporaryDirectory()+"/"
         # This uses glob to pickle all the dump data with all threads
         assert(os.system("python my_interactive_parser.py dump pickle -nt -1 -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
         # This uses glob to pickle all the dump data with 2 threads
@@ -84,7 +84,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py dump pickle -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
 
     def test_plot_dump(self):
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = tempfile.TemporaryDirectory()+"/"
         # This uses glob to pickle all the dump data
         assert(os.system("python my_interactive_parser.py dump pickle -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
 
@@ -113,7 +113,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py dump 3d -dn example_dump.txt -pf "+tmp_dir.name+"interactive_dump.p -x z -y y -z x -zs 5.0 -d temperature")==0)
 
     def test_dump_series(self):
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = tempfile.TemporaryDirectory()+"/"
         # This uses glob to pickle all the dump data
         assert(os.system("python my_interactive_parser.py dump pickle -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
 
@@ -145,7 +145,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py dump contour -pf "+tmp_dir.name+"interactive_dump.p -dk z y x -zs 5 -s time -d temperature -ls")==0)
 
     def test_pickle_tally(self):
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = tempfile.TemporaryDirectory()+"/"
         # This uses glob to pickle all the output data with threads
         assert(os.system("python my_interactive_parser.py tally pickle -nt -1 -pf "+tmp_dir.name+"interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
         # This uses glob to pickle all the output data with 2 threads
@@ -154,7 +154,7 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py tally pickle -pf "+tmp_dir.name+"interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
 
     def test_plot_tally(self):
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = tempfile.TemporaryDirectory()+"/"
         # This uses glob to pickle all the output data
         assert(os.system("python my_interactive_parser.py tally pickle -pf "+tmp_dir.name+"interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
         # This uses glob to pickle all the output data
