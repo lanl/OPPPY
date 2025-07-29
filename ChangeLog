@@ -300,6 +300,7 @@
 
     * Corrected defects:
         + Fix figure resolution option
+        + Fix multiple arrival time plotting
 
     * New Features:
         + Add support for 2d mesh plotting (using python polygon patches)
