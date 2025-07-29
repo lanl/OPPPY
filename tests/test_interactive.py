@@ -16,7 +16,7 @@ os.chdir(dir_path)
 
 
 import os
-import unittest
+import unittest, tempfile
 import shlex
 
 class test_interactive_utils(unittest.TestCase):
@@ -44,44 +44,49 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py dump line -h")==0)
 
     def test_pickle_output(self):
+        tmp_dir = tempfile.TemporaryDirectory()
         # This uses glob to pickle all the output data using all threads
-        assert(os.system("python my_interactive_parser.py output pickle -nt -1 -pf interactive.p -of "+dir_path+"output_example*.txt")==0)
+        assert(os.system("python my_interactive_parser.py output pickle -nt -1 -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
         # This uses glob to pickle all the output data using 2 threads
-        assert(os.system("python my_interactive_parser.py output pickle -nt 2 -pf interactive.p -of "+dir_path+"output_example*.txt")==0)
+        assert(os.system("python my_interactive_parser.py output pickle -nt 2 -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
         # Test no threads
-        assert(os.system("python my_interactive_parser.py output pickle -pf interactive.p -of "+dir_path+"output_example*.txt")==0)
+        assert(os.system("python my_interactive_parser.py output pickle -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
 
     def test_plot_pickle(self):
+        tmp_dir = tempfile.TemporaryDirectory()
         # This uses glob to pickle all the output data
-        assert(os.system("python my_interactive_parser.py output pickle -pf interactive.p -of "+dir_path+"output_example*.txt")==0)
+        assert(os.system("python my_interactive_parser.py output pickle -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
         # This uses glob to pickle all the output data
-        assert(os.system("python my_interactive_parser.py output iplot -pf interactive.p < "+dir_path+"interactive_input.txt")==0)
+        assert(os.system("python my_interactive_parser.py output iplot -pf "+tmp_dir.name+"interactive.p < "+dir_path+"interactive_input.txt")==0)
         # parse and plot the output data files
         assert(os.system("python my_interactive_parser.py output iplot -of "+dir_path+"output_example*.txt < "+dir_path+"interactive_input.txt")==0)
         # parse and plot the output data files with threads
         assert(os.system("python my_interactive_parser.py output iplot -nt -1 -of "+dir_path+"output_example*.txt < "+dir_path+"interactive_input.txt")==0)
 
     def test_plot_dictionary(self):
+        tmp_dir = tempfile.TemporaryDirectory()
         # This uses glob to pickle all the output data
-        assert(os.system("python my_interactive_parser.py output pickle -pf interactive.p -of "+dir_path+"output_example*.txt")==0)
+        assert(os.system("python my_interactive_parser.py output pickle -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
         # This uses glob to pickle all the output data
-        assert(os.system("python my_interactive_parser.py output plot -pf interactive.p -dn density -x time -y mat1 -sa density_mat1.png -hp")==0)
+        assert(os.system("python my_interactive_parser.py output plot -pf "+tmp_dir.name+"interactive.p -dn density -x time -y mat1 -sa density_mat1.png -hp")==0)
         # parse and plot the output data files
         assert(os.system("python my_interactive_parser.py output plot -of "+dir_path+"output_example*.txt -dn density -x time -y mat1 -sa density_mat1_pp.png -hp")==0)
         # parse and plot the output data files with threads 
         assert(os.system("python my_interactive_parser.py output plot -nt -1 -of "+dir_path+"output_example*.txt -dn density -x time -y mat1 -sa density_mat1_pp.png -hp")==0)
 
     def test_pickle_dumps(self):
+        tmp_dir = tempfile.TemporaryDirectory()
         # This uses glob to pickle all the dump data with all threads
-        assert(os.system("python my_interactive_parser.py dump pickle -nt -1 -pf interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
+        assert(os.system("python my_interactive_parser.py dump pickle -nt -1 -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
         # This uses glob to pickle all the dump data with 2 threads
-        assert(os.system("python my_interactive_parser.py dump pickle -nt 2 -pf interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
+        assert(os.system("python my_interactive_parser.py dump pickle -nt 2 -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
         # Test serial parsing
-        assert(os.system("python my_interactive_parser.py dump pickle -pf interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
+        assert(os.system("python my_interactive_parser.py dump pickle -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
 
     def test_plot_dump(self):
+        tmp_dir = tempfile.TemporaryDirectory()
         # This uses glob to pickle all the dump data
-        assert(os.system("python my_interactive_parser.py dump pickle -pf interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
+        assert(os.system("python my_interactive_parser.py dump pickle -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
 
         # Parse and plot a 1d dump
         assert(os.system("python my_interactive_parser.py dump 1d -dn "+dir_path+"example_dump.txt -x cell_id -y temperature")==0)
@@ -90,13 +95,13 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py dump 1d -dn "+dir_path+"example_dump.txt -x cell_id -y temperature -kw cell_id temperature")==0)
 
         # plot a 1d dump from a pickle file
-        assert(os.system("python my_interactive_parser.py dump 1d -dn example_dump.txt -pf interactive_dump.p -x cell_id -y temperature")==0)
+        assert(os.system("python my_interactive_parser.py dump 1d -dn example_dump.txt -pf "+tmp_dir.name+"interactive_dump.p -x cell_id -y temperature")==0)
 
         # Parse and plot a 2d dump
         assert(os.system("python my_interactive_parser.py dump 2d -dn "+dir_path+"example_dump.txt -x cell_id -y z -d temperature")==0)
 
         # plot 2d dump from pickle file
-        assert(os.system("python my_interactive_parser.py dump 2d -dn example_dump.txt -pf interactive_dump.p -x cell_id -y z -d density")==0)
+        assert(os.system("python my_interactive_parser.py dump 2d -dn example_dump.txt -pf "+tmp_dir.name+"interactive_dump.p -x cell_id -y z -d density")==0)
 
         # Parse and plot a 2d dump only extract key_words
         assert(os.system("python my_interactive_parser.py dump 2d -dn "+dir_path+"example_dump.txt -x cell_id -y z -d temperature -kw temperature cell_id z -ls")==0)
@@ -105,11 +110,12 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py dump 3d -dn "+dir_path+"example_dump.txt -x z -y y -z x -zs 5.0 -d temperature -ls")==0)
 
         # plot slice of 3d dump from pickle file
-        assert(os.system("python my_interactive_parser.py dump 3d -dn example_dump.txt -pf interactive_dump.p -x z -y y -z x -zs 5.0 -d temperature")==0)
+        assert(os.system("python my_interactive_parser.py dump 3d -dn example_dump.txt -pf "+tmp_dir.name+"interactive_dump.p -x z -y y -z x -zs 5.0 -d temperature")==0)
 
     def test_dump_series(self):
+        tmp_dir = tempfile.TemporaryDirectory()
         # This uses glob to pickle all the dump data
-        assert(os.system("python my_interactive_parser.py dump pickle -pf interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
+        assert(os.system("python my_interactive_parser.py dump pickle -pf "+tmp_dir.name+"interactive_dump.p -df "+dir_path+"example_dump*.txt")==0)
 
         # Parse and plot a point series
         assert(os.system("python my_interactive_parser.py dump point -df "+dir_path+"example_dump*.txt -df "+dir_path+"example_dump*.txt -dk x -p 5 -s time -d temperature -sy 10.0 -sy 1.0")==0)
@@ -127,30 +133,32 @@ class test_interactive_utils(unittest.TestCase):
         assert(os.system("python my_interactive_parser.py dump point -df "+dir_path+"example_dump*.txt -df "+dir_path+"example_dump*.txt -dk x -p 5 -s time -d temperature -sy 10.0")==0)
 
         # plot a point series from a pickled dump
-        assert(os.system("python my_interactive_parser.py dump point -pf interactive_dump.p interactive_dump.p -dk x -p 5 -s time -d temperature")==0)
+        assert(os.system("python my_interactive_parser.py dump point -pf "+tmp_dir.name+"interactive_dump.p "+tmp_dir.name+"interactive_dump.p -dk x -p 5 -s time -d temperature")==0)
 
         # plot a line series from a pickled dump
-        assert(os.system("python my_interactive_parser.py dump line -pf interactive_dump.p interactive_dump.p -dk x -p0 1 -p1 5 -s time -d temperature")==0)
+        assert(os.system("python my_interactive_parser.py dump line -pf "+tmp_dir.name+"interactive_dump.p "+tmp_dir.name+"interactive_dump.p -dk x -p0 1 -p1 5 -s time -d temperature")==0)
 
         # plot a contour series from a pickled dump
-        assert(os.system("python my_interactive_parser.py dump contour -pf interactive_dump.p -dk x y -s time -d temperature -np 5 -ls")==0)
+        assert(os.system("python my_interactive_parser.py dump contour -pf "+tmp_dir.name+"interactive_dump.p -dk x y -s time -d temperature -np 5 -ls")==0)
 
         # plot a contour series slice from a 3d pickled dump
-        assert(os.system("python my_interactive_parser.py dump contour -pf interactive_dump.p -dk z y x -zs 5 -s time -d temperature -ls")==0)
+        assert(os.system("python my_interactive_parser.py dump contour -pf "+tmp_dir.name+"interactive_dump.p -dk z y x -zs 5 -s time -d temperature -ls")==0)
 
     def test_pickle_tally(self):
+        tmp_dir = tempfile.TemporaryDirectory()
         # This uses glob to pickle all the output data with threads
-        assert(os.system("python my_interactive_parser.py tally pickle -nt -1 -pf interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
+        assert(os.system("python my_interactive_parser.py tally pickle -nt -1 -pf "+tmp_dir.name+"interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
         # This uses glob to pickle all the output data with 2 threads
-        assert(os.system("python my_interactive_parser.py tally pickle -nt 2 -pf interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
+        assert(os.system("python my_interactive_parser.py tally pickle -nt 2 -pf "+tmp_dir.name+"interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
         # Test Serial parsing
-        assert(os.system("python my_interactive_parser.py tally pickle -pf interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
+        assert(os.system("python my_interactive_parser.py tally pickle -pf "+tmp_dir.name+"interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
 
     def test_plot_tally(self):
+        tmp_dir = tempfile.TemporaryDirectory()
         # This uses glob to pickle all the output data
-        assert(os.system("python my_interactive_parser.py tally pickle -pf interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
+        assert(os.system("python my_interactive_parser.py tally pickle -pf "+tmp_dir.name+"interactive_tally.p -tf "+dir_path+"example_tally*.txt")==0)
         # This uses glob to pickle all the output data
-        assert(os.system("python my_interactive_parser.py tally iplot -pf interactive_tally.p < "+dir_path+"interactive_tally_input.txt")==0)
+        assert(os.system("python my_interactive_parser.py tally iplot -pf "+tmp_dir.name+"interactive_tally.p < "+dir_path+"interactive_tally_input.txt")==0)
         # parse and plot the output data files
         assert(os.system("python my_interactive_parser.py tally iplot -tf "+dir_path+"example_tally*.txt < "+dir_path+"interactive_tally_input.txt")==0)
         # parse and plot the output data files with threads
@@ -158,7 +166,7 @@ class test_interactive_utils(unittest.TestCase):
         # parse and plot the output data files
         assert(os.system("python my_interactive_parser.py tally plot -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts [#]'")==0)
         assert(os.system("python my_interactive_parser.py tally plot -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x cycle -xlab 'Cycle [#]'  -y odd_counts.0  -ylab 'Counts[0] [#]'")==0)
-        assert(os.system("python my_interactive_parser.py tally plot -pf interactive_tally.p -sk time -sv 5.0 -dn cool_counts -x bins -xlab 'bin [#]'  -y even_counts  -ylab 'Counts [#]'")==0)
+        assert(os.system("python my_interactive_parser.py tally plot -pf "+tmp_dir.name+"interactive_tally.p -sk time -sv 5.0 -dn cool_counts -x bins -xlab 'bin [#]'  -y even_counts  -ylab 'Counts [#]'")==0)
         # parse and plot the output data files with threads
         assert(os.system("python my_interactive_parser.py tally plot -nt -1 -tf "+dir_path+"example_tally*.txt -sk cycle -dn cool_counts -x bins -xlab 'bin [#]'  -y odd_counts  -ylab 'Counts [#]'")==0)
         # test scaling and log axis
