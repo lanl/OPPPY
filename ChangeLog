@@ -1,3 +1,32 @@
+2025-07-29 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_13
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+		+ h5py
+        + sphinx (to build documentation)
+		+ multiprocess (for non-linux builds, multiprocessing for linux)
+
+    * Summary of changes:
+		+ Modernize to support toml based installs using pip
+		+ Use TempoaryDirectory class to prevent clutter during testing
+
+    * Corrected defects:
+        + Modernize build system to use toml file
+
+    * New Features:
+		+ Add interactive time dependent tally plotting 
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+
 2025-04-24 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
         + OPPPY-0_1_12
