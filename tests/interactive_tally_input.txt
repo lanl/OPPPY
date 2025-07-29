@@ -1,5 +1,4 @@
 1 
 5
 1
--sa odd_count.png
 -q

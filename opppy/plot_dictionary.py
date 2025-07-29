@@ -121,6 +121,7 @@ class plot_dictionary():
         for dictionary, filename, scale_x, scale_y in zip(dictionaries,data_names,args.scale_x,args.scale_y):
             data = dictionary[dictionary_name]
             new_file = True
+            found_arrival = False
             last_x = []
             last_y = []
             last_z = []
@@ -224,19 +225,19 @@ class plot_dictionary():
         
                 interp_x = x[0]
                 if(args.plot_arrival):
-                    args.plot_arrival = False
+                    found_arrival = False
                     last_x = x[0]
                     last_y = y[0]
                     for x_value, y_value in zip(x,y):
                         if(y_value>args.y_exceeds_value):
-                            args.plot_arrival = True
+                            found_arrival = True
                             dy = (args.y_exceeds_value - last_y)/(y_value - last_y)
                             interp_x = last_x + dy*(x_value-last_x)
                             print(data_name, "first exceeds ", args.y_exceeds_value, " at ", interp_x)
                             break
                         last_x = x_value
                         last_y = y_value
-                    if(not args.plot_arrival):
+                    if(not found_arrival):
                         print("WARNING: y never exceeds y_exceeds_value="+str(args.y_exceeds_value));
         
                 if(args.find_max_y):
@@ -246,7 +247,7 @@ class plot_dictionary():
         
             if(args.last_point_only):
                 PyPloter.plot(last_x, last_y, label = data_name)
-            elif(args.plot_arrival):
+            elif(args.plot_arrival and found_arrival):
                 color=PyPloter.gca().lines[-1].get_color()
                 PyPloter.plot(interp_x, args.y_exceeds_value, linestyle=None, color=color, marker='o', label = data_name + " exceeds y="+str(args.y_exceeds_value)+" @ x="+str(interp_x))
             elif(args.plot_max):
