@@ -68,11 +68,11 @@ class test_interactive_utils(unittest.TestCase):
         # This uses glob to pickle all the output data
         assert(os.system("python my_interactive_parser.py output pickle -pf "+tmp_dir.name+"interactive.p -of "+dir_path+"output_example*.txt")==0)
         # This uses glob to pickle all the output data
-        assert(os.system("python my_interactive_parser.py output plot -pf "+tmp_dir.name+"interactive.p -dn density -x time -y mat1 -sa density_mat1.png -hp")==0)
+        assert(os.system("python my_interactive_parser.py output plot -pf "+tmp_dir.name+"interactive.p -dn density -x time -y mat1 -sa "+tmp_dir.name+"density_mat1.png -hp")==0)
         # parse and plot the output data files
-        assert(os.system("python my_interactive_parser.py output plot -of "+dir_path+"output_example*.txt -dn density -x time -y mat1 -sa density_mat1_pp.png -hp")==0)
+        assert(os.system("python my_interactive_parser.py output plot -of "+dir_path+"output_example*.txt -dn density -x time -y mat1 -sa "+tmp_dir.name+"density_mat1_pp.png -hp")==0)
         # parse and plot the output data files with threads 
-        assert(os.system("python my_interactive_parser.py output plot -nt -1 -of "+dir_path+"output_example*.txt -dn density -x time -y mat1 -sa density_mat1_pp.png -hp")==0)
+        assert(os.system("python my_interactive_parser.py output plot -nt -1 -of "+dir_path+"output_example*.txt -dn density -x time -y mat1 -sa "+tmp_dir.name+"density_mat1_pp.png -hp")==0)
 
     def test_pickle_dumps(self):
         tmp_dir = tempfile.TemporaryDirectory()

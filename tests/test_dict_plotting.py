@@ -13,7 +13,7 @@ sys.path.append('..')
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))+"/"
 
-import unittest
+import unittest, tempfile
 import shlex
 
 from opppy.output import *
@@ -43,8 +43,8 @@ class test_dict_plotting(unittest.TestCase):
     print(data)
     
     ploter = plot_dictionary()
-
-    plot_string = "-dn density -y mat1 -x time -sa test.png --hide_plot"
+    tmp_dir = tempfile.TemporaryDirectory()
+    plot_string = "-dn density -y mat1 -x time -sa "+tmp_dir.name+"test.png --hide_plot"
 
     # generate the plotting arguments
     args = ploter.parse_input_string(plot_string)
