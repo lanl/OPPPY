@@ -43,8 +43,9 @@ class test_dict_plotting(unittest.TestCase):
     print(data)
     
     ploter = plot_dictionary()
-    tmp_dir = tempfile.TemporaryDirectory()+"/"
-    plot_string = "-dn density -y mat1 -x time -sa "+tmp_dir.name+"test.png --hide_plot"
+    tmp_dir = tempfile.TemporaryDirectory()
+    tmp_dir_path = tmp_dir.name + "/"
+    plot_string = "-dn density -y mat1 -x time -sa "+tmp_dir_path+"test.png --hide_plot"
 
     # generate the plotting arguments
     args = ploter.parse_input_string(plot_string)
