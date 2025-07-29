@@ -7,19 +7,19 @@
         + numpy
         + scipy
         + matplotlib
-		+ h5py
+        + h5py
         + sphinx (to build documentation)
-		+ multiprocess (for non-linux builds, multiprocessing for linux)
+        + multiprocess (for non-linux builds, multiprocessing for linux)
 
     * Summary of changes:
-		+ Modernize to support toml based installs using pip
-		+ Use TempoaryDirectory class to prevent clutter during testing
+        + Modernize to support toml based installs using pip
+        + Use TempoaryDirectory class to prevent clutter during testing
 
     * Corrected defects:
         + Modernize build system to use toml file
 
     * New Features:
-		+ Add interactive time dependent tally plotting 
+        + Add interactive time dependent tally plotting 
 
     * Known Defects:
         + Not all plotting features have been tested.
@@ -36,17 +36,17 @@
         + numpy
         + scipy
         + matplotlib
-		+ h5py
+        + h5py
         + sphinx (to build documentation)
-		+ multiprocess (for non-linux builds, multiprocessing for linux)
+        + multiprocess (for non-linux builds, multiprocessing for linux)
 
     * Summary of changes:
-		+ Add interactive time dependent tally plotting 
+        + Add interactive time dependent tally plotting 
 
     * Corrected defects:
 
     * New Features:
-		+ Add interactive time dependent tally plotting 
+        + Add interactive time dependent tally plotting 
 
     * Known Defects:
         + Not all plotting features have been tested.
@@ -63,12 +63,12 @@
         + numpy
         + scipy
         + matplotlib
-		+ h5py
+        + h5py
         + sphinx (to build documentation)
-		+ multiprocess (for non-linux builds, multiprocessing for linux)
+        + multiprocess (for non-linux builds, multiprocessing for linux)
 
     * Summary of changes:
-		+ Add pre/post parser hooks such that the parser and the resulting dictionaries can be
+        + Add pre/post parser hooks such that the parser and the resulting dictionaries can be
         modified as a whole
         + Fixed contour plotting for parsed 2D data
 
@@ -76,7 +76,7 @@
         + Fixed contour plotting for parsed 2D data
 
     * New Features:
-		+ Add pre/post parser hooks such that the parser and the resulting dictionaries can be
+        + Add pre/post parser hooks such that the parser and the resulting dictionaries can be
 
     * Known Defects:
         + Not all plotting features have been tested.
@@ -94,15 +94,15 @@
         + numpy
         + scipy
         + matplotlib
-		+ h5py
+        + h5py
         + sphinx (to build documentation)
-		+ multiprocess (for non-linux builds, multiprocessing for linux)
+        + multiprocess (for non-linux builds, multiprocessing for linux)
 
     * Summary of changes:
-		+ Thread support for interactive parser
+        + Thread support for interactive parser
 
     * Corrected defects:
-		+ Allow threads in the interactive parser via the build_data_list calls
+        + Allow threads in the interactive parser via the build_data_list calls
 
     * New Features:
         + Threaded interactive data parsing
@@ -123,26 +123,26 @@
         + numpy
         + scipy
         + matplotlib
-		+ h5py
+        + h5py
         + sphinx (to build documentation)
-		+ multiprocess (for non-linux builds, multiprocessing for linux)
+        + multiprocess (for non-linux builds, multiprocessing for linux)
 
     * Summary of changes:
-		+ Remove debug print statment
-		+ Threading is now controlled via function/argparse arguments rather than an environment
-		variable 
-		    + Remove OPPPY_USE_THREADS enviroment variable
-			+ Limit memory duplication by batching threaded parsing based on requested number of
-			threads
-			+ nthreads was added to each (output, dump, tally) append parsing function
-			+ -nt or --nthreads was added the default argparse options for (output, dumps, and
-			tallies)
-			+ default behavior is serial (nthreads=0), nthreads=-1 uses maximum number of threads equal to the
-			number of processors, while all positive values of nthreads set a fixed number of threads.
+        + Remove debug print statment
+        + Threading is now controlled via function/argparse arguments rather than an environment
+        variable 
+            + Remove OPPPY_USE_THREADS enviroment variable
+            + Limit memory duplication by batching threaded parsing based on requested number of
+            threads
+            + nthreads was added to each (output, dump, tally) append parsing function
+            + -nt or --nthreads was added the default argparse options for (output, dumps, and
+            tallies)
+            + default behavior is serial (nthreads=0), nthreads=-1 uses maximum number of threads equal to the
+            number of processors, while all positive values of nthreads set a fixed number of threads.
 
 
     * Corrected defects:
-		+ Reduced threading memory burden when parsing multiple files
+        + Reduced threading memory burden when parsing multiple files
 
     * New Features:
         + Parallel parsing is off by default but controlled with the nthreads variable
@@ -163,23 +163,23 @@
         + numpy
         + scipy
         + matplotlib
-		+ h5py
+        + h5py
         + sphinx (to build documentation)
 
     * Summary of changes:
-		+ Added h5py to the test dependencies
-		+ Update testing
-			+ Remove unsupported test.support usage
-			+ Add sanity checks for interactive testing
-			+ Add Golds for test_output, test_dump_utils, and test_tally
-			+ Add SHOW_PLOTS test environment variables to hide plots during testing
-		+ Add Parallel Parsing for outputs, tallies, and dumps (can be disabled using
-		OPPPY_USE_THREADS=False environment variable)
-		+ Add log scale support for 2d contour plots
+        + Added h5py to the test dependencies
+        + Update testing
+            + Remove unsupported test.support usage
+            + Add sanity checks for interactive testing
+            + Add Golds for test_output, test_dump_utils, and test_tally
+            + Add SHOW_PLOTS test environment variables to hide plots during testing
+        + Add Parallel Parsing for outputs, tallies, and dumps (can be disabled using
+        OPPPY_USE_THREADS=False environment variable)
+        + Add log scale support for 2d contour plots
 
     * Corrected defects:
-		+ Improve testing robustness
-		+ Support log scale 2D plotting
+        + Improve testing robustness
+        + Support log scale 2D plotting
 
     * New Features:
         + Parallel parsing (can be disabled with OPPPY_USE_THREADS=False environment variable)
@@ -202,12 +202,12 @@
         + sphinx (to build documentation)
 
     * Summary of changes:
-		+ Remove parser dependency and replace with ast required for python 3.10 support
-		+ Fix series data plotting with interactive plotter
+        + Remove parser dependency and replace with ast required for python 3.10 support
+        + Fix series data plotting with interactive plotter
 
     * Corrected defects:
-		+ Remove parser dependency and replace with ast required for python 3.10 support
-		+ Fix series data plotting with interactive plotter
+        + Remove parser dependency and replace with ast required for python 3.10 support
+        + Fix series data plotting with interactive plotter
 
     * New Features:
         + Python 3.10+ support
@@ -231,19 +231,19 @@
         + sphinx (to build documentation)
 
     * Summary of changes:
-		+ Fix log scale to allow negative values in 2d plots
-		+ Remove old "is not" syntax errors
+        + Fix log scale to allow negative values in 2d plots
+        + Remove old "is not" syntax errors
         + Allow formated prints in plot titles
-		+ Allow more efficient parsing of case files 
+        + Allow more efficient parsing of case files 
 
     * Corrected defects:
-		+ Fix log scale to allow negative values in 2d plots
-		+ Remove old "is not" syntax errors
+        + Fix log scale to allow negative values in 2d plots
+        + Remove old "is not" syntax errors
 
     * New Features:
         + Allow formated prints in plot titles
-		+ Case file parsing will only parse specified dump names when
-		requested
+        + Case file parsing will only parse specified dump names when
+        requested
 
     * Known Defects:
         + Not all plotting features have been tested.
@@ -264,8 +264,8 @@
         + sphinx (to build documentation)
 
     * Summary of changes:
-		+ Improve output parsing performance
-		+ Add github integration testing
+        + Improve output parsing performance
+        + Add github integration testing
         + Add github documentation hosting
 
     * Corrected defects:
@@ -275,7 +275,7 @@
 
     * New Features:
         + Github integration testing
-		+ Github documentation
+        + Github documentation
 
     * Known Defects:
         + Not all plotting features have been tested.
@@ -295,16 +295,16 @@
         + sphinx (to build documentation)
 
     * Summary of changes:
-		+ Add improved 2d mesh plotting using mesh verticies
-		+ Add 2d contour line and contour map plotting
+        + Add improved 2d mesh plotting using mesh verticies
+        + Add 2d contour line and contour map plotting
 
     * Corrected defects:
-		+ Fix figure resolution option
+        + Fix figure resolution option
 
     * New Features:
         + Add support for 2d mesh plotting (using python polygon patches)
-		+ Add show mesh option for polygon patches
-		+ Add 2d contour line and contour map plotting
+        + Add show mesh option for polygon patches
+        + Add 2d contour line and contour map plotting
 
 
     * Known Defects:
@@ -328,8 +328,8 @@
 
     * Corrected defects:
         + Fix case file plotting issues in 1D and 3D for interactive plotting
-		+ Fix value range in 2D and 3D plots
-		+ Change the default color map pallet to 'jet'
+        + Fix value range in 2D and 3D plots
+        + Change the default color map pallet to 'jet'
 
     * New Features:
         + Case file plotting is now supported in 1D and 3D
