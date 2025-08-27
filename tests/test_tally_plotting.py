@@ -49,7 +49,7 @@ class test_dict_plotting(unittest.TestCase):
         if time >= plot_time:
             break
 
-    plot_string = "-dn cool_counts -y odd_counts -y even_counts -x bins" # -sa test.png --hide_plot"
+    plot_string = "-dn cool_counts -y odd_counts -y even_counts -x bins"
 
     # generate the plotting arguments
     args = ploter.parse_input_string(plot_string)
