@@ -320,7 +320,7 @@ class interactive_output_parser:
             try:
                 fig = figure(figsize=(xsize,ysize))
             except:
-                PyPloter.switch_backend('agg')
+                plt.switch_backend('agg')
                 fig = figure(figsize=(xsize,ysize))
     
             xlog_flag = 0
@@ -1181,7 +1181,7 @@ class interactive_tally_parser:
             try:
                 fig = figure(figsize=(xsize,ysize))
             except:
-                PyPloter.switch_backend('agg')
+                plt.switch_backend('agg')
                 fig = figure(figsize=(xsize,ysize))
     
             xlog_flag = 0

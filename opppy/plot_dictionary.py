@@ -13,7 +13,7 @@ Dictionary Plotting class
   plot_dictionary
 
 '''
-import matplotlib.pyplot as PyPloter
+import matplotlib.pyplot as plt
 import matplotlib.axes as axes
 import string, sys, os
 import numpy as np
@@ -24,6 +24,10 @@ import shlex
 import warnings
 
 from opppy.plotting_help import *
+
+# Remove empty legend box on all plots
+plt.rcParams['legend.frameon']=False
+plt.rcParams['legend.edgecolor']=None
 
 class plot_dictionary():
     '''
@@ -95,7 +99,7 @@ class plot_dictionary():
             data_names names associated with the dictionaries to be plotted
         '''
         if(args.hide_plot):
-            PyPloter.switch_backend('agg')
+            plt.switch_backend('agg')
 
         if len(dictionaries) is not len(data_names):
             print("Error: len of dictionaries do not match length of associated data names")
@@ -209,19 +213,19 @@ class plot_dictionary():
                         last_y.append(y[-1])
 
                 if(args.font_size is not None):
-                    PyPloter.rcParams.update({'font_size':args.font_size})
+                    plt.rcParams.update({'font_size':args.font_size})
                 
                 if(args.plot_max):
                     last_y.append(sum(sorted(y,reverse=True)[0:2])/3.0)
                     last_x.append(x[-1])
                 elif(data_line_color != '' and data_line_type != ''):
-                    PyPloter.plot(x,y,label = data_name, linestyle = data_line_type, color = data_line_color)
+                    plt.plot(x,y,label = data_name, linestyle = data_line_type, color = data_line_color)
                 elif(data_line_color != '' ):
-                    PyPloter.plot(x,y,label = data_name, color = data_line_color)
+                    plt.plot(x,y,label = data_name, color = data_line_color)
                 elif(data_line_type != '' ):
-                    PyPloter.plot(x,y,label = data_name, linestyle = data_line_type)
+                    plt.plot(x,y,label = data_name, linestyle = data_line_type)
                 else:
-                    PyPloter.plot(x,y,label = data_name)
+                    plt.plot(x,y,label = data_name)
         
                 interp_x = x[0]
                 if(args.plot_arrival):
@@ -246,44 +250,44 @@ class plot_dictionary():
                     print(data_name, "max y value ", x[y.index(min(y))], min(y))
         
             if(args.last_point_only):
-                PyPloter.plot(last_x, last_y, label = data_name)
+                plt.plot(last_x, last_y, label = data_name)
             elif(args.plot_arrival and found_arrival):
-                color=PyPloter.gca().lines[-1].get_color()
-                PyPloter.plot(interp_x, args.y_exceeds_value, linestyle=None, color=color, marker='o', label = data_name + " exceeds y="+str(args.y_exceeds_value)+" @ x="+str(interp_x))
+                color=plt.gca().lines[-1].get_color()
+                plt.plot(interp_x, args.y_exceeds_value, linestyle=None, color=color, marker='o', label = data_name + " exceeds y="+str(args.y_exceeds_value)+" @ x="+str(interp_x))
             elif(args.plot_max):
                 print("max y= "+str(last_y)+" @ x="+str(last_x))
-                color=PyPloter.gca().lines[-1].get_color()
-                PyPloter.plot(last_x, last_y, linestyle=None, color=color, marker='x', label = data_name + " max y="+str(last_y)+" @ x="+str(last_x))
+                color=plt.gca().lines[-1].get_color()
+                plt.plot(last_x, last_y, linestyle=None, color=color, marker='x', label = data_name + " max y="+str(last_y)+" @ x="+str(last_x))
         
         if(args.x_label is not None):
-            PyPloter.xlabel(args.x_label)
+            plt.xlabel(args.x_label)
         else:
-            PyPloter.xlabel(xname)
+            plt.xlabel(xname)
         
         if(args.x_limits is not None):
-            PyPloter.xlim(args.x_limits)
+            plt.xlim(args.x_limits)
         
         if(args.y_label is not None):
-            PyPloter.ylabel(args.y_label)
+            plt.ylabel(args.y_label)
         else:
-            PyPloter.ylabel(dictionary_name)
+            plt.ylabel(dictionary_name)
         
         if(args.y_limits is not None):
-            PyPloter.ylim(args.y_limits)
+            plt.ylim(args.y_limits)
         
         if(args.plot_grid):
-            PyPloter.grid()
+            plt.grid()
         
-        PyPloter.legend(loc='best')
+        plt.legend(loc='best')
         if(args.log_x):
-            PyPloter.xscale("log")
+            plt.xscale("log")
         if(args.log_y):
-            PyPloter.yscale("log")
+            plt.yscale("log")
         if(args.figure_name is not None):
-            fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
+            fig = plt.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
             warnings.filterwarnings("ignore")
-            PyPloter.show()
+            plt.show()
     
     
