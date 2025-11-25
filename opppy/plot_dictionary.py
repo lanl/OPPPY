@@ -27,7 +27,7 @@ from opppy.plotting_help import *
 
 # Remove empty legend box on all plots
 plt.rcParams['legend.frameon']=False
-plt.rcParams['legend.edgecolor']=None
+plt.rcParams['legend.edgecolor']='none'
 
 class plot_dictionary():
     '''

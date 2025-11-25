@@ -34,7 +34,7 @@ import ast
 
 # Remove empty legend box on all plots
 plt.rcParams['legend.frameon']=False
-plt.rcParams['legend.edgecolor']=None
+plt.rcParams['legend.edgecolor']='none'
 
 ####################################################
 # HELPER FUNCTIONS

@@ -38,7 +38,7 @@ series_pair = namedtuple("pair", ['index', 'grid'])
 
 # Remove empty legend box on all plots
 plt.rcParams['legend.frameon']=False
-plt.rcParams['legend.edgecolor']=None
+plt.rcParams['legend.edgecolor']='none'
 
 class plot_1d_dump_dictionary():
     '''
