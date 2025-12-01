@@ -647,7 +647,7 @@ class plot_3d_dump_dictionary():
             vmin = None
             vmax = None
         
-        if args.log_scale:
+        if args.log_scale and (vmin!=None and vmax!=None):
             plt.imshow(griddata[data_name], norm=LogNorm(vmin,vmax) if vmin>0 else
                                     SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), 
                        extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
