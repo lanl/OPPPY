@@ -15,8 +15,9 @@ Dictionary Plotting class
   plot_3d_dump_dictionary
 '''
 
-import matplotlib.pyplot as PyPloter
+import matplotlib.pyplot as plt
 import matplotlib.axes as axes
+from matplotlib.colors import LogNorm, SymLogNorm
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
 from matplotlib.animation import FuncAnimation
@@ -34,6 +35,10 @@ from opppy.plotting_help import *
 from opppy.dump_utils import *
 
 series_pair = namedtuple("pair", ['index', 'grid'])
+
+# Remove empty legend box on all plots
+plt.rcParams['legend.frameon']=False
+plt.rcParams['legend.edgecolor']='none'
 
 class plot_1d_dump_dictionary():
     '''
@@ -99,7 +104,7 @@ class plot_1d_dump_dictionary():
             data_names names associated with the dictionaries to be plotted
         '''
         if(args.hide_plot):
-            PyPloter.switch_backend('agg')
+            plt.switch_backend('agg')
 
         if len(dictionaries) is not len(data_names):
             print("Error: len of dictionaries do not match length of associated data names")
@@ -217,13 +222,13 @@ class plot_1d_dump_dictionary():
                 elif(args.plot_arrival):
                     continue
                 elif(data_line_color != '' and data_line_type != ''):
-                    PyPloter.plot(x,y,label = data_name, linestyle = data_line_type, color = data_line_color)
+                    plt.plot(x,y,label = data_name, linestyle = data_line_type, color = data_line_color)
                 elif(data_line_color != '' ):
-                    PyPloter.plot(x,y,label = data_name, color = data_line_color)
+                    plt.plot(x,y,label = data_name, color = data_line_color)
                 elif(data_line_type != '' ):
-                    PyPloter.plot(x,y,label = data_name, linestyle = data_line_type)
+                    plt.plot(x,y,label = data_name, linestyle = data_line_type)
                 else:
-                    PyPloter.plot(x,y,label = data_name)
+                    plt.plot(x,y,label = data_name)
         
                 if(args.plot_arrival):
                     last_x = x[0]
@@ -243,41 +248,41 @@ class plot_1d_dump_dictionary():
                     print(data_name, "max y value ", x[y.index(min(y))], min(y))
         
             if(args.last_point_only):
-                PyPloter.plot(last_x, last_y, label = data_name)
+                plt.plot(last_x, last_y, label = data_name)
             elif(args.plot_arrival or args.plot_max):
                 print(last_x, last_y)
-                PyPloter.plot(last_x, last_y, label = data_name)
+                plt.plot(last_x, last_y, label = data_name)
         
         if(args.x_label is not None):
-            PyPloter.xlabel(args.x_label)
+            plt.xlabel(args.x_label)
         else:
-            PyPloter.xlabel(xname)
+            plt.xlabel(xname)
         
         if(args.x_limits is not None):
-            PyPloter.xlim(args.x_limits)
+            plt.xlim(args.x_limits)
         
         if(args.y_label is not None):
-            PyPloter.ylabel(args.y_label)
+            plt.ylabel(args.y_label)
         else:
-            PyPloter.ylabel(yname)
+            plt.ylabel(yname)
         
         if(args.y_limits is not None):
-            PyPloter.ylim(args.y_limits)
+            plt.ylim(args.y_limits)
         
         if(args.plot_grid):
-            PyPloter.grid()
+            plt.grid()
         
-        PyPloter.legend(loc='best')
+        plt.legend(loc='best')
         if(args.log_x):
-            PyPloter.xscale("log")
+            plt.xscale("log")
         if(args.log_y):
-            PyPloter.yscale("log")
+            plt.yscale("log")
         if(args.figure_name is not None):
-            fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
+            fig = plt.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
             warnings.filterwarnings("ignore")
-            PyPloter.show()
+            plt.show()
     
 class plot_2d_dump_dictionary():
     '''
@@ -348,7 +353,7 @@ class plot_2d_dump_dictionary():
             dictionaries a list of dictionaries to be plotted
         '''
         if(args.hide_plot):
-            PyPloter.switch_backend('agg')
+            plt.switch_backend('agg')
 
         data_name = args.data_name
         yname = args.y_value_name
@@ -357,9 +362,8 @@ class plot_2d_dump_dictionary():
         if(args.data_file_name is not None):
             outputfile = open(args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat', 'w')
         data = np.array(dictionary[data_name])*args.scale_value
-        if(args.log_scale):
-            bias = abs(min(data));
-            data = [ log10(val+bias) if val+bias>0.0 else 0.0 for val in data]
+        vmin = data.min()
+        vmax = data.max()
         x = np.array(dictionary[xname])*args.scale_x
         y = np.array(dictionary[yname])*args.scale_y
 
@@ -386,14 +390,11 @@ class plot_2d_dump_dictionary():
         if(args.data_bounds):
             vmin = args.data_bounds[0]
             vmax = args.data_bounds[1]
-        else:
-            vmin = None
-            vmax = None
 
         if args.xy_verts_name is not None:
             xy_verts = dictionary[args.xy_verts_name]
             xy_verts = [ [[xy[0]*args.scale_x,xy[1]*args.scale_y] for xy in verts] for verts in xy_verts]
-            fig, ax = PyPloter.subplots()
+            fig, ax = plt.subplots()
             xmin = None
             xmax = None
             ymin = None
@@ -430,6 +431,9 @@ class plot_2d_dump_dictionary():
             collection = PatchCollection(patches, cmap='jet', snap=True)
             collection.set_array(np.array(data))
             collection.set_clim(vmin,vmax)
+            if args.log_scale:
+                collection.set_norm(LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax))
             if args.show_mesh:
                 collection.set_edgecolors("black")
             ax.add_collection(collection)
@@ -447,7 +451,7 @@ class plot_2d_dump_dictionary():
 
             fig.colorbar(collection, ax=ax)
         elif(args.contour):
-            fig, ax = PyPloter.subplots()
+            fig, ax = plt.subplots()
             if args.x_limits is None:
                 args.x_limits = [min(x),max(x)]
             if args.y_limits is None:
@@ -455,9 +459,9 @@ class plot_2d_dump_dictionary():
             ax.set_xlim(args.x_limits[0], args.x_limits[1])
             ax.set_ylim(args.y_limits[0], args.y_limits[1])
             ax.set_aspect('equal', adjustable='box')
-            PyPloter.tricontourf(x,y,data,cmap='jet',levels=args.contour_levels)
+            plt.tricontourf(x,y,data,cmap='jet',levels=args.contour_levels)
         elif(args.contour_lines):
-            fig, ax = PyPloter.subplots()
+            fig, ax = plt.subplots()
             if args.x_limits is None:
                 args.x_limits = [min(x),max(x)]
             if args.y_limits is None:
@@ -465,7 +469,7 @@ class plot_2d_dump_dictionary():
             ax.set_xlim(args.x_limits[0], args.x_limits[1])
             ax.set_ylim(args.y_limits[0], args.y_limits[1])
             ax.set_aspect('equal', adjustable='box')
-            PyPloter.tricontour(x,y,data,cmap='jet',levels=args.contour_levels)
+            plt.tricontour(x,y,data,cmap='jet',levels=args.contour_levels)
         else:
             if args.x_limits is not None or args.y_limits is not None:
                 if args.x_limits is None:
@@ -474,7 +478,7 @@ class plot_2d_dump_dictionary():
                     args.y_limits = [min(y),max(y)]
                 griddata = data2gridbox(dictionary, xname, yname, data_name, args.x_limits[0], 
                         args.y_limits[0], args.x_limits[1], args.y_limits[1], args.num_grid, 
-                        args.interp_method,args.log_scale)
+                        args.interp_method)
             else:
                 if(dictionary[data_name].ndim == 2 and
                    dictionary[data_name].shape[1] == dictionary[xname].shape[0] and 
@@ -482,11 +486,16 @@ class plot_2d_dump_dictionary():
                     griddata = dictionary
                 else:
                     griddata = data2grid(dictionary, xname, yname, data_name, args.num_grid,
-                            args.interp_method, args.log_scale)
+                            args.interp_method)
 
           
-            PyPloter.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
-            PyPloter.colorbar()
+            if args.log_scale:
+                plt.imshow(griddata[data_name], norm=LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), 
+                           extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
+            else:
+                plt.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
+            plt.colorbar()
 
 
         if(args.find_max_value):
@@ -495,30 +504,29 @@ class plot_2d_dump_dictionary():
             print(data_name, "min value ", x[y.index(min(data))], x[y.index(min(data))], min(data))
         
         if args.plot_title is not None:
-            PyPloter.title(bytes(args.plot_title, "utf-8").decode("unicode_escape"))
+            plt.title(bytes(args.plot_title, "utf-8").decode("unicode_escape"))
         else:
-            PyPloter.title(data_name)
+            plt.title(data_name)
 
         if(args.x_label is not None):
-            PyPloter.xlabel(bytes(args.x_label, "utf-8").decode("unicode_escape"))
+            plt.xlabel(bytes(args.x_label, "utf-8").decode("unicode_escape"))
         else:
-            PyPloter.xlabel(xname)
+            plt.xlabel(xname)
         
         if(args.y_label is not None):
-            PyPloter.ylabel(bytes(args.y_label, "utf-8").decode("unicode_escape"))
+            plt.ylabel(bytes(args.y_label, "utf-8").decode("unicode_escape"))
         else:
-            PyPloter.ylabel(yname)
+            plt.ylabel(yname)
         
         if(args.plot_grid):
-            PyPloter.grid()
+            plt.grid()
         
-        PyPloter.legend(loc='best')
         if(args.figure_name is not None):
-            fig = PyPloter.savefig(args.figure_name, bbox_inches='tight', dpi=args.figure_resolution)
+            fig = plt.savefig(args.figure_name, bbox_inches='tight', dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
             warnings.filterwarnings("ignore")
-            PyPloter.show()
+            plt.show()
     
     
 class plot_3d_dump_dictionary():
@@ -590,7 +598,7 @@ class plot_3d_dump_dictionary():
             dictionaries a list of dictionaries to be plotted
         '''
         if(args.hide_plot):
-            PyPloter.switch_backend('agg')
+            plt.switch_backend('agg')
 
         data_name = args.data_name
         xname = args.x_value_name
@@ -600,6 +608,8 @@ class plot_3d_dump_dictionary():
         if(args.data_file_name is not None):
             outputfile = open(args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat', 'w')
         data = np.array(dictionary[data_name])*args.scale_value
+        vmin = data.min()
+        vmax = data.max()
         x = np.array(dictionary[xname])*args.scale_x
         y = np.array(dictionary[yname])*args.scale_y
         z = np.array(dictionary[zname])*args.scale_z
@@ -628,17 +638,19 @@ class plot_3d_dump_dictionary():
             outputfile.close()
         
         griddata = data2grid3Dslice(dictionary, xname, yname, zname, data_name, args.z_slice,
-                args.num_grid, args.interp_method, args.log_scale)
+                args.num_grid, args.interp_method)
 
         if(args.data_bounds):
             vmin = args.data_bounds[0]
             vmax = args.data_bounds[1]
+        
+        if args.log_scale:
+            plt.imshow(griddata[data_name], norm=LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), 
+                       extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
         else:
-            vmin = None
-            vmax = None
-
-        PyPloter.imshow(griddata[data_name], vmin=vmin,vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
-        PyPloter.colorbar()
+            plt.imshow(griddata[data_name], vmin=vmin,vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
+        plt.colorbar()
         
         if(args.find_max_value):
             print(data_name, "max value ", x[y.index(max(data))], x[y.index(max(data))], max(data))
@@ -646,30 +658,29 @@ class plot_3d_dump_dictionary():
             print(data_name, "min value ", x[y.index(min(data))], x[y.index(min(data))], min(data))
         
         if args.plot_title is not None:
-            PyPloter.title(args.plot_title)
+            plt.title(args.plot_title)
         else:
-            PyPloter.title(data_name)
+            plt.title(data_name)
 
         if(args.x_label is not None):
-            PyPloter.xlabel(args.x_label)
+            plt.xlabel(args.x_label)
         else:
-            PyPloter.xlabel(xname)
+            plt.xlabel(xname)
         
         if(args.y_label is not None):
-            PyPloter.ylabel(args.y_label)
+            plt.ylabel(args.y_label)
         else:
-            PyPloter.ylabel(yname)
+            plt.ylabel(yname)
         
         if(args.plot_grid):
-            PyPloter.grid()
+            plt.grid()
         
-        PyPloter.legend(loc='best')
         if(args.figure_name is not None):
-            fig = PyPloter.savefig(args.figure_name, dpi=args.figure_resolution)
+            fig = plt.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
             warnings.filterwarnings("ignore")
-            PyPloter.show()
+            plt.show()
 
 
 class plot_line_series_dictionary():
@@ -735,7 +746,7 @@ class plot_line_series_dictionary():
             series_pair a list of 1D series pairs(index, grid)
             data_names names associated with the dictionaries to be plotted
         '''
-        fig = PyPloter.figure()
+        fig = plt.figure()
         def init_lines():
             '''
             Initial lines 
@@ -746,7 +757,7 @@ class plot_line_series_dictionary():
                 data_names names associated with the dictionaries to be plotted
             '''
             if(args.hide_plot):
-                PyPloter.switch_backend('agg')
+                plt.switch_backend('agg')
 
             if len(series_pairs) is not len(data_names):
                 print("Error: len of dictionaries do not match length of associated data names")
@@ -816,7 +827,7 @@ class plot_line_series_dictionary():
                 print(yname, "min y value ", ymin)
 
             # initialize the figure and axes
-            axes = PyPloter.axes(xlim=(xmin,xmax), ylim=(ymin,ymax))
+            axes = plt.axes(xlim=(xmin,xmax), ylim=(ymin,ymax))
 
             lines = []
             # initialize lines data
@@ -872,29 +883,29 @@ class plot_line_series_dictionary():
                 lines.append(line)
                         
             if(args.x_label is not None):
-                PyPloter.xlabel(args.x_label)
+                plt.xlabel(args.x_label)
             else:
-                PyPloter.xlabel(xname)
+                plt.xlabel(xname)
             
             if(args.x_limits is not None):
-                PyPloter.xlim(args.x_limits)
+                plt.xlim(args.x_limits)
             
             if(args.y_label is not None):
-                PyPloter.ylabel(args.y_label)
+                plt.ylabel(args.y_label)
             else:
-                PyPloter.ylabel(yname)
+                plt.ylabel(yname)
             
             if(args.y_limits is not None):
-                PyPloter.ylim(args.y_limits)
+                plt.ylim(args.y_limits)
             
             if(args.plot_grid):
-                PyPloter.grid()
+                plt.grid()
             
-            PyPloter.legend(loc='best')
+            plt.legend(loc='best')
             if(args.log_x):
-                PyPloter.xscale("log")
+                plt.xscale("log")
             if(args.log_y):
-                PyPloter.yscale("log")
+                plt.yscale("log")
              
             return lines
 
@@ -910,11 +921,11 @@ class plot_line_series_dictionary():
         ani = FuncAnimation(fig, animate, frames=len(series_pairs[0].grid), blit=True)
 
         if(args.figure_name is not None):
-            ani.save(args.figure_name, fps=30, extra_args=['-vcodec', 'libx264'])
+            ani.save(args.figure_name, writer="pillow")
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
             warnings.filterwarnings("ignore")
-            PyPloter.show()
+            plt.show()
 
 class plot_2d_series_dictionary():
     '''
@@ -987,7 +998,7 @@ class plot_2d_series_dictionary():
             series_pair a 2d series pairs(index, grid)
             data_names names associated with the dictionaries to be plotted
         '''
-        fig = PyPloter.figure()
+        fig = plt.figure()
         def init_contour():
             '''
             Initial lines 
@@ -998,7 +1009,7 @@ class plot_2d_series_dictionary():
                 data_names names associated with the dictionaries to be plotted
             '''
             if(args.hide_plot):
-                PyPloter.switch_backend('agg')
+                plt.switch_backend('agg')
 
             dname = args.data_name
             xname = args.x_value_name
@@ -1020,11 +1031,6 @@ class plot_2d_series_dictionary():
             bias = 0.0
             for data, index_value in zip(series_data, series_pair.index[index_key]):
                 v = np.array(data[dname])
-                if(args.log_scale):
-                    bias = v.min()
-                    bias = 0.0 if bias>0.0 else abs(bias)
-                    v = np.array([ [log10(val+bias) if (val+bias)>0.0 else 0.0 
-                        for val in vals] for vals in v])
                 x = np.array(data[xname])
                 y = np.array(data[yname])
                 vmin = np.array([v.min(),vmin]).min()
@@ -1068,48 +1074,56 @@ class plot_2d_series_dictionary():
                 print(dname, "min value ", vmin)
 
             # initialize the figure and axes
-            axes = PyPloter.axes(xlim=(xmin,xmax), ylim=(ymin,ymax))
+            axes = plt.axes(xlim=(xmin,xmax), ylim=(ymin,ymax))
                         
             if(args.x_label is not None):
-                PyPloter.xlabel(args.x_label)
+                plt.xlabel(args.x_label)
             else:
-                PyPloter.xlabel(xname)
+                plt.xlabel(xname)
             
             if(args.x_limits is not None):
-                PyPloter.xlim(args.x_limits)
+                plt.xlim(args.x_limits)
             
             if(args.y_label is not None):
-                PyPloter.ylabel(args.y_label)
+                plt.ylabel(args.y_label)
             else:
-                PyPloter.ylabel(yname)
+                plt.ylabel(yname)
             
             if(args.y_limits is not None):
-                PyPloter.ylim(args.y_limits)
+                plt.ylim(args.y_limits)
             
             if(args.plot_grid):
-                PyPloter.grid()
-            
-            PyPloter.legend(loc='best')
+                plt.grid()
             
             if(args.data_bounds):
-                vmin = args.data_bounds[0] if not args.log_scale else log10(args.data_bounds[0]+bias)
-                vmax = args.data_bounds[1] if not args.log_scale else log10(args.data_bounds[1]+bias)
+                vmin = args.data_bounds[0]
+                vmax = args.data_bounds[1]
 
-            imshow = PyPloter.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')
-            PyPloter.colorbar()
+            if args.log_scale:
+                imshow = plt.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax),
+                                         norm = LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), origin='lower', animated=True, cmap='jet')
+            else:
+                imshow = plt.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')
+            plt.colorbar()
             
             return imshow, xmin, xmax, ymin, ymax, vmin, vmax
 
         imshow, xmin, xmax, ymin, ymax, vmin, vmax = init_contour()
         ims = []
         for data in series_pair.grid:
-            ims.append([PyPloter.imshow(data[args.data_name], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')])
+            if args.log_scale:
+                ims.append([plt.imshow(data[args.data_name], extent=(xmin,xmax,ymin,ymax),
+                                            norm=LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), origin='lower', animated=True, cmap='jet')])
+            else:
+                ims.append([plt.imshow(data[args.data_name], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')])
 
         ani = ArtistAnimation(fig, ims, interval=200, blit=True)
 
         if(args.figure_name is not None):
-            ani.save(args.figure_name, fps=30, extra_args=['-vcodec', 'libx264'])
+            ani.save(args.figure_name, writer="pillow")
             print("Plot save as -- "+args.figure_name)
         elif(not args.hide_plot):
             warnings.filterwarnings("ignore")
-            PyPloter.show()           
+            plt.show()           

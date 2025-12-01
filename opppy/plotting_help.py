@@ -28,10 +28,13 @@ Basic plotting help functions
 import sys
 import math
 import numpy as np
-import matplotlib.pyplot as PyPloter
+import matplotlib.pyplot as plt
 import re
 import ast
 
+# Remove empty legend box on all plots
+plt.rcParams['legend.frameon']=False
+plt.rcParams['legend.edgecolor']='none'
 
 ####################################################
 # HELPER FUNCTIONS
@@ -250,14 +253,14 @@ def logplot(xlog,ylog,x,y,label):
   '''
   if xlog == 1:
     if ylog == 1:
-      PyPloter.loglog(x,y,label=label) 
+      plt.loglog(x,y,label=label) 
     else:
-      PyPloter.semilogx(x,y,label=label) 
+      plt.semilogx(x,y,label=label) 
   else:
     if ylog == 1:
-      PyPloter.semilogy(x,y,label=label) 
+      plt.semilogy(x,y,label=label) 
     else:
-      PyPloter.plot(x,y,label=label) 
+      plt.plot(x,y,label=label) 
 
 def add_plot_options(parser):
     '''
