@@ -17,7 +17,7 @@ Dictionary Plotting class
 
 import matplotlib.pyplot as plt
 import matplotlib.axes as axes
-from matplotlib.colors import LogNorm
+from matplotlib.colors import LogNorm, SymLogNorm
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
 from matplotlib.animation import FuncAnimation
@@ -433,7 +433,8 @@ class plot_2d_dump_dictionary():
             collection.set_array(np.array(data))
             collection.set_clim(vmin,vmax)
             if args.log_scale:
-                collection.set_norm(LogNorm(vmin,vmax))
+                collection.set_norm(LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax))
             if args.show_mesh:
                 collection.set_edgecolors("black")
             ax.add_collection(collection)
@@ -478,7 +479,7 @@ class plot_2d_dump_dictionary():
                     args.y_limits = [min(y),max(y)]
                 griddata = data2gridbox(dictionary, xname, yname, data_name, args.x_limits[0], 
                         args.y_limits[0], args.x_limits[1], args.y_limits[1], args.num_grid, 
-                        args.interp_method,args.log_scale)
+                        args.interp_method)
             else:
                 if(dictionary[data_name].ndim == 2 and
                    dictionary[data_name].shape[1] == dictionary[xname].shape[0] and 
@@ -486,11 +487,13 @@ class plot_2d_dump_dictionary():
                     griddata = dictionary
                 else:
                     griddata = data2grid(dictionary, xname, yname, data_name, args.num_grid,
-                            args.interp_method, args.log_scale)
+                            args.interp_method)
 
           
             if args.log_scale:
-                plt.imshow(griddata[data_name], norm=LogNorm(vmin, vmax), extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
+                plt.imshow(griddata[data_name], norm=LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), 
+                           extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
             else:
                 plt.imshow(griddata[data_name], vmin=vmin, vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
             plt.colorbar()
@@ -635,7 +638,7 @@ class plot_3d_dump_dictionary():
             outputfile.close()
         
         griddata = data2grid3Dslice(dictionary, xname, yname, zname, data_name, args.z_slice,
-                args.num_grid, args.interp_method, args.log_scale)
+                args.num_grid, args.interp_method)
 
         if(args.data_bounds):
             vmin = args.data_bounds[0]
@@ -645,7 +648,9 @@ class plot_3d_dump_dictionary():
             vmax = None
         
         if args.log_scale:
-            plt.imshow(griddata[data_name], norm=LogNorm(vmin,vmax), extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
+            plt.imshow(griddata[data_name], norm=LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), 
+                       extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
         else:
             plt.imshow(griddata[data_name], vmin=vmin,vmax=vmax, extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
         plt.colorbar()
@@ -1102,7 +1107,8 @@ class plot_2d_series_dictionary():
 
             if args.log_scale:
                 imshow = plt.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax),
-                                         norm = LogNorm(vmin, vmax), origin='lower', animated=True, cmap='jet')
+                                         norm = LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), origin='lower', animated=True, cmap='jet')
             else:
                 imshow = plt.imshow(series_pair.grid[0][dname], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')
             plt.colorbar()
@@ -1114,7 +1120,8 @@ class plot_2d_series_dictionary():
         for data in series_pair.grid:
             if args.log_scale:
                 ims.append([plt.imshow(data[args.data_name], extent=(xmin,xmax,ymin,ymax),
-                                            norm=LogNorm(vmin, vmax), origin='lower', animated=True, cmap='jet')])
+                                            norm=LogNorm(vmin,vmax) if vmin>0 else
+                                    SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), origin='lower', animated=True, cmap='jet')])
             else:
                 ims.append([plt.imshow(data[args.data_name], extent=(xmin,xmax,ymin,ymax), vmin=vmin, vmax=vmax, origin='lower', animated=True, cmap='jet')])
 

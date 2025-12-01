@@ -257,8 +257,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         names.append(filename)
         data.append(dump_parser.build_data_dictionary(filename))
 
-        tracer_t, tracer_grid = extract_series_2d(data,'time',"temperature",['x','y'], npts=5,
-                log_scale=True)
+        tracer_t, tracer_grid = extract_series_2d(data,'time',"temperature",['x','y'], npts=5)
         series_data = series_pair(tracer_t, tracer_grid)
 
         contour_series_ploter = plot_2d_series_dictionary();
@@ -272,7 +271,7 @@ class test_opppy_dump_utils(unittest.TestCase):
         contour_series_ploter.plot_2d_series(args, series_data)
 
         tracer_t, tracer_grid = extract_series_2d_slice(data,'time',"temperature",['z','y','x'],
-                5.0, npts=10, log_scale=True )
+                5.0, npts=10)
         series_data = series_pair(tracer_t, tracer_grid)
 
         plot_string = '-x z -y y -d temperature -xlab test_x'
