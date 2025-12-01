@@ -362,6 +362,8 @@ class plot_2d_dump_dictionary():
         if(args.data_file_name is not None):
             outputfile = open(args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat', 'w')
         data = np.array(dictionary[data_name])*args.scale_value
+        vmin = data.min()
+        vmax = data.max()
         x = np.array(dictionary[xname])*args.scale_x
         y = np.array(dictionary[yname])*args.scale_y
 
@@ -388,9 +390,6 @@ class plot_2d_dump_dictionary():
         if(args.data_bounds):
             vmin = args.data_bounds[0]
             vmax = args.data_bounds[1]
-        else:
-            vmin = None
-            vmax = None
 
         if args.xy_verts_name is not None:
             xy_verts = dictionary[args.xy_verts_name]
@@ -522,7 +521,6 @@ class plot_2d_dump_dictionary():
         if(args.plot_grid):
             plt.grid()
         
-        plt.legend(loc='best')
         if(args.figure_name is not None):
             fig = plt.savefig(args.figure_name, bbox_inches='tight', dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
@@ -610,6 +608,8 @@ class plot_3d_dump_dictionary():
         if(args.data_file_name is not None):
             outputfile = open(args.data_file_name+'_'+re.sub(r'[^\w]','',data_name)+'.dat', 'w')
         data = np.array(dictionary[data_name])*args.scale_value
+        vmin = data.min()
+        vmax = data.max()
         x = np.array(dictionary[xname])*args.scale_x
         y = np.array(dictionary[yname])*args.scale_y
         z = np.array(dictionary[zname])*args.scale_z
@@ -643,11 +643,8 @@ class plot_3d_dump_dictionary():
         if(args.data_bounds):
             vmin = args.data_bounds[0]
             vmax = args.data_bounds[1]
-        else:
-            vmin = None
-            vmax = None
         
-        if args.log_scale and (vmin!=None and vmax!=None):
+        if args.log_scale:
             plt.imshow(griddata[data_name], norm=LogNorm(vmin,vmax) if vmin>0 else
                                     SymLogNorm(linthresh=1.e-3,linscale=1.0,vmin=vmin,vmax=vmax), 
                        extent=(griddata[xname].min(),griddata[xname].max(),griddata[yname].min(),griddata[yname].max()), origin='lower', cmap='jet')
@@ -678,7 +675,6 @@ class plot_3d_dump_dictionary():
         if(args.plot_grid):
             plt.grid()
         
-        plt.legend(loc='best')
         if(args.figure_name is not None):
             fig = plt.savefig(args.figure_name, dpi=args.figure_resolution)
             print("Plot save as -- "+args.figure_name)
@@ -1098,8 +1094,6 @@ class plot_2d_series_dictionary():
             
             if(args.plot_grid):
                 plt.grid()
-            
-            plt.legend(loc='best')
             
             if(args.data_bounds):
                 vmin = args.data_bounds[0]
