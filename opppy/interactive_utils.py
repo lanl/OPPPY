@@ -401,10 +401,10 @@ class interactive_output_parser:
             ymin = array(ymin)
             ymax = array(ymax)
             if last_xmin is not None:
-              xmin = min(last_xmin,xmin.min())
-              xmax = max(last_xmax,xmax.max())
-              ymin = min(last_ymin,ymin.min())
-              ymax = max(last_ymax,ymax.max())
+              xmin = array([last_xmin,xmin.min()]).min()
+              xmax = array([last_xmax,xmax.max()]).max()
+              ymin = array([last_ymin,ymin.min()]).min()
+              ymax = array([last_ymax,ymax.max()]).max()
             else:
               xmin = xmin.min()
               xmax = xmax.max()
@@ -1069,7 +1069,7 @@ class interactive_tally_parser:
                                tally[args.dictionary_name][y_names[index]][y_index[index]] for tally in
                                                               dictionary['tally_cycle_data']]
                     else:
-                        my_dictionary[yname] = [ tally[yname] for tally in
+                        my_dictionary[yname] = [ tally[args.dictionary_name][yname] for tally in
                                                               dictionary['tally_cycle_data']]
                 
                 dictionary_data.append({args.dictionary_name: my_dictionary})
