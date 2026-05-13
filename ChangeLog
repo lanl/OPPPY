@@ -1,3 +1,33 @@
+2026-05-13 Mathew Cleveland <cleveland@lanl.gov>
+    * OPPPY minor release:
+        + OPPPY-0_1_14
+
+    * Current dependencies:
+        + Python 3.X
+        + numpy
+        + scipy
+        + matplotlib
+        + h5py
+        + sphinx (to build documentation)
+        + multiprocess (for non-linux builds, multiprocessing for linux)
+
+    * Summary of changes:
+        + Fix log scale plotting
+        + Fix min/max values and ydata selection for tallies
+
+    * Corrected defects:
+        + Fix log scale plotting
+        + Fix min/max values and ydata selection for tallies
+
+    * New Features:
+        + N/A
+
+    * Known Defects:
+        + Not all plotting features have been tested.
+        + Only cycle and time data is ignored when listing plot options
+        + Dictionary printing options should be fixed
+
+
 2025-07-29 Mathew Cleveland <cleveland@lanl.gov>
     * OPPPY minor release:
         + OPPPY-0_1_13
